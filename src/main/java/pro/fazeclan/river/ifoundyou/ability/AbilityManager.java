@@ -22,6 +22,7 @@ public class AbilityManager {
         register(new NoisemakerAbility());
         register(new ParryAbility());
         register(new RollAbility());
+        register(new ShrinkAbility());
         register(new StalkAbility());
         register(new TerrifyAbility());
         register(new TrapAbility());
