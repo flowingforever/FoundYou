@@ -17,6 +17,7 @@ import pro.fazeclan.river.jarona.condition.TimedUseCondition;
 import pro.fazeclan.river.jarona.util.SchedulingUtil;
 
 import java.io.Closeable;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -25,6 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ShrinkAbility extends Ability {
 
     private final Map<UUID, Long> ACTIVE_UNTIL = new ConcurrentHashMap<>();  // primed window end
+    private final Map<UUID, Closeable> TASK_MAP = new ConcurrentHashMap<>();
 
     private final Map<UUID, Double> originalScaleValues = new HashMap<>();
 
@@ -69,20 +71,18 @@ public class ShrinkAbility extends Ability {
         AttributeInstance small = player.getAttribute(Attribute.SCALE);
 
         originalScaleValues.put(player.getUniqueId(), small.getBaseValue());
+        ACTIVE_UNTIL.put(player.getUniqueId(), System.currentTimeMillis() + (getDefaultAbilityProperty("duration", 5) * 1000L));
         small.setBaseValue(SMALL_SCALE);
 
         condition.increaseUses();
 
-        Closeable shrinkTask = SchedulingUtil.interval(0L, 10L, () -> {
-            Long activeUntil = ACTIVE_UNTIL.get(player.getUniqueId());
-            if (activeUntil == null || activeUntil <= System.currentTimeMillis()) {
-                small.setBaseValue(1);
-            }
-        });
-
         condition.setHud(c -> {
             var tc = (TimedUseCondition) c;
             var duration = (tc.getDuration() / 20) + 1;
+            if (ACTIVE_UNTIL.containsKey(c.getPlayerUUID())) {
+                return "<dark_aqua>⬇ <yellow>Active!</yellow></dark_aqua> " + buildUses(tc.getMaxUses(), tc.getUses());
+            }
+
             if (tc.getUses() >= tc.getMaxUses()) {
                 return "<dark_aqua>⬇ <gray>Depleted.</gray></dark_aqua> " + buildUses(tc.getMaxUses(), tc.getUses());
             } else if ((tc.getDuration() / 20.0) == 0.0) {
@@ -103,6 +103,7 @@ public class ShrinkAbility extends Ability {
             return;
         }
 
+        var player = event.getPlayer();
         var conditionManager = Jarona.getInstance().getConditionManager();
         int maxUses = getDefaultAbilityProperty("uses", 2);
         initializeAbilityUsesCondition(
@@ -111,6 +112,15 @@ public class ShrinkAbility extends Ability {
                 conditionManager,
                 c -> "<dark_aqua>⬇ <green>Ready!</green></dark_aqua> " + buildUses(maxUses, 0)
         );
+
+        AttributeInstance small = player.getAttribute(Attribute.SCALE);
+
+        TASK_MAP.put(player.getUniqueId(), SchedulingUtil.interval(0L, 10L, () -> {
+            Long activeUntil = ACTIVE_UNTIL.get(player.getUniqueId());
+            if (activeUntil == null || activeUntil <= System.currentTimeMillis()) {
+                small.setBaseValue(1);
+            }
+        }));
     }
 
     @EventHandler
@@ -118,6 +128,8 @@ public class ShrinkAbility extends Ability {
         var conditionManager = Jarona.getInstance().getConditionManager();
         conditionManager.getPlayerConditions(event.getPlayer())
                 .remove(getId() + "_ability");
+
+        try { TASK_MAP.remove(event.getPlayer().getUniqueId()).close(); } catch (IOException ignored) {}
     }
 
 }

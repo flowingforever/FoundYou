@@ -7,6 +7,7 @@ import lombok.Getter;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
 import pro.fazeclan.river.ifoundyou.ability.AbilityManager;
+import pro.fazeclan.river.ifoundyou.command.ConfigCommand;
 import pro.fazeclan.river.ifoundyou.command.RoleCommand;
 import pro.fazeclan.river.ifoundyou.game.FoundYouGame;
 import pro.fazeclan.river.ifoundyou.listener.AbilityListeners;
@@ -45,6 +46,7 @@ public final class IFoundYou extends JavaPlugin {
 
         var command = Commands.literal("foundyou")
                 .then(RoleCommand.command())
+                .then(ConfigCommand.command())
                 .build();
         this.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands -> {
             commands.registrar().register(command);
