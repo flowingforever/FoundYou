@@ -14,7 +14,10 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.persistence.PersistentDataType;
+import pro.fazeclan.river.ifoundyou.IFoundYou;
 import pro.fazeclan.river.ifoundyou.util.RoleUtil;
+import pro.fazeclan.river.ifoundyou.util.TimeUtil;
 import pro.fazeclan.river.jarona.Jarona;
 import pro.fazeclan.river.jarona.condition.TimedCondition;
 import pro.fazeclan.river.jarona.util.GameUtil;
@@ -122,6 +125,10 @@ public class GameListeners implements Listener {
         if (event.getFinalDamage() < player.getHealth()) {
             return;
         }
+        if (player.getGameMode().isInvulnerable()) {
+            player.teleport(player.getWorld().getSpawnLocation());
+            return;
+        }
         var world = player.getWorld();
         var config = YamlConfiguration.loadConfiguration(new File(world.getWorldFolder(), "map_config.yml"));
         var manager = Jarona.getInstance().getConditionManager();
@@ -144,7 +151,23 @@ public class GameListeners implements Listener {
                                         TimedCondition.Type.GAME_TICK
                                 )
                         );
-        condition.setDuration(condition.getDuration() + config.getInt("additional-time", 900));
+        var time = config.getInt("additional-time", 900);
+        condition.setDuration(condition.getDuration() + time);
+        condition.setHud(c -> {
+            var tc = (TimedCondition) c;
+            var duration = tc.getDuration();
+            return "<red><b>" + TimeUtil.ticksIntoReadableFormat((int) duration) + "</b></red>";
+        });
+
+        world.getPersistentDataContainer().set(
+                IFoundYou.getKey("game_length"),
+                PersistentDataType.INTEGER,
+                world.getPersistentDataContainer().getOrDefault(
+                        IFoundYou.getKey("game_length"),
+                        PersistentDataType.INTEGER,
+                        900
+                ) + time
+        );
         event.setCancelled(true);
     }
 
