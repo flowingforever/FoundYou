@@ -174,7 +174,7 @@ public class GameListeners implements Listener {
     @EventHandler
     public void handlePlayerJoin(PlayerJoinEvent event) {
         var player = event.getPlayer();
-        if (player.getWorld().getKey().namespace().equals("ifoundyou")) {
+        if (!player.getWorld().getKey().namespace().equals("ifoundyou")) {
             return;
         }
         RoleUtil.removeRoles(player);
