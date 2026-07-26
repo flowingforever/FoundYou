@@ -16,6 +16,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.persistence.PersistentDataType;
 import pro.fazeclan.river.ifoundyou.IFoundYou;
+import pro.fazeclan.river.ifoundyou.event.GamePlayerDeathEvent;
 import pro.fazeclan.river.ifoundyou.util.RoleUtil;
 import pro.fazeclan.river.ifoundyou.util.TimeUtil;
 import pro.fazeclan.river.jarona.Jarona;
@@ -131,8 +132,10 @@ public class GameListeners implements Listener {
         }
         var world = player.getWorld();
         var config = YamlConfiguration.loadConfiguration(new File(world.getWorldFolder(), "map_config.yml"));
-        var manager = Jarona.getInstance().getConditionManager();
+        var plugin = Jarona.getInstance();
+        var manager = plugin.getConditionManager();
         var gameUUID = UUID.fromString(world.getKey().getKey());
+        plugin.getServer().getPluginManager().callEvent(new GamePlayerDeathEvent(player, RoleUtil.getRoleOrThrow(player)));
         player.setGameMode(GameMode.SPECTATOR);
         world.playSound(
                 player.getLocation(),
@@ -177,8 +180,14 @@ public class GameListeners implements Listener {
         if (!player.getWorld().getKey().namespace().equals("ifoundyou")) {
             return;
         }
-        RoleUtil.removeRoles(player);
-        GameUtil.resetPlayer(player, GameMode.ADVENTURE);
+
+        if (player.getGameMode().isInvulnerable()) {
+            GameUtil.resetPlayer(player, GameMode.SPECTATOR);
+            RoleUtil.removeRoles(player);
+        } else {
+            GameUtil.resetPlayer(player, GameMode.ADVENTURE);
+        }
+
     }
 
 }
