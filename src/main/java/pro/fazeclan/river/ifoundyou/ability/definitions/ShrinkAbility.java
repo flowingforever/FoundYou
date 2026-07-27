@@ -125,6 +125,10 @@ public class ShrinkAbility extends Ability {
 
     @EventHandler
     private void handleGameRemovePlayer(FoundGameRemovePlayer event) {
+        if (!event.getRole().getAbilities().contains(getId())) {
+            return;
+        }
+        
         var conditionManager = Jarona.getInstance().getConditionManager();
         conditionManager.getPlayerConditions(event.getPlayer())
                 .remove(getId() + "_ability");
