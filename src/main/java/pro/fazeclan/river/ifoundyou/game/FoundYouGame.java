@@ -268,7 +268,7 @@ public class FoundYouGame extends Game {
             for (Player player : players) {
                 player.addPotionEffect(new PotionEffect(
                         PotionEffectType.GLOWING,
-                        PotionEffect.INFINITE_DURATION,
+                        200,
                         0,
                         true,
                         false,
