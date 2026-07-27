@@ -113,8 +113,6 @@ public class FoundYouGame extends Game {
             }
         }
 
-        int runnerCount = 0;
-
         // game prep
         for (Player player : players) {
             var role = RoleUtil.getRoleOrThrow(player);
@@ -122,7 +120,6 @@ public class FoundYouGame extends Game {
             Title title = Title.title(Component.empty(), Component.empty());
             switch (role.getFaction()) {
                 case RUNNERS -> {
-                    runnerCount++;
                     title = Title.title(
                             miniMessage.deserialize("<yellow>You're a <green>Runner!"),
                             miniMessage.deserialize("<green>Avoid being killed by hunters to win!")
@@ -221,6 +218,8 @@ public class FoundYouGame extends Game {
         var graceLength = worldPDC.get(IFoundYou.getKey("grace_length"), PersistentDataType.INTEGER);
         var gameLength = worldPDC.get(IFoundYou.getKey("game_length"), PersistentDataType.INTEGER);
 
+        var totalGameLength = graceLength + gameLength;
+
         worldPDC.set(
                 IFoundYou.getKey("tick"),
                 PersistentDataType.INTEGER,
@@ -265,7 +264,23 @@ public class FoundYouGame extends Game {
             }
         }
 
-        if (getCurrentGameTick(world) >= (graceLength + gameLength)) {
+        if (getCurrentGameTick(world) == totalGameLength - 200) {
+            for (Player player : players) {
+                player.addPotionEffect(new PotionEffect(
+                        PotionEffectType.GLOWING,
+                        PotionEffect.INFINITE_DURATION,
+                        0,
+                        true,
+                        false,
+                        true
+                ));
+                player.sendMessage(minimessage.deserialize(
+                        "<yellow>Final stretch! 10 seconds remain!</yellow>"
+                ));
+            }
+        }
+
+        if (getCurrentGameTick(world) >= totalGameLength) {
             GameUtil.endGame(world);
         }
 
