@@ -1,5 +1,6 @@
 package pro.fazeclan.river.ifoundyou.role;
 
+import lombok.Getter;
 import org.bukkit.configuration.file.YamlConfiguration;
 import pro.fazeclan.river.ifoundyou.IFoundYou;
 
@@ -11,6 +12,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class RoleManager {
 
+    @Getter
     private final Map<String, Role> registry;
 
     public RoleManager() {
