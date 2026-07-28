@@ -7,8 +7,11 @@ import net.kyori.adventure.title.Title;
 import org.alexdev.unlimitednametags.api.UNTPaperAPI;
 import org.alexdev.unlimitednametags.config.Settings;
 import org.bukkit.World;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -155,6 +158,17 @@ public class FoundYouGame extends Game {
                     });
                     nametagManager.setNametagSeeThrough(player, true);
                     NametagUtil.hidePlayerNametagWithGlowToAll(player, NamedTextColor.RED);
+
+                    if (hunterCount == 1) {
+                        player.getEquipment().getBoots().editMeta(meta -> {
+                            meta.addAttributeModifier(Attribute.MAX_HEALTH, new AttributeModifier(
+                                    FoundYou.getKey("max_health"),
+                                    10.0,
+                                    AttributeModifier.Operation.ADD_NUMBER,
+                                    EquipmentSlotGroup.FEET
+                            ));
+                        });
+                    }
                 }
             }
             player.showTitle(title);
