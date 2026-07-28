@@ -50,7 +50,6 @@ public class FoundYouGame extends Game {
         var conditionManager = jarona.getConditionManager();
         var nametagManager = UNTPaperAPI.getInstance();
 
-        var pluginConfig = FoundYou.getInstance().getConfig();
         var config = YamlConfiguration.loadConfiguration(new File(world.getWorldFolder(), "map_config.yml"));
 
         var miniMessage = MiniMessage.miniMessage();
@@ -63,7 +62,7 @@ public class FoundYouGame extends Game {
         // selecting hunters and their roles
         var hunters = new ArrayList<Player>();
 
-        var hunterCount = pluginConfig.getInt("hunter-count", 1);
+        var hunterCount = 1 + Math.round(players.size() / 7.5);
 
         var queued = new ArrayList<>(players);
         Collections.shuffle(queued);

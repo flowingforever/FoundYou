@@ -37,7 +37,7 @@ public final class FoundYou extends JavaPlugin {
         var manager = Jarona.getInstance().getGameManager();
         manager.register(new FoundYouGame());
 
-        saveDefaultConfig();
+        // saveDefaultConfig();
 
         this.roleManager.reloadRegistry();
         this.abilityManager.registerAbilities();
