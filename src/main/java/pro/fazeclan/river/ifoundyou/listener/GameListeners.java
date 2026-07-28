@@ -3,6 +3,7 @@ package pro.fazeclan.river.ifoundyou.listener;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.SoundCategory;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -130,6 +131,7 @@ public class GameListeners implements Listener {
             player.teleport(player.getWorld().getSpawnLocation());
             return;
         }
+        player.setHealth(player.getAttribute(Attribute.MAX_HEALTH).getValue());
         var world = player.getWorld();
         var config = YamlConfiguration.loadConfiguration(new File(world.getWorldFolder(), "map_config.yml"));
         var plugin = Jarona.getInstance();
@@ -171,7 +173,7 @@ public class GameListeners implements Listener {
                         900
                 ) + time
         );
-        event.setCancelled(true);
+        event.setDamage(0.1);
     }
 
     @EventHandler
