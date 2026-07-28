@@ -176,6 +176,8 @@ public class EnragedShriekAbility extends Ability {
 
     @EventHandler
     private void handleGamePlayerRemoval(FoundGameRemovePlayer event) {
+        if (!event.getRole().getAbilities().contains(getId())) return;
+
         var manager = Jarona.getInstance().getConditionManager();
         manager.getPlayerConditions(event.getPlayer()).remove(getId() + "_ability");
     }

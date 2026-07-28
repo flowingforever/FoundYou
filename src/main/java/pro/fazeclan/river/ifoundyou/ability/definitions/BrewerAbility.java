@@ -44,9 +44,7 @@ public class BrewerAbility extends Ability {
 
     @EventHandler
     private void handleGameRemovePlayer(FoundGameRemovePlayer event) {
-        if (!event.getRole().getAbilities().contains(getId())) {
-            return;
-        }
+        if (!event.getRole().getAbilities().contains(getId())) return;
         try {
             brewTasks.remove(event.getPlayer().getUniqueId()).close();
         } catch (IOException ignored) {}

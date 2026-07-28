@@ -56,6 +56,8 @@ public class StalkAbility extends Ability {
 
     @EventHandler
     private void handleQuit(PlayerQuitEvent event) {
+        if (!GameUtil.hasGame(event.getPlayer().getWorld())) return;
+
         lastStepAt.remove(event.getPlayer().getUniqueId());
     }
 
