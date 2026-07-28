@@ -25,13 +25,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ShrinkAbility extends Ability {
 
-    private final Map<UUID, Long> ACTIVE_UNTIL = new ConcurrentHashMap<>();  // primed window end
-    private final Map<UUID, Closeable> TASK_MAP = new ConcurrentHashMap<>();
-
-    private final Map<UUID, Double> originalScaleValues = new HashMap<>();
-
-    private final double SMALL_SCALE = 0.65;
-
     public ShrinkAbility() { super("shrink"); }
 
     @EventHandler
@@ -41,6 +34,7 @@ public class ShrinkAbility extends Ability {
 
         var cooldown = getDefaultAbilityProperty("cooldown", 45) * 20L;
         var player = event.getPlayer();
+        var previousLocation = player.getLocation();
 
         var maxUses = getDefaultAbilityProperty("uses", 2);
 
@@ -70,19 +64,21 @@ public class ShrinkAbility extends Ability {
 
         AttributeInstance small = player.getAttribute(Attribute.SCALE);
 
-        originalScaleValues.put(player.getUniqueId(), small.getBaseValue());
-        ACTIVE_UNTIL.put(player.getUniqueId(), System.currentTimeMillis() + (getDefaultAbilityProperty("duration", 5) * 1000L));
-        small.setBaseValue(SMALL_SCALE);
+        var d = getDefaultAbilityProperty("duration", 5);
+        SchedulingUtil.runLater(d * 20L, () -> {
+            small.setBaseValue(1);
+
+            if (player.getLocation().getBlock().getType().isSolid()) {
+                player.teleport(previousLocation);
+            }
+        });
+        small.setBaseValue(getDefaultAbilityProperty("small-scale", 0.65));
 
         condition.increaseUses();
 
         condition.setHud(c -> {
             var tc = (TimedUseCondition) c;
             var duration = (tc.getDuration() / 20) + 1;
-            if (ACTIVE_UNTIL.containsKey(c.getPlayerUUID())) {
-                return "<dark_aqua>⬇ <yellow>Active!</yellow></dark_aqua> " + buildUses(tc.getMaxUses(), tc.getUses());
-            }
-
             if (tc.getUses() >= tc.getMaxUses()) {
                 return "<dark_aqua>⬇ <gray>Depleted.</gray></dark_aqua> " + buildUses(tc.getMaxUses(), tc.getUses());
             } else if ((tc.getDuration() / 20.0) == 0.0) {
@@ -92,7 +88,7 @@ public class ShrinkAbility extends Ability {
             }
         });
 
-        player.sendMessage(ChatColor.GREEN + "Shrink activated! " + ChatColor.GRAY + "(Speed II & Shrink, 10s) "
+        player.sendMessage(ChatColor.GREEN + "Shrink activated! " + ChatColor.GRAY + "(Speed II & Shrink, " + d + "s) "
                 + ChatColor.DARK_AQUA + "[" + (condition.getMaxUses() - condition.getUses()) + " left]");
 
     }
@@ -103,7 +99,6 @@ public class ShrinkAbility extends Ability {
             return;
         }
 
-        var player = event.getPlayer();
         var conditionManager = Jarona.getInstance().getConditionManager();
         int maxUses = getDefaultAbilityProperty("uses", 2);
         initializeAbilityUsesCondition(
@@ -113,14 +108,6 @@ public class ShrinkAbility extends Ability {
                 c -> "<dark_aqua>⬇ <green>Ready!</green></dark_aqua> " + buildUses(maxUses, 0)
         );
 
-        AttributeInstance small = player.getAttribute(Attribute.SCALE);
-
-        TASK_MAP.put(player.getUniqueId(), SchedulingUtil.interval(0L, 10L, () -> {
-            Long activeUntil = ACTIVE_UNTIL.get(player.getUniqueId());
-            if (activeUntil == null || activeUntil <= System.currentTimeMillis()) {
-                small.setBaseValue(1);
-            }
-        }));
     }
 
     @EventHandler
@@ -128,12 +115,13 @@ public class ShrinkAbility extends Ability {
         if (!event.getRole().getAbilities().contains(getId())) {
             return;
         }
-        
+
+        var player = event.getPlayer();
         var conditionManager = Jarona.getInstance().getConditionManager();
-        conditionManager.getPlayerConditions(event.getPlayer())
+        conditionManager.getPlayerConditions(player)
                 .remove(getId() + "_ability");
 
-        try { TASK_MAP.remove(event.getPlayer().getUniqueId()).close(); } catch (IOException ignored) {}
+        player.getAttribute(Attribute.SCALE).setBaseValue(1);
     }
 
 }

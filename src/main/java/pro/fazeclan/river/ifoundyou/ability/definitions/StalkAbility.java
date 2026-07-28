@@ -11,6 +11,7 @@ import org.bukkit.potion.PotionEffectType;
 import pro.fazeclan.river.ifoundyou.ability.Ability;
 import pro.fazeclan.river.ifoundyou.event.FoundGameAddPlayer;
 import pro.fazeclan.river.ifoundyou.event.FoundGameRemovePlayer;
+import pro.fazeclan.river.jarona.util.GameUtil;
 import pro.fazeclan.river.jarona.util.SchedulingUtil;
 
 import java.io.Closeable;
@@ -61,6 +62,7 @@ public class StalkAbility extends Ability {
     // Footsteps: when a Hider moves, draw prints visible only to seekers with this ability
     @EventHandler
     private void onPlayerMove(PlayerMoveEvent event) {
+        if (!GameUtil.hasGame(event.getTo().getWorld())) return;
         if (!event.hasChangedPosition()) return;
 
         Player mover = event.getPlayer();
