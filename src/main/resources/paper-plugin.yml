@@ -1,9 +1,9 @@
-name: IFoundYou
+name: FoundYou
 version: '${version}'
 
-main: pro.fazeclan.river.ifoundyou.IFoundYou
-bootstrapper: pro.fazeclan.river.ifoundyou.IFoundYouBootstrap
-loader: pro.fazeclan.river.ifoundyou.IFoundYouLoader
+main: pro.fazeclan.river.foundyou.FoundYou
+bootstrapper: pro.fazeclan.river.foundyou.FYBootstrap
+loader: pro.fazeclan.river.foundyou.FYLoader
 api-version: '26.2'
 load: STARTUP
 

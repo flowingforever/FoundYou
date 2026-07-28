@@ -1,1 +1,1 @@
-rootProject.name = "IFoundYou"
+rootProject.name = "FoundYou"
