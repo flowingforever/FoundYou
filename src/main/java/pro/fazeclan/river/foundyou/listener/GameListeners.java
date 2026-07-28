@@ -179,15 +179,11 @@ public class GameListeners implements Listener {
     @EventHandler
     public void handlePlayerJoin(PlayerJoinEvent event) {
         var player = event.getPlayer();
-        if (!player.getWorld().getKey().namespace().equals("foundyou")) return;
+        if (GameUtil.hasGame(player.getWorld())) return;
 
-        if (player.getGameMode().isInvulnerable()) {
-            GameUtil.resetPlayer(player, GameMode.SPECTATOR);
-            RoleUtil.removeRoles(player);
-        } else {
-            GameUtil.resetPlayer(player, GameMode.ADVENTURE);
-        }
-
+        var manager = Jarona.getInstance().getConditionManager();
+        manager.getPlayerConditions(player).clear();
+        RoleUtil.removeRoles(player);
     }
 
 }
