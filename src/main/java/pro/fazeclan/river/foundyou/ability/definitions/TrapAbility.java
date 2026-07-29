@@ -185,6 +185,7 @@ public class TrapAbility extends Ability {
                     getDefaultAbilityProperty("particle.size", 1.2).floatValue()
             );
             beamTask = SchedulingUtil.interval(0L, 5L, () -> { // redraw every 0.25s
+                if (!location.isWorldLoaded()) return;
                 World w = location.getWorld();
                 if (w == null) return;
 
