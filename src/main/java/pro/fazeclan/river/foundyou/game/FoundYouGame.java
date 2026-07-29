@@ -65,7 +65,7 @@ public class FoundYouGame extends Game {
         // selecting hunters and their roles
         var hunters = new ArrayList<Player>();
 
-        var hunterCount = 1 + Math.round(players.size() / 7.5);
+        var hunterCount = 1 + Math.ceil(players.size() / 7.5);
 
         var queued = new ArrayList<>(players);
         Collections.shuffle(queued);
