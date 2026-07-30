@@ -6,11 +6,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -93,6 +96,8 @@ public class AmbushAbility extends Ability {
                 false,
                 true
         ));
+        hideArmor(player);
+
         player.sendMessage(ChatColor.RED + "Ambush activated! " + ChatColor.GRAY + "(Invisible for 10s.)");
 
         SchedulingUtil.runLater(duration * 20L, () -> {
@@ -195,10 +200,62 @@ public class AmbushAbility extends Ability {
 
     private void reveal(Player player) {
         player.removePotionEffect(PotionEffectType.INVISIBILITY);
+        showArmor(player);
     }
 
     private boolean isAbilityActive(Player player) {
         return ACTIVE_UNTIL.containsKey(player.getUniqueId());
+    }
+
+    private void hideArmor(Player invisiblePlayer) {
+        Map<EquipmentSlot, ItemStack> hiddenEquipment =
+                new EnumMap<>(EquipmentSlot.class);
+
+        hiddenEquipment.put(EquipmentSlot.HEAD, ItemStack.empty());
+        hiddenEquipment.put(EquipmentSlot.CHEST, ItemStack.empty());
+        hiddenEquipment.put(EquipmentSlot.LEGS, ItemStack.empty());
+        hiddenEquipment.put(EquipmentSlot.FEET, ItemStack.empty());
+
+        for (Player viewer : Bukkit.getOnlinePlayers()) {
+            if (viewer.equals(invisiblePlayer)) {
+                continue;
+            }
+
+            viewer.sendEquipmentChange(invisiblePlayer, hiddenEquipment);
+        }
+    }
+
+    private void showArmor(Player player) {
+        Map<EquipmentSlot, ItemStack> realEquipment =
+                new EnumMap<>(EquipmentSlot.class);
+
+        realEquipment.put(
+                EquipmentSlot.HEAD,
+                player.getInventory().getHelmet()
+        );
+
+        realEquipment.put(
+                EquipmentSlot.CHEST,
+                player.getInventory().getChestplate()
+        );
+
+        realEquipment.put(
+                EquipmentSlot.LEGS,
+                player.getInventory().getLeggings()
+        );
+
+        realEquipment.put(
+                EquipmentSlot.FEET,
+                player.getInventory().getBoots()
+        );
+
+        for (Player viewer : Bukkit.getOnlinePlayers()) {
+            if (viewer.equals(player)) {
+                continue;
+            }
+
+            viewer.sendEquipmentChange(player, realEquipment);
+        }
     }
 
     @EventHandler

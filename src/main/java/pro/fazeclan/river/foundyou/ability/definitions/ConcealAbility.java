@@ -1,7 +1,11 @@
 package pro.fazeclan.river.foundyou.ability.definitions;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import pro.fazeclan.river.foundyou.ability.Ability;
@@ -11,6 +15,10 @@ import pro.fazeclan.river.foundyou.event.FoundGameRemovePlayer;
 import pro.fazeclan.river.jarona.Jarona;
 import pro.fazeclan.river.jarona.condition.TimedCondition;
 import pro.fazeclan.river.jarona.condition.TimedUseCondition;
+import pro.fazeclan.river.jarona.util.SchedulingUtil;
+
+import java.util.EnumMap;
+import java.util.Map;
 
 public class ConcealAbility extends Ability {
 
@@ -61,13 +69,69 @@ public class ConcealAbility extends Ability {
             }
         });
 
-        // Apply Invisibility for 5 seconds.
+        // Apply Invisibility for 8 seconds.
 
         var duration = getDefaultAbilityProperty("duration", 8);
         player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, duration * 20, 0, false, false, true));
+        hideArmor(player);
+
+        SchedulingUtil.runLater(duration * 20L, () -> {
+            showArmor(player);
+        });
 
         player.sendMessage(ChatColor.GREEN + "Conceal activated! " + ChatColor.GRAY + "(Invisibility, " + duration + "s) "
                 + ChatColor.DARK_AQUA + "[" + (condition.getMaxUses() - condition.getUses()) + " left]");
+    }
+
+    private void hideArmor(Player invisiblePlayer) {
+        Map<EquipmentSlot, ItemStack> hiddenEquipment =
+                new EnumMap<>(EquipmentSlot.class);
+
+        hiddenEquipment.put(EquipmentSlot.HEAD, ItemStack.empty());
+        hiddenEquipment.put(EquipmentSlot.CHEST, ItemStack.empty());
+        hiddenEquipment.put(EquipmentSlot.LEGS, ItemStack.empty());
+        hiddenEquipment.put(EquipmentSlot.FEET, ItemStack.empty());
+
+        for (Player viewer : Bukkit.getOnlinePlayers()) {
+            if (viewer.equals(invisiblePlayer)) {
+                continue;
+            }
+
+            viewer.sendEquipmentChange(invisiblePlayer, hiddenEquipment);
+        }
+    }
+
+    private void showArmor(Player player) {
+        Map<EquipmentSlot, ItemStack> realEquipment =
+                new EnumMap<>(EquipmentSlot.class);
+
+        realEquipment.put(
+                EquipmentSlot.HEAD,
+                player.getInventory().getHelmet()
+        );
+
+        realEquipment.put(
+                EquipmentSlot.CHEST,
+                player.getInventory().getChestplate()
+        );
+
+        realEquipment.put(
+                EquipmentSlot.LEGS,
+                player.getInventory().getLeggings()
+        );
+
+        realEquipment.put(
+                EquipmentSlot.FEET,
+                player.getInventory().getBoots()
+        );
+
+        for (Player viewer : Bukkit.getOnlinePlayers()) {
+            if (viewer.equals(player)) {
+                continue;
+            }
+
+            viewer.sendEquipmentChange(player, realEquipment);
+        }
     }
 
     @EventHandler
