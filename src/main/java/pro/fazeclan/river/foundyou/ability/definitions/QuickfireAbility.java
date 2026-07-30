@@ -55,7 +55,7 @@ public class QuickfireAbility extends Ability {
         shootArrow(player);
 
         // Display Minecraft cooldown overlay over the crossbow.
-        player.setCooldown(Material.CROSSBOW, getDefaultAbilityProperty("cooldown-ticks", 10));
+        player.setCooldown(Material.CROSSBOW, getDefaultAbilityProperty("cooldown-ticks", 30));
     }
 
     private void consumeArrow(Player player) {

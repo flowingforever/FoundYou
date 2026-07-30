@@ -86,7 +86,7 @@ public class ScrapshotAbility extends Ability {
         fireParticleBeam(player);
         applyRecoil(player);
 
-        player.setCooldown(Material.CROSSBOW, getDefaultAbilityProperty("cooldown", 30) * 20);
+        player.setCooldown(Material.CROSSBOW, getDefaultAbilityProperty("cooldown", 20) * 20);
     }
 
     private void consumeArrow(Player player) {
@@ -119,7 +119,7 @@ public class ScrapshotAbility extends Ability {
             Entity hitEntity = result.getHitEntity();
 
             if (hitEntity instanceof LivingEntity target) {
-                target.damage(getDefaultAbilityProperty("damage", 8), player);
+                target.damage(getDefaultAbilityProperty("damage", 12), player);
             }
         }
 
@@ -163,9 +163,9 @@ public class ScrapshotAbility extends Ability {
         Vector recoil = player.getEyeLocation()
                 .getDirection()
                 .normalize()
-                .multiply(-getDefaultAbilityProperty("recoil-strength", 1.4));
+                .multiply(-getDefaultAbilityProperty("recoil-strength", 1.29));
 
-        recoil.setY(Math.max(recoil.getY(), getDefaultAbilityProperty("recoil-verticality", 0.35)));
+        recoil.setY(Math.max(recoil.getY(), getDefaultAbilityProperty("recoil-verticality", 0.34)));
 
         player.setVelocity(recoil);
     }
