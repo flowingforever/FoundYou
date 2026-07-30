@@ -26,6 +26,8 @@ import pro.fazeclan.river.foundyou.ability.Ability;
 import pro.fazeclan.river.foundyou.event.AbilityEvent;
 import pro.fazeclan.river.foundyou.event.FoundGameAddPlayer;
 import pro.fazeclan.river.foundyou.event.FoundGameRemovePlayer;
+import pro.fazeclan.river.foundyou.event.GracePeriodOverEvent;
+import pro.fazeclan.river.foundyou.util.RoleUtil;
 import pro.fazeclan.river.jarona.Jarona;
 import pro.fazeclan.river.jarona.condition.TimedCondition;
 import pro.fazeclan.river.jarona.util.SchedulingUtil;
@@ -284,5 +286,14 @@ public class AmbushAbility extends Ability {
 
         var manager = Jarona.getInstance().getConditionManager();
         manager.getPlayerConditions(event.getPlayer()).remove(getId() + "_ability");
+    }
+
+    @EventHandler
+    private void handleGraceOver(GracePeriodOverEvent event) {
+        for (var player : event.getPlayers()) {
+            if (RoleUtil.getRoleOrThrow(player).getAbilities().contains(getId())) {
+                player.removePotionEffect(PotionEffectType.GLOWING);
+            }
+        }
     }
 }

@@ -17,6 +17,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import pro.fazeclan.river.foundyou.FoundYou;
+import pro.fazeclan.river.foundyou.event.GracePeriodOverEvent;
 import pro.fazeclan.river.foundyou.role.Faction;
 import pro.fazeclan.river.foundyou.role.Role;
 import pro.fazeclan.river.foundyou.util.RoleUtil;
@@ -260,6 +261,8 @@ public class FoundYouGame extends Game {
                     );
                 }
             }
+
+            FoundYou.getInstance().getServer().getPluginManager().callEvent(new GracePeriodOverEvent(world, players));
         }
 
         if (getCurrentGameTick(world) == totalGameLength - 200) {
