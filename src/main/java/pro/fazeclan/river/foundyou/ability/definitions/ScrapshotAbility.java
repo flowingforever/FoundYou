@@ -24,12 +24,6 @@ import org.bukkit.util.Vector;
 
 public class ScrapshotAbility extends Ability {
 
-    private static final double BEAM_RANGE = 5.0;
-    private static final double BEAM_STEP = 0.25;
-    private static final double HITBOX_SIZE = 0.35;
-
-    private static final Particle.DustOptions ORANGE_DUST = new Particle.DustOptions(Color.fromRGB(255, 125, 20), 1.25f);
-
     public ScrapshotAbility() {
         super("scrapshot");
     }
@@ -51,6 +45,19 @@ public class ScrapshotAbility extends Ability {
                 );
 
         if (!condition.getAvailable()) return;
+
+        ItemStack crossbow = player.getInventory().getItemInMainHand();
+        if (crossbow.getType() != Material.CROSSBOW) {
+            return;
+        }
+
+        if (player.hasCooldown(Material.CROSSBOW)) {
+            return;
+        }
+
+        if (!player.getInventory().contains(Material.ARROW)) {
+            return;
+        }
 
         int cooldown = getDefaultAbilityProperty("cooldown", 30);
 
@@ -75,20 +82,6 @@ public class ScrapshotAbility extends Ability {
             world.playSound(loc, Sound.BLOCK_CHAIN_BREAK, 1.0f, 0.5f);
         }
 
-        ItemStack crossbow = player.getInventory().getItemInMainHand();
-
-        if (crossbow.getType() != Material.CROSSBOW) {
-            return;
-        }
-
-        if (player.hasCooldown(Material.CROSSBOW)) {
-            return;
-        }
-
-        if (!player.getInventory().contains(Material.ARROW)) {
-            return;
-        }
-
         consumeArrow(player);
         fireParticleBeam(player);
         applyRecoil(player);
@@ -110,14 +103,14 @@ public class ScrapshotAbility extends Ability {
         RayTraceResult result = world.rayTrace(
                 start,
                 direction,
-                BEAM_RANGE,
+                getDefaultAbilityProperty("beam-range", 5.0),
                 FluidCollisionMode.NEVER,
                 true,
-                HITBOX_SIZE,
+                getDefaultAbilityProperty("hitbox-size", 0.35),
                 entity -> isValidTarget(player, entity)
         );
 
-        double beamLength = BEAM_RANGE;
+        double beamLength = getDefaultAbilityProperty("beam-range", 5.0);
 
         if (result != null) {
             beamLength = result.getHitPosition()
@@ -141,7 +134,7 @@ public class ScrapshotAbility extends Ability {
     }
 
     private void spawnBeamParticles(World world, Location start, Vector direction, double length) {
-        for (double distance = 0; distance <= length; distance += BEAM_STEP) {
+        for (double distance = 0; distance <= length; distance += getDefaultAbilityProperty("beam-step", 0.25)) {
             Location particleLocation = start.clone().add(
                     direction.clone().multiply(distance)
             );
@@ -154,7 +147,14 @@ public class ScrapshotAbility extends Ability {
                     0.0,
                     0.0,
                     0.0,
-                    ORANGE_DUST
+                    new Particle.DustOptions(
+                            Color.fromRGB(
+                                    getDefaultAbilityProperty("particle.red", 255),
+                                    getDefaultAbilityProperty("particle.green", 125),
+                                    getDefaultAbilityProperty("particle.blue", 20)
+                            ),
+                            getDefaultAbilityProperty("particle.size", 1.25).floatValue()
+                    )
             );
         }
     }

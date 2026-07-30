@@ -2,3 +2,11 @@ cooldown: 30
 damage: 8
 recoil-strength: 1.4
 recoil-verticality: 0.35
+beam-range: 5.0
+beam-step: 0.25
+hitbox-size: 0.35
+particle:
+  red: 255
+  green: 125
+  blue: 20
+  size: 1.25
