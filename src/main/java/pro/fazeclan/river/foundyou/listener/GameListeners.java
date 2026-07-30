@@ -146,6 +146,7 @@ public class GameListeners implements Listener {
                 2f,
                 0.5f
         );
+
         // todo: summon corpse
 
         // add more time when player dies

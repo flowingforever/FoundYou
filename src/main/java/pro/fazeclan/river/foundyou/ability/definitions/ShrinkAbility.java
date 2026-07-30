@@ -60,7 +60,7 @@ public class ShrinkAbility extends Ability {
         SchedulingUtil.runLater(d * 20L, () -> {
             small.setBaseValue(1);
 
-            if (player.getLocation().getBlock().getType().isSolid()) {
+            if (player.getLocation().getBlock().getBoundingBox().contains(player.getBoundingBox())) {
                 player.teleport(previousLocation);
             }
         });

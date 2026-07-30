@@ -5,6 +5,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.title.Title;
 import org.alexdev.unlimitednametags.api.UNTPaperAPI;
+import org.alexdev.unlimitednametags.api.UntNametagManagerPaper;
 import org.alexdev.unlimitednametags.config.Settings;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
@@ -126,18 +127,8 @@ public class FoundYouGame extends Game {
                             miniMessage.deserialize("<yellow>You're a <green>Runner!"),
                             miniMessage.deserialize("<green>Avoid being killed by hunters to win!")
                     );
-                    nametagManager.modifyNametagProperty(player, current -> {
-                        var groups = new ArrayList<>(current.displayGroups());
-                        groups.clear();
-                        groups.add(Settings.DisplayGroup
-                                .builder()
-                                .line("<green>" + player.getName() + "</green>")
-                                .scale(1f)
-                                .build()
-                        );
-                        return current.withDisplayGroups(groups);
-                    });
-                    nametagManager.hideNametag(player);
+                    nametagManager.setForcedNametag(player, miniMessage.deserialize("<green>" + player.getName() + "</green>"));
+                    nametagManager.setNametagSeeThrough(player, false);
                     NametagUtil.hidePlayerNametagWithGlowToAll(player, NamedTextColor.GREEN);
                 }
                 case HUNTERS -> {
@@ -145,29 +136,18 @@ public class FoundYouGame extends Game {
                             miniMessage.deserialize("<yellow>You're a <red>Hunter!"),
                             miniMessage.deserialize("<red>Catch and kill all runners to win.")
                     );
-                    nametagManager.modifyNametagProperty(player, current -> {
-                        var groups = new ArrayList<>(current.displayGroups());
-                        groups.clear();
-                        groups.add(Settings.DisplayGroup
-                                .builder()
-                                .line("<red>" + player.getName() + "</red>")
-                                .scale(1f)
-                                .build()
-                        );
-                        return current.withDisplayGroups(groups);
-                    });
+                    nametagManager.setForcedNametag(player, miniMessage.deserialize("<red>" + player.getName() + "</red>"));
+                    ((UntNametagManagerPaper) UNTPaperAPI.getInstance().nametagManager()).hideOtherNametags(player);
                     nametagManager.setNametagSeeThrough(player, true);
                     NametagUtil.hidePlayerNametagWithGlowToAll(player, NamedTextColor.RED);
 
                     if (hunterCount == 1) {
-                        player.getEquipment().getBoots().editMeta(meta -> {
-                            meta.addAttributeModifier(Attribute.MAX_HEALTH, new AttributeModifier(
-                                    FoundYou.getKey("max_health"),
-                                    10.0,
-                                    AttributeModifier.Operation.ADD_NUMBER,
-                                    EquipmentSlotGroup.FEET
-                            ));
-                        });
+                        player.getEquipment().getBoots().editMeta(meta -> meta.addAttributeModifier(Attribute.MAX_HEALTH, new AttributeModifier(
+                                FoundYou.getKey("max_health"),
+                                10.0,
+                                AttributeModifier.Operation.ADD_NUMBER,
+                                EquipmentSlotGroup.FEET
+                        )));
                     }
                 }
             }
@@ -312,7 +292,8 @@ public class FoundYouGame extends Game {
         conditionManager.getGameConditions(gameUUID).remove("game_" + gameUUID);
 
         for (Player player : players) {
-            nametagManager.removeNametagOverride(player);
+            nametagManager.clearForcedNametag(player);
+            nametagManager.setNametagSeeThrough(player, true);
             NametagUtil.showPlayerNametagToAll(player);
             RoleUtil.removeRoles(player);
 

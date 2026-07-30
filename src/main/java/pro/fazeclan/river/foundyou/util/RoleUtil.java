@@ -93,4 +93,8 @@ public class RoleUtil {
         player.getScoreboardTags().removeIf(tag -> tag.startsWith("foundyoufaction_"));
     }
 
+    public static boolean isSameFaction(Player p1, Player p2) {
+        return getFactionElseThrow(p1).equals(getFactionElseThrow(p2));
+    }
+
 }
