@@ -23,6 +23,7 @@ public class AbilityManager {
         register(new QuickfireAbility());
         register(new QuiverAbility());
         register(new RollAbility());
+        register(new ScrapshotAbility());
         register(new SelfDestructAbility());
         register(new ShrinkAbility());
         register(new StalkAbility());
