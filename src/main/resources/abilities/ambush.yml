@@ -1,0 +1,6 @@
+cooldown: 90
+duration: 10
+punish-duration: 5
+backstab-multiplier: 1.5
+normal-hit-multiplier: 0.75
+backstab-dot-threshold: 0.5 # Increase this to make backstabs stricter.
