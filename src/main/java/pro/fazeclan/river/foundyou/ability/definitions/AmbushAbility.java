@@ -59,9 +59,9 @@ public class AmbushAbility extends Ability {
             var tc = (TimedCondition) c;
             var duration = (tc.getDuration() / 20) + 1;
             if ((tc.getDuration() / 20.0) == 0.0) {
-                return "<light_gray>\uD83D\uDC80 <green>Ready!</green></light_gray>";
+                return "<gray>☠ <green>Ready!</green></gray>";
             } else {
-                return "<light_gray>\uD83D\uDC80 <red>" + duration + "s</red></light_gray>";
+                return "<gray>☠ <red>" + duration + "s</red></gray>";
             }
         });
 
@@ -211,7 +211,7 @@ public class AmbushAbility extends Ability {
                 event,
                 maxUses,
                 manager,
-                c -> "<light_gray>\uD83D\uDC80 <green>Ready!</green></light_gray> " + buildUses(maxUses, 0)
+                c -> "<gray>☠ <green>Ready!</green></gray> " + buildUses(maxUses, 0)
         );
     }
 
