@@ -40,13 +40,7 @@ public class QuiverAbility extends Ability {
 
     private void giveArrow(Player p) {
         ItemStack arrow = new ItemStack(Material.ARROW);
-        PlayerInventory inv = p.getInventory();
-        var leftover = inv.addItem(arrow);
-
-        if (!leftover.isEmpty()) {
-            World w = p.getWorld();
-            if (w != null) w.dropItemNaturally(p.getLocation(), arrow);
-        }
+        p.give(arrow);
 
         p.sendMessage(ChatColor.GREEN + "You've gained an arrow.");
     }
