@@ -65,8 +65,6 @@ public class AmbushAbility extends Ability {
             }
         });
 
-        condition.setDuration(cooldown * 20L);
-
         // ability
         Location loc = player.getLocation();
         World world = loc.getWorld();
@@ -83,6 +81,8 @@ public class AmbushAbility extends Ability {
             player.sendMessage(ChatColor.YELLOW + "Ambush is already active.");
             return;
         }
+
+        condition.setDuration(cooldown * 20L);
 
         ACTIVE_UNTIL.put(player.getUniqueId(), now + (duration * 1000L));
 
