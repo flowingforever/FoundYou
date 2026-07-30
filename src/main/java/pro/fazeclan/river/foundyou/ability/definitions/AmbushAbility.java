@@ -118,14 +118,20 @@ public class AmbushAbility extends Ability {
 
         Location loc = attacker.getLocation();
         World world = loc.getWorld();
-        if (world != null) {
-            world.playSound(loc, Sound.ENTITY_GHAST_SCREAM, 1.0f, 0.8f);
-        }
+
 
         if (isBehindPlayer(attacker, victim)) {
+            if (world != null) {
+                world.playSound(loc, Sound.ENTITY_GHAST_SCREAM, 1.0f, 0.8f);
+            }
+
             event.setDamage(event.getDamage() * getDefaultAbilityProperty("backstab-multiplier", 1.5));
             reveal(attacker);
         } else {
+            if (world != null) {
+                world.playSound(loc, Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO, 1.0f, 1f);
+            }
+
             event.setDamage(event.getDamage() * getDefaultAbilityProperty("normal-hit-multiplier", 0.75));
             reveal(attacker);
         }
