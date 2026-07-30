@@ -7,12 +7,14 @@ import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import io.papermc.paper.command.brigadier.argument.resolvers.selector.PlayerSelectorArgumentResolver;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.alexdev.unlimitednametags.api.UNTPaperAPI;
 import org.alexdev.unlimitednametags.config.Settings;
 import org.bukkit.entity.Player;
 import pro.fazeclan.river.foundyou.FoundYou;
 import pro.fazeclan.river.foundyou.role.Faction;
 import pro.fazeclan.river.foundyou.util.RoleUtil;
+import pro.fazeclan.river.foundyou.util.TextUtil;
 import pro.fazeclan.river.jarona.util.NametagUtil;
 
 import java.util.ArrayList;
@@ -27,32 +29,29 @@ public class PlayerCommand {
                                 .then(Commands.argument("game_player", ArgumentTypes.player())
                                         .then(Commands.argument("players", ArgumentTypes.players())
                                                 .executes(ctx -> {
+                                                    var source = ctx.getSource();
                                                     var nametagManager = UNTPaperAPI.getInstance();
                                                     var manager = FoundYou.getInstance().getRoleManager();
                                                     var tr = ctx.getArgument("game_player", PlayerSelectorArgumentResolver.class);
-                                                    var gamePlayer = tr.resolve(ctx.getSource()).getFirst();
+                                                    var gamePlayer = tr.resolve(source).getFirst();
 
                                                     var tr2 = ctx.getArgument("players", PlayerSelectorArgumentResolver.class);
-                                                    var players = tr2.resolve(ctx.getSource());
+                                                    var players = tr2.resolve(source);
 
                                                     for (Player player : players) {
                                                         RoleUtil.removeRoles(player);
                                                         RoleUtil.assignRole(player, manager.getRandomUnlimitedRole(Faction.RUNNERS));
 
                                                         player.teleport(gamePlayer);
-                                                        nametagManager.modifyNametagProperty(player, current -> {
-                                                            var groups = new ArrayList<>(current.displayGroups());
-                                                            groups.clear();
-                                                            groups.add(Settings.DisplayGroup
-                                                                    .builder()
-                                                                    .line("<green>" + player.getName() + "</green>")
-                                                                    .scale(1f)
-                                                                    .build()
-                                                            );
-                                                            return current.withDisplayGroups(groups);
-                                                        });
-                                                        nametagManager.hideNametag(player);
+                                                        nametagManager.setForcedNametag(player, MiniMessage.miniMessage().deserialize("<green>" + player.getName() + "</green>"));
+                                                        nametagManager.setNametagSeeThrough(player, false);
                                                         NametagUtil.hidePlayerNametagWithGlowToAll(player, NamedTextColor.GREEN);
+                                                        player.sendMessage(TextUtil.formatComponent(
+                                                                "<green>You've been added into an ongoing game!</green>"
+                                                        ));
+                                                        source.getSender().sendMessage(TextUtil.formatComponent(
+                                                                "<green>Added " + player.getName() + " to a game!</green>"
+                                                        ));
                                                     }
 
                                                     return Command.SINGLE_SUCCESS;
@@ -65,17 +64,24 @@ public class PlayerCommand {
                         Commands.literal("remove")
                                 .then(Commands.argument("players", ArgumentTypes.players())
                                         .executes(ctx -> {
+                                            var source = ctx.getSource();
                                             var nametagManager = UNTPaperAPI.getInstance();
                                             var tr2 = ctx.getArgument("players", PlayerSelectorArgumentResolver.class);
-                                            var players = tr2.resolve(ctx.getSource());
+                                            var players = tr2.resolve(source);
 
                                             for (Player player : players) {
                                                 RoleUtil.removeRoles(player);
 
                                                 player.kill();
                                                 player.spigot().respawn();
-                                                nametagManager.removeNametagOverride(player);
+                                                nametagManager.clearForcedNametag(player);
                                                 NametagUtil.showPlayerNametagToAll(player);
+                                                player.sendMessage(TextUtil.formatComponent(
+                                                        "<green>You've been removed from an ongoing game!</green>"
+                                                ));
+                                                source.getSender().sendMessage(TextUtil.formatComponent(
+                                                        "<green>Removed " + player.getName() + " from a game!</green>"
+                                                ));
                                             }
 
                                             return Command.SINGLE_SUCCESS;

@@ -10,6 +10,7 @@ import pro.fazeclan.river.foundyou.FoundYou;
 import pro.fazeclan.river.foundyou.command.arguments.RoleArgument;
 import pro.fazeclan.river.foundyou.dialog.RoleCreationDialog;
 import pro.fazeclan.river.foundyou.role.Role;
+import pro.fazeclan.river.foundyou.util.TextUtil;
 
 public class RoleCommand {
 
@@ -32,6 +33,9 @@ public class RoleCommand {
                                 .executes(ctx -> {
                                     var manager = FoundYou.getInstance().getRoleManager();
                                     manager.reloadRegistry();
+                                    ctx.getSource().getSender().sendMessage(TextUtil.formatComponent(
+                                            "<green>Reloaded role registry!</green>"
+                                    ));
 
                                     return Command.SINGLE_SUCCESS;
                                 })
@@ -50,6 +54,9 @@ public class RoleCommand {
                                                     nbt.mergeCompound(NBT.parseNBT(role.getItems()));
                                                 } catch (Exception ignored) {}
                                             });
+                                            ctx.getSource().getSender().sendMessage(TextUtil.formatComponent(
+                                                    "<green>Given all the items in "+ role.getName() +"!</green>"
+                                            ));
 
                                             return Command.SINGLE_SUCCESS;
                                         })

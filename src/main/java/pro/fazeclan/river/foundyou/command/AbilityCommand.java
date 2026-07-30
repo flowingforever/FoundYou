@@ -7,17 +7,17 @@ import io.papermc.paper.command.brigadier.Commands;
 import pro.fazeclan.river.foundyou.FoundYou;
 import pro.fazeclan.river.foundyou.util.TextUtil;
 
-public class ConfigCommand {
+public class AbilityCommand {
 
     public static LiteralArgumentBuilder<CommandSourceStack> command() {
-        return Commands.literal("config")
-                .requires(ctx -> ctx.getSender().hasPermission("found_you.admin.config"))
+        return Commands.literal("ability")
+                .requires(ctx -> ctx.getSender().hasPermission("found_you.admin.ability"))
                 .then(
                         Commands.literal("reload")
                                 .executes(ctx -> {
-                                    FoundYou.getInstance().reloadConfig();
+                                    FoundYou.getInstance().getAbilityManager().reloadRegistry();
                                     ctx.getSource().getSender().sendMessage(TextUtil.formatComponent(
-                                            "<green>Reloaded general configuration!</green>"
+                                            "<green>Reloaded ability configurations!</green>"
                                     ));
 
                                     return Command.SINGLE_SUCCESS;
