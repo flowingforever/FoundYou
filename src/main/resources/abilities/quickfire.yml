@@ -1,3 +1,2 @@
-interval: 30 # seconds
 cooldown-ticks: 10
 arrow-speed: 3.0
