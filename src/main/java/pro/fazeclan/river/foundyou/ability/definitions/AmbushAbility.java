@@ -14,6 +14,7 @@ import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -33,6 +34,8 @@ import pro.fazeclan.river.jarona.util.SchedulingUtil;
 public class AmbushAbility extends Ability {
 
     private final Map<UUID, Long> ACTIVE_UNTIL = new ConcurrentHashMap<>();  // primed window end
+
+    private final Map<UUID, Integer> hiddenArrowCounts = new HashMap<>();
 
     public AmbushAbility() {
         super("ambush");
@@ -97,6 +100,7 @@ public class AmbushAbility extends Ability {
                 true
         ));
         hideArmor(player);
+        hideBodyArrows(player);
 
         player.sendMessage(ChatColor.RED + "Ambush activated! " + ChatColor.GRAY + "(Invisible for 10s.)");
 
@@ -105,6 +109,12 @@ public class AmbushAbility extends Ability {
             reveal(player);
         });
 
+    }
+
+    private void reveal(Player player) {
+        player.removePotionEffect(PotionEffectType.INVISIBILITY);
+        showArmor(player);
+        restoreBodyArrows(player);
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -198,11 +208,6 @@ public class AmbushAbility extends Ability {
         return behindDot >= getDefaultAbilityProperty("backstab-dot-threshold", 0.5);
     }
 
-    private void reveal(Player player) {
-        player.removePotionEffect(PotionEffectType.INVISIBILITY);
-        showArmor(player);
-    }
-
     private boolean isAbilityActive(Player player) {
         return ACTIVE_UNTIL.containsKey(player.getUniqueId());
     }
@@ -256,6 +261,29 @@ public class AmbushAbility extends Ability {
 
             viewer.sendEquipmentChange(player, realEquipment);
         }
+    }
+
+    private void hideBodyArrows(Player player) {
+        UUID playerId = player.getUniqueId();
+
+        hiddenArrowCounts.put(
+                playerId,
+                player.getArrowsInBody()
+        );
+
+        player.setArrowsInBody(0, true);
+    }
+
+    private void restoreBodyArrows(Player player) {
+        Integer arrowCount = hiddenArrowCounts.remove(
+                player.getUniqueId()
+        );
+
+        if (arrowCount == null) {
+            return;
+        }
+
+        player.setArrowsInBody(arrowCount, true);
     }
 
     @EventHandler
