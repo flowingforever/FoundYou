@@ -18,9 +18,6 @@ public class QuickfireAbility extends Ability {
         super("quickfire");
     }
 
-    private static final int COOLDOWN_TICKS = 10;
-    private static final double ARROW_SPEED = 3.0;
-
     @EventHandler
     public void onPlayerLeftClick(PlayerInteractEvent event) {
         // Prevent the event from running for the offhand.
@@ -58,7 +55,7 @@ public class QuickfireAbility extends Ability {
         shootArrow(player);
 
         // Display Minecraft cooldown overlay over the crossbow.
-        player.setCooldown(Material.CROSSBOW, COOLDOWN_TICKS);
+        player.setCooldown(Material.CROSSBOW, getDefaultAbilityProperty("cooldown-ticks", 10) * 20);
     }
 
     private void consumeArrow(Player player) {
@@ -71,7 +68,7 @@ public class QuickfireAbility extends Ability {
         Vector velocity = player.getEyeLocation()
                 .getDirection()
                 .normalize()
-                .multiply(ARROW_SPEED);
+                .multiply(getDefaultAbilityProperty("arrow-speed", 3.0));
 
         Arrow arrow = player.launchProjectile(Arrow.class, velocity);
 
