@@ -86,7 +86,7 @@ public class ScrapshotAbility extends Ability {
         fireParticleBeam(player);
         applyRecoil(player);
 
-        player.setCooldown(Material.CROSSBOW, getDefaultAbilityProperty("cooldown", 30));
+        player.setCooldown(Material.CROSSBOW, getDefaultAbilityProperty("cooldown", 30) * 20);
     }
 
     private void consumeArrow(Player player) {
