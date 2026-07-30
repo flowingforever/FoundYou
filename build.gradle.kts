@@ -14,6 +14,7 @@ repositories {
     }
     maven { url = uri("https://maven.pvphub.me/tofaa") }
     maven { url = uri("https://jitpack.io") }
+    maven { url = uri("https://maven.maxhenkel.de/repository/public") }
 }
 
 dependencies {
@@ -22,6 +23,7 @@ dependencies {
     compileOnly("de.tr7zw:item-nbt-api-plugin:2.15.7")
     compileOnly("io.github.alexdev03:unlimitednametags-api-paper:2.0.0")
     compileOnly("io.github.tofaa2:spigot:3.0.3-SNAPSHOT")
+    compileOnly("de.maxhenkel.voicechat:voicechat-api:2.6.20")
 }
 
 java {

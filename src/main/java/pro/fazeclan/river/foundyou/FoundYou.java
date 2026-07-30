@@ -1,5 +1,6 @@
 package pro.fazeclan.river.foundyou;
 
+import de.maxhenkel.voicechat.api.BukkitVoicechatService;
 import de.tr7zw.nbtapi.NBT;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
@@ -11,19 +12,26 @@ import pro.fazeclan.river.foundyou.command.AbilityCommand;
 import pro.fazeclan.river.foundyou.command.ConfigCommand;
 import pro.fazeclan.river.foundyou.command.PlayerCommand;
 import pro.fazeclan.river.foundyou.command.RoleCommand;
+import pro.fazeclan.river.foundyou.compat.FYVoicechatPlugin;
 import pro.fazeclan.river.foundyou.game.FoundYouGame;
 import pro.fazeclan.river.foundyou.listener.AbilityListeners;
 import pro.fazeclan.river.foundyou.listener.GameListeners;
 import pro.fazeclan.river.foundyou.role.RoleManager;
 import pro.fazeclan.river.jarona.Jarona;
 
+import javax.annotation.Nullable;
+
 public final class FoundYou extends JavaPlugin {
 
     @Getter
-    RoleManager roleManager;
+    private RoleManager roleManager;
 
     @Getter
-    AbilityManager abilityManager;
+    private AbilityManager abilityManager;
+
+    @Nullable
+    @Getter
+    private FYVoicechatPlugin voicechatPlugin;
 
     @Override
     public void onLoad() {
@@ -33,6 +41,17 @@ public final class FoundYou extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        if (getServer().getPluginManager().isPluginEnabled("voicechat")) {
+            var service = getServer().getServicesManager().load(BukkitVoicechatService.class);
+
+            if (service != null) {
+                voicechatPlugin = new FYVoicechatPlugin();
+                service.registerPlugin(voicechatPlugin);
+            }
+        } else {
+            getLogger().warning("Simple Voice Chat not loaded, nothing SVC related will work!");
+        }
+
         NBT.preloadApi();
 
         var manager = Jarona.getInstance().getGameManager();

@@ -131,13 +131,15 @@ public class GameListeners implements Listener {
             player.teleport(player.getWorld().getSpawnLocation());
             return;
         }
+
         player.setHealth(player.getAttribute(Attribute.MAX_HEALTH).getValue());
         var world = player.getWorld();
         var config = YamlConfiguration.loadConfiguration(new File(world.getWorldFolder(), "map_config.yml"));
-        var plugin = Jarona.getInstance();
-        var manager = plugin.getConditionManager();
+        var jarona = Jarona.getInstance();
+        var plugin = FoundYou.getInstance();
+        var manager = jarona.getConditionManager();
         var gameUUID = UUID.fromString(world.getKey().getKey());
-        plugin.getServer().getPluginManager().callEvent(new GamePlayerDeathEvent(player, RoleUtil.getRoleOrThrow(player)));
+        jarona.getServer().getPluginManager().callEvent(new GamePlayerDeathEvent(player, RoleUtil.getRoleOrThrow(player)));
         player.setGameMode(GameMode.SPECTATOR);
         world.playSound(
                 player.getLocation(),
@@ -175,6 +177,11 @@ public class GameListeners implements Listener {
                 ) + time
         );
         event.setDamage(0.1);
+
+        var svcPlugin = plugin.getVoicechatPlugin();
+        if (svcPlugin != null) {
+            svcPlugin.addSpectator(player);
+        }
     }
 
     @EventHandler

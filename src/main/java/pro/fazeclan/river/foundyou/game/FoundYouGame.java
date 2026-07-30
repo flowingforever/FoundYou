@@ -141,6 +141,11 @@ public class FoundYouGame extends Game {
                     nametagManager.setNametagSeeThrough(player, true);
                     NametagUtil.hidePlayerNametagWithGlowToAll(player, NamedTextColor.RED);
 
+                    var svcPlugin = plugin.getVoicechatPlugin();
+                    if (svcPlugin != null) {
+                        svcPlugin.addHunter(player);
+                    }
+
                     if (hunterCount == 1) {
                         player.getEquipment().getBoots().editMeta(meta -> meta.addAttributeModifier(Attribute.MAX_HEALTH, new AttributeModifier(
                                 FoundYou.getKey("max_health"),
@@ -282,6 +287,7 @@ public class FoundYouGame extends Game {
     @Override
     public void end(World world, List<Player> players) {
         var jarona = Jarona.getInstance();
+        var plugin = FoundYou.getInstance();
         var gameUUID = UUID.fromString(world.getKey().getKey());
         var miniMessage = MiniMessage.miniMessage();
 
@@ -296,6 +302,11 @@ public class FoundYouGame extends Game {
             nametagManager.setNametagSeeThrough(player, true);
             NametagUtil.showPlayerNametagToAll(player);
             RoleUtil.removeRoles(player);
+
+            var svcPlugin = plugin.getVoicechatPlugin();
+            if (svcPlugin != null) {
+                svcPlugin.removePlayer(player);
+            }
 
             if (runnersWon) {
                 player.showTitle(

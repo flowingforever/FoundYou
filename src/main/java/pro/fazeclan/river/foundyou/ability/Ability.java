@@ -91,7 +91,6 @@ public class Ability implements Listener {
         condition.setHud(hud);
         condition.setHudCondition(_ -> true);
         condition.setPriority(200);
-        player.sendMessage("this ability is available: " + condition.getAvailable());
     }
 
     public boolean isRunner(Player player) {
