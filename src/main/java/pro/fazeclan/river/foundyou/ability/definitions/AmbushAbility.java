@@ -69,8 +69,7 @@ public class AmbushAbility extends Ability {
         Location loc = player.getLocation();
         World world = loc.getWorld();
         if (world != null) {
-            world.playSound(loc, Sound.ENTITY_ARROW_HIT, 1.0f, 0.5f);
-            world.playSound(loc, Sound.BLOCK_CHAIN_BREAK, 1.0f, 0.5f);
+            world.playSound(loc, Sound.BLOCK_FIRE_EXTINGUISH, 1.0f, 0.8f);
         }
 
         int duration = getDefaultAbilityProperty("duration", 10);
@@ -117,6 +116,12 @@ public class AmbushAbility extends Ability {
             return;
         }
 
+        Location loc = attacker.getLocation();
+        World world = loc.getWorld();
+        if (world != null) {
+            world.playSound(loc, Sound.ENTITY_GHAST_SCREAM, 1.0f, 0.8f);
+        }
+
         if (isBehindPlayer(attacker, victim)) {
             event.setDamage(event.getDamage() * getDefaultAbilityProperty("backstab-multiplier", 1.5));
             reveal(attacker);
@@ -137,6 +142,12 @@ public class AmbushAbility extends Ability {
         }
 
         reveal(victim);
+
+        Location loc = victim.getLocation();
+        World world = loc.getWorld();
+        if (world != null) {
+            world.playSound(loc, Sound.BLOCK_GLASS_BREAK, 1.0f, 0.1f);
+        }
 
         victim.addPotionEffect(new PotionEffect(
                 PotionEffectType.WEAKNESS,
