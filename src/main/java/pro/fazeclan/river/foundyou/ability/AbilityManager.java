@@ -20,6 +20,8 @@ public class AbilityManager {
         register(new EnragedShriekAbility());
         register(new NoisemakerAbility());
         register(new ParryAbility());
+        register(new QuickfireAbility());
+        register(new QuiverAbility());
         register(new RollAbility());
         register(new SelfDestructAbility());
         register(new ShrinkAbility());
