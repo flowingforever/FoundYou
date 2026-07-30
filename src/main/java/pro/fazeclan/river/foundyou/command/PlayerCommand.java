@@ -12,7 +12,10 @@ import org.alexdev.unlimitednametags.api.UNTPaperAPI;
 import org.alexdev.unlimitednametags.config.Settings;
 import org.bukkit.entity.Player;
 import pro.fazeclan.river.foundyou.FoundYou;
+import pro.fazeclan.river.foundyou.command.arguments.RoleArgument;
 import pro.fazeclan.river.foundyou.role.Faction;
+import pro.fazeclan.river.foundyou.role.Role;
+import pro.fazeclan.river.foundyou.role.RoleManager;
 import pro.fazeclan.river.foundyou.util.RoleUtil;
 import pro.fazeclan.river.foundyou.util.TextUtil;
 import pro.fazeclan.river.jarona.util.NametagUtil;
@@ -28,6 +31,34 @@ public class PlayerCommand {
                         Commands.literal("add")
                                 .then(Commands.argument("game_player", ArgumentTypes.player())
                                         .then(Commands.argument("players", ArgumentTypes.players())
+                                                .then(
+                                                        Commands.argument("role", new RoleArgument())
+                                                                .executes(ctx -> {
+                                                                    var source = ctx.getSource();
+                                                                    var nametagManager = UNTPaperAPI.getInstance();
+                                                                    var manager = FoundYou.getInstance().getRoleManager();
+                                                                    var tr = ctx.getArgument("game_player", PlayerSelectorArgumentResolver.class);
+                                                                    var gamePlayer = tr.resolve(source).getFirst();
+
+                                                                    var tr2 = ctx.getArgument("players", PlayerSelectorArgumentResolver.class);
+                                                                    var players = tr2.resolve(source);
+
+                                                                    var role = ctx.getArgument("role", Role.class);
+
+                                                                    for (Player player : players) {
+                                                                        assignPlayer(player, gamePlayer, role, manager, nametagManager);
+
+                                                                        player.sendMessage(TextUtil.formatComponent(
+                                                                                "<green>You've been added into an ongoing game!</green>"
+                                                                        ));
+                                                                        source.getSender().sendMessage(TextUtil.formatComponent(
+                                                                                "<green>Added " + player.getName() + " to a game!</green>"
+                                                                        ));
+                                                                    }
+
+                                                                    return Command.SINGLE_SUCCESS;
+                                                                })
+                                                )
                                                 .executes(ctx -> {
                                                     var source = ctx.getSource();
                                                     var nametagManager = UNTPaperAPI.getInstance();
@@ -39,13 +70,8 @@ public class PlayerCommand {
                                                     var players = tr2.resolve(source);
 
                                                     for (Player player : players) {
-                                                        RoleUtil.removeRoles(player);
-                                                        RoleUtil.assignRole(player, manager.getRandomUnlimitedRole(Faction.RUNNERS));
+                                                        assignPlayer(player, gamePlayer, manager.getRandomUnlimitedRole(Faction.RUNNERS), manager, nametagManager);
 
-                                                        player.teleport(gamePlayer);
-                                                        nametagManager.setForcedNametag(player, MiniMessage.miniMessage().deserialize("<green>" + player.getName() + "</green>"));
-                                                        nametagManager.setNametagSeeThrough(player, false);
-                                                        NametagUtil.hidePlayerNametagWithGlowToAll(player, NamedTextColor.GREEN);
                                                         player.sendMessage(TextUtil.formatComponent(
                                                                 "<green>You've been added into an ongoing game!</green>"
                                                         ));
@@ -88,6 +114,16 @@ public class PlayerCommand {
                                         })
                                 )
                 );
+    }
+
+    private static void assignPlayer(Player player, Player gamePlayer, Role role, RoleManager manager, UNTPaperAPI api) {
+        RoleUtil.removeRoles(player);
+        RoleUtil.assignRole(player, role);
+
+        player.teleport(gamePlayer);
+        api.setForcedNametag(player, MiniMessage.miniMessage().deserialize("<green>" + player.getName() + "</green>"));
+        api.setNametagSeeThrough(player, false);
+        NametagUtil.hidePlayerNametagWithGlowToAll(player, NamedTextColor.GREEN);
     }
 
 }
