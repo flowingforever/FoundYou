@@ -9,8 +9,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import pro.fazeclan.river.foundyou.ability.Ability;
-import pro.fazeclan.river.foundyou.event.FoundGameAddPlayer;
-import pro.fazeclan.river.foundyou.event.FoundGameRemovePlayer;
+import pro.fazeclan.river.foundyou.event.GameAddPlayerEvent;
+import pro.fazeclan.river.foundyou.event.GameRemovePlayerEvent;
 import pro.fazeclan.river.jarona.util.GameUtil;
 import pro.fazeclan.river.jarona.util.SchedulingUtil;
 
@@ -28,7 +28,7 @@ public class StalkAbility extends Ability {
     private final Map<UUID, Closeable> gameTasks = new ConcurrentHashMap<>();
 
     @EventHandler
-    private void handleGameAddPlayer(FoundGameAddPlayer event) {
+    private void handleGameAddPlayer(GameAddPlayerEvent event) {
         if (!event.getRole().getAbilities().contains(getId())) return;
 
         var player = event.getPlayer();
@@ -38,7 +38,7 @@ public class StalkAbility extends Ability {
     }
 
     @EventHandler
-    private void handleGameRemovePlayer(FoundGameRemovePlayer event) {
+    private void handleGameRemovePlayer(GameRemovePlayerEvent event) {
         if (!event.getRole().getAbilities().contains(getId())) return;
 
         try {

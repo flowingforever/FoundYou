@@ -15,6 +15,7 @@ repositories {
     maven { url = uri("https://maven.pvphub.me/tofaa") }
     maven { url = uri("https://jitpack.io") }
     maven { url = uri("https://maven.maxhenkel.de/repository/public") }
+    maven { url = uri("https://repo.xenondevs.xyz/releases") }
 }
 
 dependencies {
@@ -24,6 +25,7 @@ dependencies {
     compileOnly("io.github.alexdev03:unlimitednametags-api-paper:2.0.0")
     compileOnly("io.github.tofaa2:spigot:3.0.3-SNAPSHOT")
     compileOnly("de.maxhenkel.voicechat:voicechat-api:2.6.20")
+    implementation("xyz.xenondevs.invui:invui:2.3.0")
 }
 
 java {
@@ -31,6 +33,10 @@ java {
 }
 
 tasks {
+    shadowJar {
+        relocate("xyz.xenondevs.invui", "pro.fazeclan.river.foundyou.invui")
+    }
+
     build {
         dependsOn(shadowJar)
     }

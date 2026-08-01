@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -108,6 +109,23 @@ public class GameListeners implements Listener {
             return;
         }
         if (block.getType() != Material.DECORATED_POT) {
+            return;
+        }
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void handlePlayerOnPlayerDamage(EntityDamageByEntityEvent event) {
+        if (!(event.getEntity() instanceof Player victim)) {
+            return;
+        }
+        if (!(event.getDamager() instanceof Player damager)) {
+            return;
+        }
+        if (!victim.getWorld().getKey().namespace().equals("foundyou")) {
+            return;
+        }
+        if (!RoleUtil.isSameFaction(victim, damager)) {
             return;
         }
         event.setCancelled(true);

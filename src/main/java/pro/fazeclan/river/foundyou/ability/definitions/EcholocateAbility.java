@@ -7,8 +7,8 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import pro.fazeclan.river.foundyou.ability.Ability;
-import pro.fazeclan.river.foundyou.event.FoundGameAddPlayer;
-import pro.fazeclan.river.foundyou.event.FoundGameRemovePlayer;
+import pro.fazeclan.river.foundyou.event.GameAddPlayerEvent;
+import pro.fazeclan.river.foundyou.event.GameRemovePlayerEvent;
 import pro.fazeclan.river.jarona.util.SchedulingUtil;
 
 import java.io.Closeable;
@@ -30,7 +30,7 @@ public class EcholocateAbility extends Ability {
     }
 
     @EventHandler
-    private void handleGameStart(FoundGameAddPlayer event) {
+    private void handleGameStart(GameAddPlayerEvent event) {
         if (!event.getRole().getAbilities().contains(getId())) return;
 
         var player = event.getPlayer();
@@ -56,7 +56,7 @@ public class EcholocateAbility extends Ability {
     }
 
     @EventHandler
-    private void handlePlayerRemoval(FoundGameRemovePlayer event) {
+    private void handlePlayerRemoval(GameRemovePlayerEvent event) {
         if (!event.getRole().getAbilities().contains(getId())) return;
 
         try {

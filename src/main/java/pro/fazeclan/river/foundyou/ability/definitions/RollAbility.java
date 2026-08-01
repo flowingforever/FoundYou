@@ -6,8 +6,8 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import pro.fazeclan.river.foundyou.ability.Ability;
 import pro.fazeclan.river.foundyou.event.AbilityEvent;
-import pro.fazeclan.river.foundyou.event.FoundGameAddPlayer;
-import pro.fazeclan.river.foundyou.event.FoundGameRemovePlayer;
+import pro.fazeclan.river.foundyou.event.GameAddPlayerEvent;
+import pro.fazeclan.river.foundyou.event.GameRemovePlayerEvent;
 import pro.fazeclan.river.jarona.Jarona;
 import pro.fazeclan.river.jarona.condition.TimedCondition;
 import pro.fazeclan.river.jarona.condition.TimedUseCondition;
@@ -88,7 +88,7 @@ public class RollAbility extends Ability {
     }
 
     @EventHandler
-    private void handlePlayerAddition(FoundGameAddPlayer event) {
+    private void handlePlayerAddition(GameAddPlayerEvent event) {
         if (!event.getRole().getAbilities().contains(getId())) return;
 
         var manager = Jarona.getInstance().getConditionManager();
@@ -103,7 +103,7 @@ public class RollAbility extends Ability {
     }
 
     @EventHandler
-    private void handlePlayerRemoval(FoundGameRemovePlayer event) {
+    private void handlePlayerRemoval(GameRemovePlayerEvent event) {
         if (!event.getRole().getAbilities().contains(getId())) return;
 
         Jarona.getInstance().getConditionManager()

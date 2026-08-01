@@ -8,8 +8,8 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import pro.fazeclan.river.foundyou.ability.Ability;
 import pro.fazeclan.river.foundyou.event.AbilityEvent;
-import pro.fazeclan.river.foundyou.event.FoundGameAddPlayer;
-import pro.fazeclan.river.foundyou.event.FoundGameRemovePlayer;
+import pro.fazeclan.river.foundyou.event.GameAddPlayerEvent;
+import pro.fazeclan.river.foundyou.event.GameRemovePlayerEvent;
 import pro.fazeclan.river.jarona.Jarona;
 import pro.fazeclan.river.jarona.condition.TimedCondition;
 import pro.fazeclan.river.jarona.util.SchedulingUtil;
@@ -135,7 +135,7 @@ public class TrapAbility extends Ability {
     }
 
     @EventHandler
-    private void handleGameJoin(FoundGameAddPlayer event) {
+    private void handleGameJoin(GameAddPlayerEvent event) {
         if (!event.getRole().getAbilities().contains(getId())) return;
 
         initializeAbilityCondition(
@@ -146,7 +146,7 @@ public class TrapAbility extends Ability {
     }
 
     @EventHandler
-    private void handleGameLeave(FoundGameRemovePlayer event) {
+    private void handleGameLeave(GameRemovePlayerEvent event) {
         if (!event.getRole().getAbilities().contains(getId())) return;
 
         var player = event.getPlayer();

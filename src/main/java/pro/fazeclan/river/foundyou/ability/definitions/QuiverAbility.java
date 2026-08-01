@@ -2,14 +2,12 @@ package pro.fazeclan.river.foundyou.ability.definitions;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import pro.fazeclan.river.foundyou.ability.Ability;
-import pro.fazeclan.river.foundyou.event.FoundGameAddPlayer;
-import pro.fazeclan.river.foundyou.event.FoundGameRemovePlayer;
+import pro.fazeclan.river.foundyou.event.GameAddPlayerEvent;
+import pro.fazeclan.river.foundyou.event.GameRemovePlayerEvent;
 import pro.fazeclan.river.jarona.util.SchedulingUtil;
 
 import java.io.Closeable;
@@ -27,7 +25,7 @@ public class QuiverAbility extends Ability {
     }
 
     @EventHandler
-    private void handleGameAddPlayer(FoundGameAddPlayer event) {
+    private void handleGameAddPlayer(GameAddPlayerEvent event) {
         if (!event.getRole().getAbilities().contains(getId())) {
             return;
         }
@@ -46,7 +44,7 @@ public class QuiverAbility extends Ability {
     }
 
     @EventHandler
-    private void handleGameRemovePlayer(FoundGameRemovePlayer event) {
+    private void handleGameRemovePlayer(GameRemovePlayerEvent event) {
         if (!event.getRole().getAbilities().contains(getId())) return;
         try {
             quiverTask.remove(event.getPlayer().getUniqueId()).close();

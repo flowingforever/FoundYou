@@ -7,8 +7,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import pro.fazeclan.river.foundyou.FoundYou;
-import pro.fazeclan.river.foundyou.event.FoundGameAddPlayer;
-import pro.fazeclan.river.foundyou.event.FoundGameRemovePlayer;
+import pro.fazeclan.river.foundyou.event.GameAddPlayerEvent;
+import pro.fazeclan.river.foundyou.event.GameRemovePlayerEvent;
 import pro.fazeclan.river.foundyou.role.Faction;
 import pro.fazeclan.river.foundyou.role.Role;
 import pro.fazeclan.river.jarona.util.GameUtil;
@@ -36,7 +36,7 @@ public class RoleUtil {
         FoundYou.getInstance()
                 .getServer()
                 .getPluginManager()
-                .callEvent(new FoundGameAddPlayer(player, role));
+                .callEvent(new GameAddPlayerEvent(player, role));
     }
 
     public static void assignRole(Player player, Role role, Location teleport) {
@@ -52,7 +52,7 @@ public class RoleUtil {
             FoundYou.getInstance()
                     .getServer()
                     .getPluginManager()
-                    .callEvent(new FoundGameRemovePlayer(player, role.get()));
+                    .callEvent(new GameRemovePlayerEvent(player, role.get()));
         }
     }
 

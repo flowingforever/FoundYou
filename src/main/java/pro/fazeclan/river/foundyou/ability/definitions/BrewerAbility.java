@@ -12,8 +12,8 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import pro.fazeclan.river.foundyou.ability.Ability;
-import pro.fazeclan.river.foundyou.event.FoundGameAddPlayer;
-import pro.fazeclan.river.foundyou.event.FoundGameRemovePlayer;
+import pro.fazeclan.river.foundyou.event.GameAddPlayerEvent;
+import pro.fazeclan.river.foundyou.event.GameRemovePlayerEvent;
 import pro.fazeclan.river.jarona.util.SchedulingUtil;
 
 import java.io.Closeable;
@@ -31,7 +31,7 @@ public class BrewerAbility extends Ability {
     }
 
     @EventHandler
-    private void handleGameAddPlayer(FoundGameAddPlayer event) {
+    private void handleGameAddPlayer(GameAddPlayerEvent event) {
         if (!event.getRole().getAbilities().contains(getId())) {
             return;
         }
@@ -43,7 +43,7 @@ public class BrewerAbility extends Ability {
     }
 
     @EventHandler
-    private void handleGameRemovePlayer(FoundGameRemovePlayer event) {
+    private void handleGameRemovePlayer(GameRemovePlayerEvent event) {
         if (!event.getRole().getAbilities().contains(getId())) return;
         try {
             brewTasks.remove(event.getPlayer().getUniqueId()).close();
