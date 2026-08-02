@@ -1,9 +1,6 @@
 package pro.fazeclan.river.foundyou.ability.definitions;
 
-import org.bukkit.Location;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.potion.PotionEffect;
@@ -62,6 +59,17 @@ public class DashAbility extends Ability {
                 false,
                 true
         ));
+
+        player.addPotionEffect(new PotionEffect(
+                PotionEffectType.DARKNESS,
+                5 * 20,
+                1,
+                false,
+                false,
+                true
+        ));
+
+        player.sendMessage(ChatColor.GREEN + "Draining Dash activated! " + ChatColor.GRAY + "(Speed II, 2s. Darkness 5s.");
         condition.increaseUses();
 
         condition.setHud(c -> {
