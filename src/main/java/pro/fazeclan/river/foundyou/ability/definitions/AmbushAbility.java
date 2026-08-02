@@ -104,7 +104,7 @@ public class AmbushAbility extends Ability {
         hideBodyArrows(player);
         player.removePotionEffect(PotionEffectType.GLOWING);
 
-        player.sendMessage(ChatColor.RED + "Ambush activated! " + ChatColor.GRAY + "(Invisible for 10s.)");
+        player.sendMessage(ChatColor.RED + "Ambush activated! " + ChatColor.GRAY + "(Invisible for " + duration + "s.)");
 
         SchedulingUtil.runLater(duration * 20L, () -> {
             ACTIVE_UNTIL.remove(player.getUniqueId());
@@ -323,12 +323,4 @@ public class AmbushAbility extends Ability {
         manager.getPlayerConditions(event.getPlayer()).remove(getId() + "_ability");
     }
 
-    @EventHandler
-    private void handleGraceOver(GracePeriodOverEvent event) {
-        for (var player : event.getPlayers()) {
-            if (RoleUtil.getRoleOrThrow(player).getAbilities().contains(getId())) {
-                player.removePotionEffect(PotionEffectType.GLOWING);
-            }
-        }
-    }
 }
