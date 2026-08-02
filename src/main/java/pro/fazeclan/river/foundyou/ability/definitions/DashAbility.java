@@ -69,7 +69,7 @@ public class DashAbility extends Ability {
                 true
         ));
 
-        player.sendMessage(ChatColor.GREEN + "Draining Dash activated! " + ChatColor.GRAY + "(Speed II, 2s. Darkness 5s.");
+        player.sendMessage(ChatColor.GREEN + "Draining Dash activated! " + ChatColor.GRAY + "(Speed II, 2s. Darkness 5s.)");
         condition.increaseUses();
 
         condition.setHud(c -> {
