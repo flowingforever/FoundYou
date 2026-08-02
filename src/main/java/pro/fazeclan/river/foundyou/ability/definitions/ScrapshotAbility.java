@@ -87,6 +87,8 @@ public class ScrapshotAbility extends Ability {
         applyRecoil(player);
 
         player.setCooldown(Material.CROSSBOW, getDefaultAbilityProperty("cooldown", 20) * 20);
+
+        player.sendMessage(ChatColor.GOLD + "Recoil shot fired! " + ChatColor.GRAY + "(" + cooldown + "s cooldown.)");
     }
 
     private void consumeArrow(Player player) {

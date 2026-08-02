@@ -16,6 +16,7 @@ public class AbilityManager {
         register(new AmbushAbility());
         register(new BrewerAbility());
         register(new ConcealAbility());
+        register(new DashAbility());
         register(new DisplacementAbility());
         register(new EcholocateAbility());
         register(new EnragedShriekAbility());
