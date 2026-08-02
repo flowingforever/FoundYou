@@ -10,8 +10,8 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import pro.fazeclan.river.foundyou.ability.Ability;
 import pro.fazeclan.river.foundyou.event.AbilityEvent;
-import pro.fazeclan.river.foundyou.event.FoundGameAddPlayer;
-import pro.fazeclan.river.foundyou.event.FoundGameRemovePlayer;
+import pro.fazeclan.river.foundyou.event.GameAddPlayerEvent;
+import pro.fazeclan.river.foundyou.event.GameRemovePlayerEvent;
 import pro.fazeclan.river.jarona.Jarona;
 import pro.fazeclan.river.jarona.condition.TimedCondition;
 import pro.fazeclan.river.jarona.condition.TimedUseCondition;
@@ -135,7 +135,7 @@ public class ConcealAbility extends Ability {
     }
 
     @EventHandler
-    private void handleGamePlayerAdd(FoundGameAddPlayer event) {
+    private void handleGamePlayerAdd(GameAddPlayerEvent event) {
         if (!event.getRole().getAbilities().contains(getId())) return;
 
         var conditionManager = Jarona.getInstance().getConditionManager();
@@ -149,7 +149,7 @@ public class ConcealAbility extends Ability {
     }
 
     @EventHandler
-    private void handleGamePlayerRemoval(FoundGameRemovePlayer event) {
+    private void handleGamePlayerRemoval(GameRemovePlayerEvent event) {
         if (!event.getRole().getAbilities().contains(getId())) return;
 
         var conditionManager = Jarona.getInstance().getConditionManager();

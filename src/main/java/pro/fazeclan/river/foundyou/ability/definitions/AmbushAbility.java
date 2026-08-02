@@ -10,7 +10,6 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
 import java.util.EnumMap;
@@ -25,8 +24,8 @@ import org.bukkit.World;
 
 import pro.fazeclan.river.foundyou.ability.Ability;
 import pro.fazeclan.river.foundyou.event.AbilityEvent;
-import pro.fazeclan.river.foundyou.event.FoundGameAddPlayer;
-import pro.fazeclan.river.foundyou.event.FoundGameRemovePlayer;
+import pro.fazeclan.river.foundyou.event.GameAddPlayerEvent;
+import pro.fazeclan.river.foundyou.event.GameRemovePlayerEvent;
 import pro.fazeclan.river.foundyou.event.GracePeriodOverEvent;
 import pro.fazeclan.river.foundyou.util.RoleUtil;
 import pro.fazeclan.river.jarona.Jarona;
@@ -303,7 +302,7 @@ public class AmbushAbility extends Ability {
     }
 
     @EventHandler
-    private void handleGamePlayerAdd(FoundGameAddPlayer event) {
+    private void handleGamePlayerAdd(GameAddPlayerEvent event) {
         if (!event.getRole().getAbilities().contains(getId())) return;
 
         var manager = Jarona.getInstance().getConditionManager();
@@ -317,7 +316,7 @@ public class AmbushAbility extends Ability {
     }
 
     @EventHandler
-    private void handleGamePlayerRemove(FoundGameRemovePlayer event) {
+    private void handleGamePlayerRemove(GameRemovePlayerEvent event) {
         if (!event.getRole().getAbilities().contains(getId())) return;
 
         var manager = Jarona.getInstance().getConditionManager();

@@ -7,12 +7,12 @@ import org.bukkit.event.player.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 import pro.fazeclan.river.foundyou.role.Role;
 
-public class FoundGameAddPlayer extends PlayerEvent {
+public class GameRemovePlayerEvent extends PlayerEvent {
 
     @Getter
     private final Role role;
 
-    public FoundGameAddPlayer(@NotNull Player player, Role role) {
+    public GameRemovePlayerEvent(@NotNull Player player, Role role) {
         super(player);
         this.role = role;
     }

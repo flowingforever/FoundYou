@@ -15,8 +15,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.RayTraceResult;
 import pro.fazeclan.river.foundyou.ability.Ability;
 import pro.fazeclan.river.foundyou.event.AbilityEvent;
-import pro.fazeclan.river.foundyou.event.FoundGameAddPlayer;
-import pro.fazeclan.river.foundyou.event.FoundGameRemovePlayer;
+import pro.fazeclan.river.foundyou.event.GameAddPlayerEvent;
+import pro.fazeclan.river.foundyou.event.GameRemovePlayerEvent;
 import pro.fazeclan.river.jarona.Jarona;
 import pro.fazeclan.river.jarona.condition.TimedCondition;
 
@@ -172,7 +172,7 @@ public class ScrapshotAbility extends Ability {
 
 
     @EventHandler
-    private void handlePlayerAdd(FoundGameAddPlayer event) {
+    private void handlePlayerAdd(GameAddPlayerEvent event) {
         if (!event.getRole().getAbilities().contains(getId())) return;
 
         var manager = Jarona.getInstance().getConditionManager();
@@ -180,7 +180,7 @@ public class ScrapshotAbility extends Ability {
     }
 
     @EventHandler
-    private void handlePlayerRemoval(FoundGameRemovePlayer event) {
+    private void handlePlayerRemoval(GameRemovePlayerEvent event) {
         if (!event.getRole().getAbilities().contains(getId())) return;
 
         var player = event.getPlayer();

@@ -5,7 +5,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import pro.fazeclan.river.foundyou.FoundYou;
-import pro.fazeclan.river.foundyou.event.FoundGameAddPlayer;
+import pro.fazeclan.river.foundyou.event.GameAddPlayerEvent;
 import pro.fazeclan.river.foundyou.role.Faction;
 import pro.fazeclan.river.foundyou.util.RoleUtil;
 import pro.fazeclan.river.jarona.condition.Condition;
@@ -56,7 +56,7 @@ public class Ability implements Listener {
         return sb.toString().trim();
     }
 
-    public void initializeAbilityCondition(FoundGameAddPlayer event, ConditionManager manager, Function<Condition, String> hud) {
+    public void initializeAbilityCondition(GameAddPlayerEvent event, ConditionManager manager, Function<Condition, String> hud) {
         var player = event.getPlayer();
         var condition = manager.getPlayerConditions(player)
                 .getOrCreate(
@@ -74,7 +74,7 @@ public class Ability implements Listener {
         condition.setPriority(200);
     }
 
-    public void initializeAbilityUsesCondition(FoundGameAddPlayer event, int maxUses, ConditionManager manager, Function<Condition, String> hud) {
+    public void initializeAbilityUsesCondition(GameAddPlayerEvent event, int maxUses, ConditionManager manager, Function<Condition, String> hud) {
         var player = event.getPlayer();
         var condition = manager.getPlayerConditions(player)
                 .getOrCreate(
