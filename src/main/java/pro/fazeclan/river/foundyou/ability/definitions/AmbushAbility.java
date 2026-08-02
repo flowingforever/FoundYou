@@ -103,6 +103,7 @@ public class AmbushAbility extends Ability {
         ));
         hideArmor(player);
         hideBodyArrows(player);
+        player.removePotionEffect(PotionEffectType.GLOWING);
 
         player.sendMessage(ChatColor.RED + "Ambush activated! " + ChatColor.GRAY + "(Invisible for 10s.)");
 
@@ -117,6 +118,13 @@ public class AmbushAbility extends Ability {
         player.removePotionEffect(PotionEffectType.INVISIBILITY);
         showArmor(player);
         restoreBodyArrows(player);
+        player.addPotionEffect(new PotionEffect(
+                PotionEffectType.GLOWING,
+                PotionEffect.INFINITE_DURATION,
+                0,
+                false,
+                false,
+                true));
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
