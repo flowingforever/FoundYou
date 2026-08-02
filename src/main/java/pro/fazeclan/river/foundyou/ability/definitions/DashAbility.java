@@ -90,6 +90,7 @@ public class DashAbility extends Ability {
 
         Vector dashVector = player.getEyeLocation()
                 .getDirection()
+                .setY(0)
                 .normalize()
                 .multiply(getDefaultAbilityProperty("magnitude", 1.11));
 
