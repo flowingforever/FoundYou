@@ -33,6 +33,7 @@ public class RoleUtil {
                 nbt.mergeCompound(NBT.parseNBT(role.getItems()));
             } catch (Exception ignored) {}
         });
+        player.updateInventory();
         FoundYou.getInstance()
                 .getServer()
                 .getPluginManager()
