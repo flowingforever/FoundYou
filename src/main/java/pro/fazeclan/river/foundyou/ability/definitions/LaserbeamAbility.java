@@ -117,7 +117,8 @@ public class LaserbeamAbility extends Ability {
 
         spawnBeamParticles(world, start, direction, beamLength);
 
-        if (hitPlayer == null) {
+        assert hitPlayer != null;
+        if (!hitPlayer.getGameMode().equals(GameMode.SPECTATOR)) {
             tellPlayerTheyMissed(shooter);
             return false;
         }
@@ -174,8 +175,8 @@ public class LaserbeamAbility extends Ability {
         double radiusSquared = getDefaultAbilityProperty("reveal-radius", 7) * getDefaultAbilityProperty("reveal-radius", 7);
 
         for (Player nearbyPlayer : center.getWorld().getPlayers()) {
-            if (nearbyPlayer.getLocation()
-                    .distanceSquared(center) > radiusSquared) {
+            if (nearbyPlayer.getLocation().distanceSquared(center) > radiusSquared
+                && !nearbyPlayer.getGameMode().equals(GameMode.SPECTATOR)) {
                 continue;
             }
 
