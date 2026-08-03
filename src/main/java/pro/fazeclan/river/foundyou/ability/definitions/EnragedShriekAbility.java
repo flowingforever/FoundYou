@@ -74,14 +74,14 @@ public class EnragedShriekAbility extends Ability {
         var charge = getDefaultAbilityProperty("charge", 3);
 
         // Make all hiders glow for 3s
-        for (Player hider : player.getWorld().getPlayers()) {
-            if (isRunner(hider)) return;
-
-            hider.showTitle(Title.title(
-                    miniMessage().deserialize(""),
-                    miniMessage().deserialize("<red>BOOM INCOMING!")
-            ));
-            hider.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, charge * 20, 0, false, false, true));
+        for (Player victim : player.getWorld().getPlayers()) {
+            if (isRunner(victim)) {
+                victim.showTitle(Title.title(
+                        miniMessage().deserialize(""),
+                        miniMessage().deserialize("<red>BOOM INCOMING!")
+                ));
+                victim.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, charge * 20, 0, false, false, true));
+            }
         }
 
         // Title + progress: cyan
