@@ -37,8 +37,21 @@ public class EcholocateAbility extends Ability {
         double r2 = Math.pow(getDefaultAbilityProperty("radius", 25.0), 2);
 
         echoTasks.put(player.getUniqueId(), SchedulingUtil.interval(10L, 10L, () -> {
-            player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 40, 0, false, false, true));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 40, 1, false, false, true));
+
+            if (player.getGameMode() != GameMode.SPECTATOR) {
+
+                if (player.isSneaking()) {
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 40, 0, false, false, true));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 40, 9, false, false, true));
+                    player.removePotionEffect(PotionEffectType.SLOWNESS);
+                } else {
+                    player.removePotionEffect(PotionEffectType.BLINDNESS);
+                    player.removePotionEffect(PotionEffectType.SPEED);
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 40, 49, false, false, true));
+                }
+
+            }
+
             player.removePotionEffect(PotionEffectType.GLOWING);
             player.setGlowing(false);
 
@@ -102,12 +115,11 @@ public class EcholocateAbility extends Ability {
 
     private void sendEcholocationPing(Player holder, Player mover) {
         Location start = holder.getLocation().add(0, 1.0, 0);
-        Location end   = mover.getLocation().add(0, 1.0, 0);
+        Location end = mover.getLocation().add(0, 1.0, 0);
 
         int travelTicks = Math.min(40, Math.max(10, (int) (start.distance(end) * 2)));
 
         Vibration vib = new Vibration(
-                start,
                 new Vibration.Destination.EntityDestination(mover),
                 travelTicks
         );

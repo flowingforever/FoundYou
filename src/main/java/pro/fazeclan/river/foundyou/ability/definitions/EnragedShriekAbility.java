@@ -139,9 +139,11 @@ public class EnragedShriekAbility extends Ability {
                 if (!isRunner(target)) continue;
 
                 if (point.distanceSquared(target.getLocation().add(0, 1.0, 0)) <= getDefaultAbilityProperty("hit-radius", 1.0)) {
-                    // Apply 7 hearts (14 HP) and Weakness II for 10s
-                    target.damage(14.0, user);
+                    // Apply 7 hearts (14 HP) and Weakness II for 10s, Glowing for 5, and Slowness 1 for 5s
+                    target.damage(16.0, user);
                     target.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 10 * 20, 1, false, false, true));
+                    target.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 5 * 20, 0, false, false, true));
+                    target.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 5 * 20, 0, false, false, true));
 
                     // Impact flare
                     w.spawnParticle(Particle.SONIC_BOOM, target.getLocation().add(0, 1.0, 0), 10, 0.2, 0.2, 0.2, 0.01);
