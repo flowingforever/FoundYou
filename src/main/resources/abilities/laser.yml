@@ -1,0 +1,8 @@
+success-cooldown: 3
+failure-cooldown: 20
+damage: 6
+reveal-radius: 7
+
+beam-range: 7.0
+beam-step: 0.20
+hitbox-size: 0.35

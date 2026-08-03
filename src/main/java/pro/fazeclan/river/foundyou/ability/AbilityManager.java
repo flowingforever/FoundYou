@@ -20,6 +20,7 @@ public class AbilityManager {
         register(new DisplacementAbility());
         register(new EcholocateAbility());
         register(new EnragedShriekAbility());
+        register(new LaserbeamAbility());
         register(new NoisemakerAbility());
         register(new ParryAbility());
         register(new QuickfireAbility());
