@@ -26,7 +26,3 @@ My Friends - Feedback and whatnot for this project!! Every little bit counts and
 - [ ] Game Modifiers
   - [ ] Infection
   - [ ] Impostor
-
-## Known Issues
-
-- Shrink allows you to phase through walls when you grow back to normal size
