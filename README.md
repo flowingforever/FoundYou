@@ -20,6 +20,12 @@ My Friends - Feedback and whatnot for this project!! Every little bit counts and
 - [ ] Layout Editor
 - [ ] Info Commands/Menus
 - [ ] Documentation (Mainly for setting up your own maps and roles, as they're all behind commands at the moment.)
+- [ ] Player Statistics
+- [ ] Achievements and/or Challenges
+- [ ] Map Voting
+- [ ] Game Modifiers
+  - [ ] Infection
+  - [ ] Impostor
 
 ## Known Issues
 
