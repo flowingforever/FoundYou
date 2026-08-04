@@ -13,3 +13,14 @@ Runners win if even one is still alive when the time runs out, or all hunters ar
 [Sonicdude](https://github.com/TheRealSonicdude) - He made all the abilities, pretty much the creative guy for this project.
 
 My Friends - Feedback and whatnot for this project!! Every little bit counts and even a few has made maps for our friend group to play!! This wouldn't be improving as fast as it is without them!!
+
+## Plans
+
+- [ ] Class Editor
+- [ ] Layout Editor
+- [ ] Info Commands/Menus
+- [ ] Documentation (Mainly for setting up your own maps and roles, as they're all behind commands at the moment.)
+
+## Known Issues
+
+- Shrink allows you to phase through walls when you grow back to normal size
