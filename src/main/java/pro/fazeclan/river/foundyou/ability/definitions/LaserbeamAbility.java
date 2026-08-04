@@ -118,7 +118,7 @@ public class LaserbeamAbility extends Ability {
         spawnBeamParticles(world, start, direction, beamLength);
 
         assert hitPlayer != null;
-        if (!hitPlayer.getGameMode().equals(GameMode.SPECTATOR)) {
+        if (hitPlayer.getGameMode().equals(GameMode.SPECTATOR)) {
             tellPlayerTheyMissed(shooter);
             return false;
         }
