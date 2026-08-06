@@ -1,5 +1,7 @@
 package pro.fazeclan.river.foundyou.ability.definitions;
 
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.Consumable;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -52,7 +54,7 @@ public class BrewerAbility extends Ability {
 
     private void brewFor(Player p) {
         ItemStack potion = randomPotion();
-        giveOrDrop(p, potion);
+        p.give(potion);
         p.sendMessage(ChatColor.GREEN + "You conjured a new potion!");
     }
 
@@ -84,6 +86,10 @@ public class BrewerAbility extends Ability {
     // Vile Concoction: Weakness III (0:03), Nausea (0:03), Mining Fatigue III (0:03)
     private ItemStack vileConcoction() {
         ItemStack item = new ItemStack(Material.LINGERING_POTION, 1);
+        item.setData(
+                DataComponentTypes.CONSUMABLE,
+                Consumable.consumable().consumeSeconds(getDefaultAbilityProperty("drink-duration.vile-concoction", 0.8).floatValue()).build()
+        );
         PotionMeta meta = (PotionMeta) item.getItemMeta();
         meta.setDisplayName(ChatColor.DARK_GREEN + "Vile Concoction");
         meta.addCustomEffect(new PotionEffect(PotionEffectType.WEAKNESS, 3 * 20, 2, false, false, true), true);       // III
@@ -97,6 +103,10 @@ public class BrewerAbility extends Ability {
     // One-Winged Angel: Slow Falling II (0:04), Speed II (0:06)
     private ItemStack oneWingedAngel() {
         ItemStack item = new ItemStack(Material.POTION, 1);
+        item.setData(
+                DataComponentTypes.CONSUMABLE,
+                Consumable.consumable().consumeSeconds(getDefaultAbilityProperty("drink-duration.one-winged-angel", 0.8).floatValue()).build()
+        );
         PotionMeta meta = (PotionMeta) item.getItemMeta();
         meta.setDisplayName(ChatColor.AQUA + "One-Winged Angel");
         meta.addCustomEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 4 * 20, 1, false, false, true), true); // II
@@ -109,6 +119,10 @@ public class BrewerAbility extends Ability {
     // Death's Dance: Wither II (0:07), Speed III (0:10)
     private ItemStack deathsDance() {
         ItemStack item = new ItemStack(Material.POTION, 1);
+        item.setData(
+                DataComponentTypes.CONSUMABLE,
+                Consumable.consumable().consumeSeconds(getDefaultAbilityProperty("drink-duration.deaths-dance", 0.8).floatValue()).build()
+        );
         PotionMeta meta = (PotionMeta) item.getItemMeta();
         meta.setDisplayName(ChatColor.DARK_PURPLE + "Death's Dance");
         meta.addCustomEffect(new PotionEffect(PotionEffectType.WITHER, 7 * 20, 1, false, false, true), true); // II
@@ -121,6 +135,10 @@ public class BrewerAbility extends Ability {
     // Near-Perfected Ambrosia: Instant Health II, Regeneration II (0:10), Nausea (0:10)
     private ItemStack nearPerfectedAmbrosia() {
         ItemStack item = new ItemStack(Material.POTION, 1);
+        item.setData(
+                DataComponentTypes.CONSUMABLE,
+                Consumable.consumable().consumeSeconds(getDefaultAbilityProperty("drink-duration.near-perfected-ambrosia", 0.8).floatValue()).build()
+        );
         PotionMeta meta = (PotionMeta) item.getItemMeta();
         meta.setDisplayName(ChatColor.GOLD + "Near-Perfected Ambrosia");
         meta.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH, 1, 1, false, false, true), true); // II
@@ -129,16 +147,6 @@ public class BrewerAbility extends Ability {
         meta.setColor(Color.ORANGE);
         item.setItemMeta(meta);
         return item;
-    }
-
-    // ---- helpers ----
-    private void giveOrDrop(Player p, ItemStack item) {
-        PlayerInventory inv = p.getInventory();
-        var leftover = inv.addItem(item);
-        if (!leftover.isEmpty()) {
-            World w = p.getWorld();
-            if (w != null) w.dropItemNaturally(p.getLocation(), item);
-        }
     }
 
 }
