@@ -49,7 +49,6 @@ public class MuzzleAbility extends Ability {
                 BossBar.Color.RED,
                 BossBar.Overlay.PROGRESS
         );
-        bossbar.addListener(new MuzzleListener());
         new BukkitRunnable() {
             long tick = 0;
 
@@ -63,7 +62,15 @@ public class MuzzleAbility extends Ability {
                 }
             }
 
+            @Override
+            public synchronized void cancel() throws IllegalStateException {
+                var players = player.getWorld().getPlayers();
+                for (var v : players) {
+                    v.removeScoreboardTag("foundyoumuzzled");
+                }
+            }
         }.runTaskTimer(FoundYou.getInstance(), 0L, 1L);
+
         for (var victim : player.getLocation().getNearbyPlayers(range)) {
             if (victim.equals(player)) continue;
             if (victim.getGameMode().isInvulnerable()) continue;
@@ -91,28 +98,13 @@ public class MuzzleAbility extends Ability {
 
     @EventHandler
     private void handlePlayerRemoval(GameRemovePlayerEvent event) {
+        var player = event.getPlayer();
+        player.removeScoreboardTag("foundyoumuzzled");
+
         if (!event.getRole().getAbilities().contains(getId())) return;
 
-        var player = event.getPlayer();
         var manager = Jarona.getInstance().getConditionManager();
         manager.getPlayerConditions(player).remove(getId() + "_ability");
-    }
-
-    private class MuzzleListener implements BossBar.Listener {
-
-        @Override
-        public void bossBarProgressChanged(@NotNull BossBar bossbar, float oldProgress, float newProgress) {
-            BossBar.Listener.super.bossBarProgressChanged(bossbar, oldProgress, newProgress);
-
-            if (newProgress <= 0f) {
-                var viewers = bossbar.viewers();
-                viewers.forEach(v -> {
-                    if (!(v instanceof Player viewer)) return;
-                    bossbar.removeViewer(viewer);
-                    viewer.removeScoreboardTag("foundyoumuzzled");
-                });
-            }
-        }
     }
 
 }
