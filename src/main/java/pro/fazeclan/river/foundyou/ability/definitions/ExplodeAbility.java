@@ -3,6 +3,9 @@ package pro.fazeclan.river.foundyou.ability.definitions;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
+import pro.fazeclan.river.foundyou.FoundYou;
 import pro.fazeclan.river.foundyou.ability.Ability;
 import pro.fazeclan.river.foundyou.event.AbilityEvent;
 import pro.fazeclan.river.foundyou.event.GameAddPlayerEvent;
@@ -34,10 +37,9 @@ public class ExplodeAbility extends Ability {
                                 )
                         );
         if (!condition.getAvailable()) return;
-
-        handleExplosion(player);
-        RoleUtil.eliminatePlayer(player);
         condition.setAvailable(false);
+
+        handleExplosionBuildup(player);
     }
 
     @EventHandler
@@ -71,6 +73,36 @@ public class ExplodeAbility extends Ability {
         handleExplosion(event.getPlayer());
     }
 
+    private void handleExplosionBuildup(Player player) {
+        Location deathLocation = player.getLocation();
+        int delay = getDefaultAbilityProperty("delay", 5);
+        var world = player.getWorld().getUID();
+
+        new BukkitRunnable() {
+            int tick = 0;
+
+            @Override
+            public void run() {
+                tick++;
+
+                player.getWorld().playSound(deathLocation, "minecraft:block.note_block.bit", SoundCategory.PLAYERS, 1.0f, 2.0f);
+                if (tick >= delay) {
+                    cancel();
+                }
+            }
+
+            @Override
+            public synchronized void cancel() throws IllegalStateException {
+                if (Bukkit.getWorld(world) == null) {
+                    return;
+                }
+                handleExplosion(player);
+                RoleUtil.eliminatePlayer(player);
+                super.cancel();
+            }
+        }.runTaskTimer(FoundYou.getInstance(), 0L, 2L);
+    }
+
     private void handleExplosion(Player player) {
         Location deathLocation = player.getLocation();
 
@@ -101,11 +133,23 @@ public class ExplodeAbility extends Ability {
                 continue;
             }
 
-            if (nearbyPlayer.getGameMode() == GameMode.SPECTATOR) {
+            if (nearbyPlayer.getGameMode().isInvulnerable()) {
                 continue;
             }
 
+            var multiplier = location.distance(nearbyPlayer.getLocation());
+            var push = location.toVector().subtract(nearbyPlayer.getLocation().toVector()).multiply(-1);
+            if (push.lengthSquared() > 0) {
+                push.normalize();
+            } else {
+                push = new Vector(0, 1, 0);
+            }
+            push.add(new Vector(0, 0.2, 0));
+
+            push.multiply(multiplier);
+
             nearbyPlayer.damage(damage, deadPlayer);
+            nearbyPlayer.setVelocity(push);
         }
     }
 }

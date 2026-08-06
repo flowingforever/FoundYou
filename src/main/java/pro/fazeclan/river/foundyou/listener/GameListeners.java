@@ -128,6 +128,9 @@ public class GameListeners implements Listener {
         if (!RoleUtil.isSameFaction(victim, damager)) {
             return;
         }
+        if (FoundYou.getInstance().getConfig().getBoolean("friendly-fire")) {
+            return;
+        }
         event.setCancelled(true);
     }
 
