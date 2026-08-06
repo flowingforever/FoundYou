@@ -100,11 +100,21 @@ public class AmbushAbility extends Ability {
                 false,
                 true
         ));
+
+        player.addPotionEffect(new PotionEffect(
+                PotionEffectType.SPEED,
+                duration * 20,
+                0,
+                false,
+                false,
+                true
+        ));
+
         hideArmor(player);
         hideBodyArrows(player);
         player.removePotionEffect(PotionEffectType.GLOWING);
 
-        player.sendMessage(ChatColor.RED + "Ambush activated! " + ChatColor.GRAY + "(Invisible for " + duration + "s.)");
+        player.sendMessage(ChatColor.RED + "Ambush activated! " + ChatColor.GRAY + "(Invisible " + duration + "s, Speed I " + duration + "s.)");
 
         SchedulingUtil.runLater(duration * 20L, () -> {
             ACTIVE_UNTIL.remove(player.getUniqueId());
