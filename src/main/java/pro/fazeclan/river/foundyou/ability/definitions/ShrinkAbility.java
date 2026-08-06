@@ -47,7 +47,7 @@ public class ShrinkAbility extends Ability {
 
         player.addPotionEffect(new PotionEffect(
                 PotionEffectType.SPEED,
-                10 * 20,
+                5 * 20,
                 1,
                 false,
                 false,
