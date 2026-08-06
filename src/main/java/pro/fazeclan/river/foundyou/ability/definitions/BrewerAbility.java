@@ -2,14 +2,13 @@ package pro.fazeclan.river.foundyou.ability.definitions;
 
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.Consumable;
+import net.kyori.adventure.key.Key;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -101,7 +100,10 @@ public class BrewerAbility extends Ability {
         ItemStack item = new ItemStack(Material.POTION, 1);
         item.setData(
                 DataComponentTypes.CONSUMABLE,
-                Consumable.consumable().consumeSeconds(getDefaultAbilityProperty("drink-duration.one-winged-angel", 0.8).floatValue()).build()
+                Consumable.consumable()
+                        .consumeSeconds(getDefaultAbilityProperty("drink-duration.one-winged-angel", 0.8).floatValue())
+                        .sound(Key.key("minecraft", "entity.generic.drink"))
+                        .build()
         );
         PotionMeta meta = (PotionMeta) item.getItemMeta();
         meta.setDisplayName(ChatColor.AQUA + "One-Winged Angel");
@@ -117,7 +119,10 @@ public class BrewerAbility extends Ability {
         ItemStack item = new ItemStack(Material.POTION, 1);
         item.setData(
                 DataComponentTypes.CONSUMABLE,
-                Consumable.consumable().consumeSeconds(getDefaultAbilityProperty("drink-duration.deaths-dance", 0.8).floatValue()).build()
+                Consumable.consumable()
+                        .consumeSeconds(getDefaultAbilityProperty("drink-duration.deaths-dance", 0.8).floatValue())
+                        .sound(Key.key("minecraft", "entity.generic.drink"))
+                        .build()
         );
         PotionMeta meta = (PotionMeta) item.getItemMeta();
         meta.setDisplayName(ChatColor.DARK_PURPLE + "Death's Dance");
@@ -133,7 +138,10 @@ public class BrewerAbility extends Ability {
         ItemStack item = new ItemStack(Material.POTION, 1);
         item.setData(
                 DataComponentTypes.CONSUMABLE,
-                Consumable.consumable().consumeSeconds(getDefaultAbilityProperty("drink-duration.near-perfected-ambrosia", 0.8).floatValue()).build()
+                Consumable.consumable()
+                        .consumeSeconds(getDefaultAbilityProperty("drink-duration.near-perfected-ambrosia", 0.8).floatValue())
+                        .sound(Key.key("minecraft", "entity.generic.drink"))
+                        .build()
         );
         PotionMeta meta = (PotionMeta) item.getItemMeta();
         meta.setDisplayName(ChatColor.GOLD + "Near-Perfected Ambrosia");
