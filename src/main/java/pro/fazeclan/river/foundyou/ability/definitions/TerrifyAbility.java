@@ -110,7 +110,7 @@ public class TerrifyAbility extends Ability {
 
         for (Player targetPlayer : user.getWorld().getPlayers()) {
             Player target = targetPlayer.getPlayer();
-            if (!isRunner(target)) continue;
+            if (isHunter(target)) continue;
 
             if (seekerLoc.distanceSquared(target.getLocation()) <= aura_radius_sq) {
                 target.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, aura_darkness_ticks, 0, false, true, true));

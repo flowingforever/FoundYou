@@ -77,8 +77,6 @@ public class MuzzleAbility extends Ability {
             }
         }.runTaskTimer(FoundYou.getInstance(), 0L, 1L);
 
-
-
     }
 
     @EventHandler
