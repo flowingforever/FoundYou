@@ -25,6 +25,7 @@ public class AbilityManager {
         register(new ParryAbility());
         register(new QuickfireAbility());
         register(new QuiverAbility());
+        register(new RewindAbility());
         register(new RollAbility());
         register(new ScrapshotAbility());
         register(new ExplodeAbility());
