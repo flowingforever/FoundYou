@@ -1,7 +1,5 @@
 package pro.fazeclan.river.foundyou.ability.definitions;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -64,7 +62,7 @@ public class RewindAbility extends Ability {
         long now = System.currentTimeMillis();
         Long until = ACTIVE_UNTIL.get(player.getUniqueId());
         if (until != null && until > now) {
-            player.sendMessage(NamedTextColor.YELLOW + "Rewind is already active.");
+            player.sendMessage(ChatColor.YELLOW + "Rewind is already active.");
             return;
         }
 
@@ -116,17 +114,18 @@ public class RewindAbility extends Ability {
 
         condition.setHud(c -> {
             var tc = (TimedUseCondition) c;
+            var displayDuration = (tc.getDuration() / 20) + 1;
             if (tc.getUses() >= tc.getMaxUses()) {
-                return "<dark_aqua>⏰ <gray>Depleted.</gray></dark_aqua> " + buildUses(tc.getMaxUses(), tc.getUses());
+                return "<dark_aqua>\uD83D\uDD52 <gray>Depleted.</gray></dark_aqua> " + buildUses(tc.getMaxUses(), tc.getUses());
             } else if ((tc.getDuration() / 20.0) == 0.0) {
-                return "<dark_aqua>⏰ <green>Ready!</green></dark_aqua> " + buildUses(tc.getMaxUses(), tc.getUses());
+                return "<dark_aqua>\uD83D\uDD52 <green>Ready!</green></dark_aqua> " + buildUses(tc.getMaxUses(), tc.getUses());
             } else {
-                return "<dark_aqua>⏰ <red>" + duration + "s</red></dark_aqua> " + buildUses(tc.getMaxUses(), tc.getUses());
+                return "<dark_aqua>\uD83D\uDD52 <red>" + displayDuration + "s</red></dark_aqua> " + buildUses(tc.getMaxUses(), tc.getUses());
             }
         });
 
-        player.sendMessage(NamedTextColor.DARK_AQUA + "Rewind activated! " + NamedTextColor.GRAY + "(You will be teleported back in 5s.) "
-                + NamedTextColor.RED + "[" + (condition.getMaxUses() - condition.getUses()) + " left]");
+        player.sendMessage(ChatColor.DARK_AQUA + "Rewind activated! " + ChatColor.GRAY + "(You will be teleported back in 5s.) "
+                + ChatColor.RED + "[" + (condition.getMaxUses() - condition.getUses()) + " left]");
 
     }
 
@@ -134,7 +133,7 @@ public class RewindAbility extends Ability {
         boolean teleported = player.teleport(teleportLocation);
 
         if (!teleported) {
-            player.sendMessage(NamedTextColor.RED + "Rewind failed!");
+            player.sendMessage(ChatColor.RED + "Rewind failed!");
             return;
         }
 
@@ -182,7 +181,7 @@ public class RewindAbility extends Ability {
                 event,
                 maxUses,
                 conditionManager,
-                c -> "<dark_aqua>⏰ <green>Ready!</green></dark_aqua> " + buildUses(maxUses, 0)
+                c -> "<dark_aqua>\uD83D\uDD52 <green>Ready!</green></dark_aqua> " + buildUses(maxUses, 0)
         );
     }
 
