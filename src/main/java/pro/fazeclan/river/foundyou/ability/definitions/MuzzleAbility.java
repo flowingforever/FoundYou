@@ -14,6 +14,7 @@ import pro.fazeclan.river.foundyou.event.AbilityEvent;
 import pro.fazeclan.river.foundyou.event.GameAddPlayerEvent;
 import pro.fazeclan.river.foundyou.event.GameRemovePlayerEvent;
 import pro.fazeclan.river.jarona.Jarona;
+import pro.fazeclan.river.jarona.condition.SwitchCondition;
 import pro.fazeclan.river.jarona.condition.TimedCondition;
 import pro.fazeclan.river.jarona.util.ConditionUtil;
 import pro.fazeclan.river.jarona.util.SchedulingUtil;
@@ -43,19 +44,29 @@ public class MuzzleAbility extends Ability {
 
         var range = getDefaultAbilityProperty("range", 7.0);
         var duration = getDefaultAbilityProperty("duration", 10) * 20;
-        final BossBar bossbar = BossBar.bossBar(
-                Component.text("Muzzled!").color(NamedTextColor.GRAY),
-                1f,
-                BossBar.Color.RED,
-                BossBar.Overlay.PROGRESS
-        );
+
+        for (var victim : player.getLocation().getNearbyPlayers(range)) {
+            if (victim.equals(player)) continue;
+            if (victim.getGameMode().isInvulnerable()) continue;
+
+            ConditionUtil.getPlayerConditions(victim)
+                            .getOrCreate(
+                                    "foundyoumuzzled",
+                                    new SwitchCondition(
+                                            true,
+                                            c -> "<dark_gray>Muzzled!</dark_gray>",
+                                            victim.getUniqueId()
+                                    )
+                            );
+            victim.addScoreboardTag("foundyoumuzzled");
+        }
+
         new BukkitRunnable() {
             long tick = 0;
 
             @Override
             public void run() {
                 tick++;
-                bossbar.progress(Math.max(1.0f - (float) tick / duration, 0.0f));
 
                 if (tick >= duration) {
                     cancel();
@@ -67,19 +78,13 @@ public class MuzzleAbility extends Ability {
                 var players = player.getWorld().getPlayers();
                 for (var v : players) {
                     v.removeScoreboardTag("foundyoumuzzled");
-                    bossbar.removeViewer(v);
+                    ConditionUtil.getPlayerConditions(v).remove("foundyoumuzzled");
                 }
 
             }
         }.runTaskTimer(FoundYou.getInstance(), 0L, 1L);
 
-        for (var victim : player.getLocation().getNearbyPlayers(range)) {
-            if (victim.equals(player)) continue;
-            if (victim.getGameMode().isInvulnerable()) continue;
 
-            bossbar.addViewer(victim);
-            victim.addScoreboardTag("foundyoumuzzled");
-        }
 
     }
 
@@ -102,6 +107,7 @@ public class MuzzleAbility extends Ability {
     private void handlePlayerRemoval(GameRemovePlayerEvent event) {
         var player = event.getPlayer();
         player.removeScoreboardTag("foundyoumuzzled");
+        ConditionUtil.getPlayerConditions(player).remove("foundyoumuzzled");
 
         if (!event.getRole().getAbilities().contains(getId())) return;
 
