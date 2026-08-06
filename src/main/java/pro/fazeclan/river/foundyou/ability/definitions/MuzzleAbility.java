@@ -1,13 +1,7 @@
 package pro.fazeclan.river.foundyou.ability.definitions;
 
-import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.bossbar.BossBar;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.jetbrains.annotations.NotNull;
 import pro.fazeclan.river.foundyou.FoundYou;
 import pro.fazeclan.river.foundyou.ability.Ability;
 import pro.fazeclan.river.foundyou.event.AbilityEvent;
@@ -17,7 +11,6 @@ import pro.fazeclan.river.jarona.Jarona;
 import pro.fazeclan.river.jarona.condition.SwitchCondition;
 import pro.fazeclan.river.jarona.condition.TimedCondition;
 import pro.fazeclan.river.jarona.util.ConditionUtil;
-import pro.fazeclan.river.jarona.util.SchedulingUtil;
 
 public class MuzzleAbility extends Ability {
 

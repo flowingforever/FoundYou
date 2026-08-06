@@ -115,6 +115,22 @@ public class GameListeners implements Listener {
     }
 
     @EventHandler
+    public void handlePlayerInteractShelf(PlayerInteractEvent event) {
+        var player = event.getPlayer();
+        if (!player.getWorld().getKey().namespace().equals("foundyou")) {
+            return;
+        }
+        var block = event.getClickedBlock();
+        if (block == null) {
+            return;
+        }
+        if (!block.getType().getKey().value().contains("shelf")) {
+            return;
+        }
+        event.setCancelled(true);
+    }
+
+    @EventHandler
     public void handlePlayerOnPlayerDamage(EntityDamageByEntityEvent event) {
         if (!(event.getEntity() instanceof Player victim)) {
             return;
