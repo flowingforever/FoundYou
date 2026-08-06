@@ -128,6 +128,7 @@ public class ExplodeAbility extends Ability {
     private void damageNearbyPlayers(Player deadPlayer, Location location) {
         var radius = getDefaultAbilityProperty("radius", 5);
         var damage = getDefaultAbilityProperty("damage", 10);
+        var velocityMultiplier = getDefaultAbilityProperty("velocity-multiplier", 1.1);
         for (Player nearbyPlayer : location.getNearbyPlayers(radius)) {
             if (nearbyPlayer.equals(deadPlayer)) {
                 continue;
@@ -137,7 +138,7 @@ public class ExplodeAbility extends Ability {
                 continue;
             }
 
-            var multiplier = location.distance(nearbyPlayer.getLocation());
+            var distanceMultiplier = location.distance(nearbyPlayer.getLocation()) * velocityMultiplier;
             var push = location.toVector().subtract(nearbyPlayer.getLocation().toVector()).multiply(-1);
             if (push.lengthSquared() > 0) {
                 push.normalize();
@@ -146,7 +147,7 @@ public class ExplodeAbility extends Ability {
             }
             push.add(new Vector(0, 0.2, 0));
 
-            push.multiply(multiplier);
+            push.multiply(distanceMultiplier);
 
             nearbyPlayer.damage(damage, deadPlayer);
             nearbyPlayer.setVelocity(push);

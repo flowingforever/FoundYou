@@ -1,3 +1,4 @@
 radius: 5
 damage: 20
 delay: 5
+velocity-multiplier: 1.1
