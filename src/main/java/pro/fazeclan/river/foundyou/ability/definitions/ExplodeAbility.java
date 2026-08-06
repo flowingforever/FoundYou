@@ -138,7 +138,7 @@ public class ExplodeAbility extends Ability {
                 continue;
             }
 
-            var distanceMultiplier = location.distance(nearbyPlayer.getLocation()) * velocityMultiplier;
+            var distanceMultiplier = (radius - location.distance(nearbyPlayer.getLocation())) * velocityMultiplier;
             var push = location.toVector().subtract(nearbyPlayer.getLocation().toVector()).multiply(-1);
             if (push.lengthSquared() > 0) {
                 push.normalize();
