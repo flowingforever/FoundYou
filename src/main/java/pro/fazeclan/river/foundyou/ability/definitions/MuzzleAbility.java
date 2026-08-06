@@ -41,7 +41,6 @@ public class MuzzleAbility extends Ability {
         if (!condition.getAvailable()) return;
         condition.setDuration(getDefaultAbilityProperty("cooldown", 45) * 20L);
 
-        var svc = FoundYou.getInstance().getVoicechatPlugin();
         var range = getDefaultAbilityProperty("range", 7.0);
         var duration = getDefaultAbilityProperty("duration", 10) * 20;
         final BossBar bossbar = BossBar.bossBar(
@@ -57,7 +56,7 @@ public class MuzzleAbility extends Ability {
             @Override
             public void run() {
                 tick++;
-                bossbar.progress(1.0f - (float) tick / duration);
+                bossbar.progress(Math.min(1.0f - (float) tick / duration, 1.0f));
 
                 if (tick >= duration) {
                     cancel();
