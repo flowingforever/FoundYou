@@ -150,56 +150,10 @@ public class GameListeners implements Listener {
             return;
         }
 
+        RoleUtil.eliminatePlayer(player);
+
         player.setHealth(player.getAttribute(Attribute.MAX_HEALTH).getValue());
-        var world = player.getWorld();
-        var config = YamlConfiguration.loadConfiguration(new File(world.getWorldFolder(), "map_config.yml"));
-        var jarona = Jarona.getInstance();
-        var plugin = FoundYou.getInstance();
-        var manager = jarona.getConditionManager();
-        var gameUUID = UUID.fromString(world.getKey().getKey());
-        jarona.getServer().getPluginManager().callEvent(new GamePlayerDeathEvent(player, RoleUtil.getRoleOrThrow(player)));
-        player.setGameMode(GameMode.SPECTATOR);
-        world.playSound(
-                player.getLocation(),
-                "minecraft:block.beacon.deactivate",
-                SoundCategory.PLAYERS,
-                2f,
-                0.5f
-        );
-
-        // todo: summon corpse
-
-        // add more time when player dies
-        var condition = manager.getGameConditions(gameUUID)
-                        .getOrCreate(
-                                "game_" + gameUUID,
-                                new TimedCondition(
-                                        TimedCondition.Type.GAME_TICK
-                                )
-                        );
-        var time = config.getInt("additional-time", 900);
-        condition.setDuration(condition.getDuration() + time);
-        condition.setHud(c -> {
-            var tc = (TimedCondition) c;
-            var duration = tc.getDuration();
-            return "<red><b>" + TimeUtil.ticksIntoReadableFormat((int) duration) + "</b></red>";
-        });
-
-        world.getPersistentDataContainer().set(
-                FoundYou.getKey("game_length"),
-                PersistentDataType.INTEGER,
-                world.getPersistentDataContainer().getOrDefault(
-                        FoundYou.getKey("game_length"),
-                        PersistentDataType.INTEGER,
-                        900
-                ) + time
-        );
         event.setDamage(0.1);
-
-        var svcPlugin = plugin.getVoicechatPlugin();
-        if (svcPlugin != null) {
-            svcPlugin.addSpectator(player);
-        }
     }
 
     @EventHandler

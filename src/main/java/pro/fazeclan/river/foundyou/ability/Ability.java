@@ -8,10 +8,7 @@ import pro.fazeclan.river.foundyou.FoundYou;
 import pro.fazeclan.river.foundyou.event.GameAddPlayerEvent;
 import pro.fazeclan.river.foundyou.role.Faction;
 import pro.fazeclan.river.foundyou.util.RoleUtil;
-import pro.fazeclan.river.jarona.condition.Condition;
-import pro.fazeclan.river.jarona.condition.ConditionManager;
-import pro.fazeclan.river.jarona.condition.TimedCondition;
-import pro.fazeclan.river.jarona.condition.TimedUseCondition;
+import pro.fazeclan.river.jarona.condition.*;
 
 import java.io.File;
 import java.util.function.Function;
@@ -64,6 +61,24 @@ public class Ability implements Listener {
                         new TimedCondition(
                                 TimedCondition.Type.GAME_TICK,
                                 c -> null,
+                                player.getUniqueId()
+                        )
+                );
+
+        condition.reset();
+        condition.setHud(hud);
+        condition.setHudCondition(c -> true);
+        condition.setPriority(200);
+    }
+
+    public void initializeAbilitySwitchCondition(GameAddPlayerEvent event, ConditionManager manager, Function<Condition, String> hud) {
+        var player = event.getPlayer();
+        var condition = manager.getPlayerConditions(player)
+                .getOrCreate(
+                        getId() + "_ability",
+                        new SwitchCondition(
+                                true,
+                                hud,
                                 player.getUniqueId()
                         )
                 );

@@ -27,7 +27,7 @@ public class AbilityManager {
         register(new QuiverAbility());
         register(new RollAbility());
         register(new ScrapshotAbility());
-        register(new SelfDestructAbility());
+        register(new ExplodeAbility());
         register(new ShrinkAbility());
         register(new StalkAbility());
         register(new TerrifyAbility());

@@ -36,7 +36,6 @@ public class PlayerCommand {
                                                                 .executes(ctx -> {
                                                                     var source = ctx.getSource();
                                                                     var nametagManager = UNTPaperAPI.getInstance();
-                                                                    var manager = FoundYou.getInstance().getRoleManager();
                                                                     var tr = ctx.getArgument("game_player", PlayerSelectorArgumentResolver.class);
                                                                     var gamePlayer = tr.resolve(source).getFirst();
 
@@ -46,7 +45,9 @@ public class PlayerCommand {
                                                                     var role = ctx.getArgument("role", Role.class);
 
                                                                     for (Player player : players) {
-                                                                        assignPlayer(player, gamePlayer, role, manager, nametagManager);
+                                                                        assignPlayer(player, gamePlayer, role, nametagManager);
+
+
 
                                                                         player.sendMessage(TextUtil.formatComponent(
                                                                                 "<green>You've been added into an ongoing game!</green>"
@@ -70,7 +71,7 @@ public class PlayerCommand {
                                                     var players = tr2.resolve(source);
 
                                                     for (Player player : players) {
-                                                        assignPlayer(player, gamePlayer, manager.getRandomUnlimitedRole(Faction.RUNNERS), manager, nametagManager);
+                                                        assignPlayer(player, gamePlayer, manager.getRandomUnlimitedRole(Faction.RUNNERS), nametagManager);
 
                                                         player.sendMessage(TextUtil.formatComponent(
                                                                 "<green>You've been added into an ongoing game!</green>"
@@ -116,14 +117,21 @@ public class PlayerCommand {
                 );
     }
 
-    private static void assignPlayer(Player player, Player gamePlayer, Role role, RoleManager manager, UNTPaperAPI api) {
+    private static void assignPlayer(Player player, Player gamePlayer, Role role, UNTPaperAPI api) {
+        var world = player.getWorld();
         RoleUtil.removeRoles(player);
         RoleUtil.assignRole(player, role);
 
         player.teleport(gamePlayer);
-        api.setForcedNametag(player, MiniMessage.miniMessage().deserialize("<green>" + player.getName() + "</green>"));
+        var color = "green";
+        if (role.getFaction().equals(Faction.HUNTERS)) {
+            color = "red";
+        }
+        api.setForcedNametag(player, MiniMessage.miniMessage().deserialize("<" + color + ">" + player.getName() + "</" + color + ">"));
         api.setNametagSeeThrough(player, false);
-        NametagUtil.hidePlayerNametagWithGlowToAll(player, NamedTextColor.GREEN);
+        for (var p : world.getPlayers()) {
+            NametagUtil.hidePlayerNametagWithGlow(player, p, NamedTextColor.NAMES.value(color));
+        }
     }
 
 }

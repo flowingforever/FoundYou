@@ -16,9 +16,6 @@ public class AbilityListeners implements Listener {
         if (player.getGameMode().equals(GameMode.SPECTATOR)) {
             return;
         }
-        if (player.isSneaking()) {
-            return;
-        }
         var role = RoleUtil.getRole(player);
         if (role.isEmpty()) {
             return;
