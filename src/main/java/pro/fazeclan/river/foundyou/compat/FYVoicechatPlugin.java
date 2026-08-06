@@ -1,16 +1,19 @@
 package pro.fazeclan.river.foundyou.compat;
 
 import de.maxhenkel.voicechat.api.Group;
-import de.maxhenkel.voicechat.api.VoicechatApi;
 import de.maxhenkel.voicechat.api.VoicechatPlugin;
 import de.maxhenkel.voicechat.api.VoicechatServerApi;
 import de.maxhenkel.voicechat.api.events.EventRegistration;
+import de.maxhenkel.voicechat.api.events.MicrophonePacketEvent;
 import de.maxhenkel.voicechat.api.events.VoicechatServerStartedEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class FYVoicechatPlugin implements VoicechatPlugin {
     private VoicechatServerApi serverApi;
@@ -31,6 +34,15 @@ public class FYVoicechatPlugin implements VoicechatPlugin {
     public void registerEvents(EventRegistration registration) {
         registration.registerEvent(VoicechatServerStartedEvent.class, event -> {
             serverApi = event.getVoicechat();
+        });
+
+        registration.registerEvent(MicrophonePacketEvent.class, event -> {
+            var connection = event.getSenderConnection();
+            if (connection == null) return;
+            var player = Bukkit.getPlayer(connection.getPlayer().getUuid());
+            if (player == null) return;
+            if (!player.getScoreboardTags().contains("foundyoumuzzled")) return;
+            event.cancel();
         });
     }
 

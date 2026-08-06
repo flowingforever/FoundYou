@@ -32,6 +32,7 @@ public class AbilityManager {
         register(new StalkAbility());
         register(new TerrifyAbility());
         register(new TrapAbility());
+        register(new MuzzleAbility());
     }
 
     public void reloadRegistry() {
