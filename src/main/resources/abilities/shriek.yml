@@ -3,3 +3,4 @@ charge: 3 # seconds
 range: 15 # blocks
 step: 0.5
 hit-radius: 1.0
+glowing-range: 25

@@ -72,9 +72,11 @@ public class EnragedShriekAbility extends Ability {
         });
 
         var charge = getDefaultAbilityProperty("charge", 3);
+        var range = getDefaultAbilityProperty("glowing-range", 25);
 
         // Make all hiders glow for 3s
         for (Player victim : player.getWorld().getPlayers()) {
+            if (victim.getLocation().distanceSquared(player.getLocation()) > range * range) return;
             if (isRunner(victim)) {
                 victim.showTitle(Title.title(
                         miniMessage().deserialize(""),
