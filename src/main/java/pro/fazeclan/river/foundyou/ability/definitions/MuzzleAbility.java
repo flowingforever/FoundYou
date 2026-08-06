@@ -67,7 +67,9 @@ public class MuzzleAbility extends Ability {
                 var players = player.getWorld().getPlayers();
                 for (var v : players) {
                     v.removeScoreboardTag("foundyoumuzzled");
+                    bossbar.removeViewer(v);
                 }
+
             }
         }.runTaskTimer(FoundYou.getInstance(), 0L, 1L);
 
