@@ -49,7 +49,9 @@ public class LaserbeamAbility extends Ability {
 
         if (!condition.getAvailable()) return;
 
-        int cooldown;
+        int cooldown = getDefaultAbilityProperty("failed-cooldown", 20);
+
+        condition.setDuration(cooldown * 20L);
 
         condition.setHud(c -> {
             var tc = (TimedCondition) c;
@@ -72,8 +74,6 @@ public class LaserbeamAbility extends Ability {
         if (fireBeam(player)) {
             cooldown = getDefaultAbilityProperty("success-cooldown", 3);
             world.playSound(loc, Sound.BLOCK_TRIAL_SPAWNER_OPEN_SHUTTER, 1.0f, 2f);
-        } else {
-            cooldown = getDefaultAbilityProperty("failed-cooldown", 20);
         }
 
         condition.setDuration(cooldown * 20L);
