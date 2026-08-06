@@ -56,7 +56,7 @@ public class MuzzleAbility extends Ability {
             @Override
             public void run() {
                 tick++;
-                bossbar.progress(Math.min(1.0f - (float) tick / duration, 1.0f));
+                bossbar.progress(Math.max(1.0f - (float) tick / duration, 0.0f));
 
                 if (tick >= duration) {
                     cancel();
