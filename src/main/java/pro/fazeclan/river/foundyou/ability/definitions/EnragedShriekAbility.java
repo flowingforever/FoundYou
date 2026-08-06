@@ -76,7 +76,7 @@ public class EnragedShriekAbility extends Ability {
 
         // Make all hiders glow for 3s
         for (Player victim : player.getWorld().getPlayers()) {
-            if (victim.getLocation().distanceSquared(player.getLocation()) > range * range) return;
+            if (victim.getLocation().distanceSquared(player.getLocation()) > range * range) continue;
             if (isRunner(victim)) {
                 victim.showTitle(Title.title(
                         miniMessage().deserialize(""),
