@@ -1,6 +1,5 @@
 interval: 45 # seconds
 drink-duration:
-  vile-concoction: 0.8
   one-winged-angel: 0.8
   deaths-dance: 0.8
   near-perfected-ambrosia: 0.8

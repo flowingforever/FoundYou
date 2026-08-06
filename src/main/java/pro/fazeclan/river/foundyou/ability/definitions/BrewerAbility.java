@@ -86,10 +86,6 @@ public class BrewerAbility extends Ability {
     // Vile Concoction: Weakness III (0:03), Nausea (0:03), Mining Fatigue III (0:03)
     private ItemStack vileConcoction() {
         ItemStack item = new ItemStack(Material.LINGERING_POTION, 1);
-        item.setData(
-                DataComponentTypes.CONSUMABLE,
-                Consumable.consumable().consumeSeconds(getDefaultAbilityProperty("drink-duration.vile-concoction", 0.8).floatValue()).build()
-        );
         PotionMeta meta = (PotionMeta) item.getItemMeta();
         meta.setDisplayName(ChatColor.DARK_GREEN + "Vile Concoction");
         meta.addCustomEffect(new PotionEffect(PotionEffectType.WEAKNESS, 3 * 20, 2, false, false, true), true);       // III
