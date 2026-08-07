@@ -325,6 +325,7 @@ public class FoundYouGame extends Game {
         Collections.shuffle(limitedRoles);
 
         var unlimitedRoles = new ArrayList<>(manager.getUnlimitedRoles(faction));
+        Collections.shuffle(unlimitedRoles);
         int size = unlimitedRoles.size();
         int index = 0;
 
