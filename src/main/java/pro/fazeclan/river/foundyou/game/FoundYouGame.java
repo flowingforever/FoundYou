@@ -294,21 +294,22 @@ public class FoundYouGame extends Game {
         }
     }
 
-    public int getCurrentGameTick(World world) {
+    private int getCurrentGameTick(World world) {
         return world.getPersistentDataContainer().getOrDefault(FoundYou.getKey("tick"), PersistentDataType.INTEGER, 0);
     }
 
-    public boolean isFactionAlive(List<Player> players, Faction faction) {
+    private boolean isFactionAlive(List<Player> players, Faction faction) {
         return players.stream()
                 .filter(player -> !player.getGameMode().isInvulnerable())
+                .filter(player -> RoleUtil.getFaction(player).isPresent())
                 .anyMatch(player -> RoleUtil.getFactionElseThrow(player).equals(faction));
     }
 
-    public boolean areRunnersAlive(List<Player> players) {
+    private boolean areRunnersAlive(List<Player> players) {
         return isFactionAlive(players, Faction.RUNNERS);
     }
 
-    public boolean areHuntersAlive(List<Player> players) {
+    private boolean areHuntersAlive(List<Player> players) {
         return isFactionAlive(players, Faction.HUNTERS);
     }
 

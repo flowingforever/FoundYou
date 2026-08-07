@@ -13,6 +13,7 @@ public class AbilityListeners implements Listener {
     @EventHandler
     public void handleSwapHands(PlayerSwapHandItemsEvent event) {
         var player = event.getPlayer();
+        if (!player.getWorld().key().namespace().equals("foundyou")) return;
         if (player.getGameMode().equals(GameMode.SPECTATOR)) return;
         var role = RoleUtil.getRole(player);
         if (role.isEmpty()) return;
