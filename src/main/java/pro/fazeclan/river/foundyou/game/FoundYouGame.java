@@ -6,6 +6,7 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.title.Title;
 import org.alexdev.unlimitednametags.api.UNTPaperAPI;
 import org.alexdev.unlimitednametags.api.UntNametagManagerPaper;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -34,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class FoundYouGame extends Game {
     public FoundYouGame() {
@@ -51,7 +53,6 @@ public class FoundYouGame extends Game {
         var plugin = FoundYou.getInstance();
         var jarona = Jarona.getInstance();
 
-        var roleManager = plugin.getRoleManager();
         var conditionManager = jarona.getConditionManager();
         var nametagManager = UNTPaperAPI.getInstance();
 
@@ -64,7 +65,7 @@ public class FoundYouGame extends Game {
         var runnerSpawn = WorldlessLocation.deserialize("spawn", config).toLocation(world);
         var hunterSpawn = WorldlessLocation.deserialize("hunter-spawn", config).toLocation(world);
 
-        // selecting hunters and their roles
+        // selecting hunters
         var hunters = new ArrayList<Player>();
 
         var hunterCount = 1 + Math.floor(players.size() / 7.5);
@@ -78,44 +79,8 @@ public class FoundYouGame extends Game {
             queued.remove(hunter);
         }
 
-        var limitedHunterRoles = new ArrayList<>(roleManager.getLimitedRoles(Faction.HUNTERS));
-        Collections.shuffle(limitedHunterRoles);
-        for (Role role : limitedHunterRoles) {
-            for (int i = 0; i < role.getMaxPlayers() || i < hunters.size(); i++) {
-                try {
-                    var hunter = hunters.get(i);
-                    GameFunctions.addPlayer(hunter, role, hunterSpawn);
-                    hunters.remove(hunter);
-                } catch (Exception ignored) {}
-            }
-        }
-        if (!hunters.isEmpty()) {
-            for (Player hunter : hunters) {
-                GameFunctions.addPlayer(
-                        hunter,
-                        roleManager.getRandomUnlimitedRole(Faction.HUNTERS),
-                        hunterSpawn
-                );
-            }
-        }
-
-        // selecting runner roles
-        var limitedRunnerRoles = new ArrayList<>(roleManager.getLimitedRoles(Faction.RUNNERS));
-        Collections.shuffle(limitedRunnerRoles);
-        for (Role role : limitedRunnerRoles) {
-            for (int i = 0; i < role.getMaxPlayers(); i++) {
-                try {
-                    var runner = queued.get(i);
-                    GameFunctions.addPlayer(runner, role, runnerSpawn);
-                    queued.remove(runner);
-                } catch (Exception ignored) {}
-            }
-        }
-        if (!queued.isEmpty()) {
-            for (Player runner : queued) {
-                GameFunctions.addPlayer(runner, roleManager.getRandomUnlimitedRole(Faction.RUNNERS), runnerSpawn);
-            }
-        }
+        assignRoles(hunters, Faction.HUNTERS, hunterSpawn);
+        assignRoles(queued, Faction.RUNNERS, runnerSpawn);
 
         // game prep
         for (Player player : players) {
@@ -345,5 +310,42 @@ public class FoundYouGame extends Game {
 
     public boolean areHuntersAlive(List<Player> players) {
         return isFactionAlive(players, Faction.HUNTERS);
+    }
+
+    private void assignRoles(List<Player> players, Faction faction, Location location) {
+        var manager = FoundYou.getInstance().getRoleManager();
+
+        var limitedRoles = new ArrayList<Role>();
+        for (var role : manager.getLimitedRoles(faction)) {
+            for (int i = 0; i < role.getMaxPlayers(); i++) {
+                limitedRoles.add(role);
+            }
+        }
+        Collections.shuffle(limitedRoles);
+
+        var unlimitedRoles = new ArrayList<>(manager.getUnlimitedRoles());
+        int size = unlimitedRoles.size();
+        int index = 0;
+
+        float chance = 1.0f;
+        for (var player : players) {
+            if (chance > 0f) {
+                if (ThreadLocalRandom.current().nextFloat() <= chance && !limitedRoles.isEmpty()) {
+                    GameFunctions.addPlayer(player, limitedRoles.getFirst(), location);
+                    limitedRoles.removeFirst();
+                    chance /= 2f;
+                    continue;
+                }
+
+                chance = 0f;
+            }
+
+            if (index + 1 > size) {
+                index = 0;
+            }
+
+            GameFunctions.addPlayer(player, unlimitedRoles.get(index), location);
+            index++;
+        }
     }
 }
