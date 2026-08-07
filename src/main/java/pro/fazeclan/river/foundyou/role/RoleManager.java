@@ -34,7 +34,7 @@ public class RoleManager {
         return this.registry.values()
                 .stream()
                 .filter(Role::isLimited)
-                .filter(role -> role.getFaction().equals(faction))
+                .filter(role -> role.getFaction() == faction)
                 .sorted().toList();
     }
 
@@ -49,7 +49,7 @@ public class RoleManager {
         return this.registry.values()
                 .stream()
                 .filter(role -> !role.isLimited())
-                .filter(role -> role.getFaction().equals(faction))
+                .filter(role -> role.getFaction() == faction)
                 .sorted().toList();
     }
 

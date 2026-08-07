@@ -70,17 +70,17 @@ public class FoundYouGame extends Game {
 
         var hunterCount = 1 + Math.floor(players.size() / 7.5);
 
-        var queued = new ArrayList<>(players);
-        Collections.shuffle(queued);
+        var runners = new ArrayList<>(players);
+        Collections.shuffle(runners);
 
         for (int i = 0; i < hunterCount; i++) {
-            var hunter = queued.getFirst();
+            var hunter = runners.getFirst();
             hunters.add(hunter);
-            queued.remove(hunter);
+            runners.remove(hunter);
         }
 
         assignRoles(hunters, Faction.HUNTERS, hunterSpawn);
-        assignRoles(queued, Faction.RUNNERS, runnerSpawn);
+        assignRoles(runners, Faction.RUNNERS, runnerSpawn);
 
         // game prep
         for (Player player : players) {
@@ -324,7 +324,7 @@ public class FoundYouGame extends Game {
         }
         Collections.shuffle(limitedRoles);
 
-        var unlimitedRoles = new ArrayList<>(manager.getUnlimitedRoles());
+        var unlimitedRoles = new ArrayList<>(manager.getUnlimitedRoles(faction));
         int size = unlimitedRoles.size();
         int index = 0;
 
