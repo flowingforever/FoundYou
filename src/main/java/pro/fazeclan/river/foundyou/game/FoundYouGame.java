@@ -329,13 +329,14 @@ public class FoundYouGame extends Game {
         int size = unlimitedRoles.size();
         int index = 0;
 
+        float dividend = (float) FoundYou.getInstance().getConfig().getDouble("role-chance-dividend", 2.0);
         float chance = 1.0f;
         for (var player : players) {
             if (chance > 0f) {
                 if (ThreadLocalRandom.current().nextFloat() <= chance && !limitedRoles.isEmpty()) {
                     GameFunctions.addPlayer(player, limitedRoles.getFirst(), location);
                     limitedRoles.removeFirst();
-                    chance /= 2f;
+                    chance /= dividend;
                     continue;
                 }
 
