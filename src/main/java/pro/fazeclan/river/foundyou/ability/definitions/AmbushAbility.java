@@ -11,26 +11,19 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
+import pro.fazeclan.river.foundyou.ability.Ability;
+import pro.fazeclan.river.foundyou.event.AbilityEvent;
+import pro.fazeclan.river.foundyou.event.GameAddPlayerEvent;
+import pro.fazeclan.river.foundyou.event.GameRemovePlayerEvent;
+import pro.fazeclan.river.jarona.Jarona;
+import pro.fazeclan.river.jarona.condition.TimedCondition;
+import pro.fazeclan.river.jarona.util.SchedulingUtil;
 
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-
-import org.bukkit.Location;
-import org.bukkit.Sound;
-import org.bukkit.World;
-
-import pro.fazeclan.river.foundyou.ability.Ability;
-import pro.fazeclan.river.foundyou.event.AbilityEvent;
-import pro.fazeclan.river.foundyou.event.GameAddPlayerEvent;
-import pro.fazeclan.river.foundyou.event.GameRemovePlayerEvent;
-import pro.fazeclan.river.foundyou.event.GracePeriodOverEvent;
-import pro.fazeclan.river.foundyou.util.RoleUtil;
-import pro.fazeclan.river.jarona.Jarona;
-import pro.fazeclan.river.jarona.condition.TimedCondition;
-import pro.fazeclan.river.jarona.util.SchedulingUtil;
 
 public class AmbushAbility extends Ability {
 

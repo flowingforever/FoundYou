@@ -1,26 +1,19 @@
 package pro.fazeclan.river.foundyou.ability.definitions;
 
 import org.bukkit.*;
-import org.bukkit.Color;
-import org.bukkit.FluidCollisionMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.RayTraceResult;
+import org.bukkit.util.Vector;
 import pro.fazeclan.river.foundyou.ability.Ability;
 import pro.fazeclan.river.foundyou.event.AbilityEvent;
 import pro.fazeclan.river.foundyou.event.GameAddPlayerEvent;
 import pro.fazeclan.river.foundyou.event.GameRemovePlayerEvent;
 import pro.fazeclan.river.jarona.Jarona;
 import pro.fazeclan.river.jarona.condition.TimedCondition;
-
-import org.bukkit.util.Vector;
 
 public class ScrapshotAbility extends Ability {
 

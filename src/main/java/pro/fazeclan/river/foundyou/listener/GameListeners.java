@@ -1,10 +1,7 @@
 package pro.fazeclan.river.foundyou.listener;
 
-import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.SoundCategory;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -16,17 +13,11 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.persistence.PersistentDataType;
 import pro.fazeclan.river.foundyou.FoundYou;
-import pro.fazeclan.river.foundyou.event.GamePlayerDeathEvent;
+import pro.fazeclan.river.foundyou.util.GameFunctions;
 import pro.fazeclan.river.foundyou.util.RoleUtil;
-import pro.fazeclan.river.foundyou.util.TimeUtil;
 import pro.fazeclan.river.jarona.Jarona;
-import pro.fazeclan.river.jarona.condition.TimedCondition;
 import pro.fazeclan.river.jarona.util.GameUtil;
-
-import java.io.File;
-import java.util.UUID;
 
 public class GameListeners implements Listener {
 
@@ -169,7 +160,7 @@ public class GameListeners implements Listener {
             return;
         }
 
-        RoleUtil.eliminatePlayer(player);
+        GameFunctions.eliminatePlayer(player);
 
         player.setHealth(player.getAttribute(Attribute.MAX_HEALTH).getValue());
         event.setDamage(0.1);

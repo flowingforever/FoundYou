@@ -9,18 +9,15 @@ import io.papermc.paper.command.brigadier.argument.resolvers.selector.PlayerSele
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.alexdev.unlimitednametags.api.UNTPaperAPI;
-import org.alexdev.unlimitednametags.config.Settings;
 import org.bukkit.entity.Player;
 import pro.fazeclan.river.foundyou.FoundYou;
 import pro.fazeclan.river.foundyou.command.arguments.RoleArgument;
 import pro.fazeclan.river.foundyou.role.Faction;
 import pro.fazeclan.river.foundyou.role.Role;
-import pro.fazeclan.river.foundyou.role.RoleManager;
+import pro.fazeclan.river.foundyou.util.GameFunctions;
 import pro.fazeclan.river.foundyou.util.RoleUtil;
 import pro.fazeclan.river.foundyou.util.TextUtil;
 import pro.fazeclan.river.jarona.util.NametagUtil;
-
-import java.util.ArrayList;
 
 public class PlayerCommand {
 
@@ -35,7 +32,6 @@ public class PlayerCommand {
                                                         Commands.argument("role", new RoleArgument())
                                                                 .executes(ctx -> {
                                                                     var source = ctx.getSource();
-                                                                    var nametagManager = UNTPaperAPI.getInstance();
                                                                     var tr = ctx.getArgument("game_player", PlayerSelectorArgumentResolver.class);
                                                                     var gamePlayer = tr.resolve(source).getFirst();
 
@@ -45,9 +41,7 @@ public class PlayerCommand {
                                                                     var role = ctx.getArgument("role", Role.class);
 
                                                                     for (Player player : players) {
-                                                                        assignPlayer(player, gamePlayer, role, nametagManager);
-
-
+                                                                        GameFunctions.addPlayer(player, role, gamePlayer.getLocation());
 
                                                                         player.sendMessage(TextUtil.formatComponent(
                                                                                 "<green>You've been added into an ongoing game!</green>"
@@ -62,7 +56,6 @@ public class PlayerCommand {
                                                 )
                                                 .executes(ctx -> {
                                                     var source = ctx.getSource();
-                                                    var nametagManager = UNTPaperAPI.getInstance();
                                                     var manager = FoundYou.getInstance().getRoleManager();
                                                     var tr = ctx.getArgument("game_player", PlayerSelectorArgumentResolver.class);
                                                     var gamePlayer = tr.resolve(source).getFirst();
@@ -71,7 +64,7 @@ public class PlayerCommand {
                                                     var players = tr2.resolve(source);
 
                                                     for (Player player : players) {
-                                                        assignPlayer(player, gamePlayer, manager.getRandomUnlimitedRole(Faction.RUNNERS), nametagManager);
+                                                        GameFunctions.addPlayer(player, manager.getRandomUnlimitedRole(Faction.RUNNERS), gamePlayer.getLocation());
 
                                                         player.sendMessage(TextUtil.formatComponent(
                                                                 "<green>You've been added into an ongoing game!</green>"
@@ -92,17 +85,14 @@ public class PlayerCommand {
                                 .then(Commands.argument("players", ArgumentTypes.players())
                                         .executes(ctx -> {
                                             var source = ctx.getSource();
-                                            var nametagManager = UNTPaperAPI.getInstance();
                                             var tr2 = ctx.getArgument("players", PlayerSelectorArgumentResolver.class);
                                             var players = tr2.resolve(source);
 
                                             for (Player player : players) {
-                                                RoleUtil.removeRoles(player);
+                                                GameFunctions.removePlayer(player);
 
                                                 player.kill();
                                                 player.spigot().respawn();
-                                                nametagManager.clearForcedNametag(player);
-                                                NametagUtil.showPlayerNametagToAll(player);
                                                 player.sendMessage(TextUtil.formatComponent(
                                                         "<green>You've been removed from an ongoing game!</green>"
                                                 ));
@@ -115,23 +105,6 @@ public class PlayerCommand {
                                         })
                                 )
                 );
-    }
-
-    private static void assignPlayer(Player player, Player gamePlayer, Role role, UNTPaperAPI api) {
-        var world = player.getWorld();
-        RoleUtil.removeRoles(player);
-        RoleUtil.assignRole(player, role);
-
-        player.teleport(gamePlayer);
-        var color = "green";
-        if (role.getFaction().equals(Faction.HUNTERS)) {
-            color = "red";
-        }
-        api.setForcedNametag(player, MiniMessage.miniMessage().deserialize("<" + color + ">" + player.getName() + "</" + color + ">"));
-        api.setNametagSeeThrough(player, false);
-        for (var p : world.getPlayers()) {
-            NametagUtil.hidePlayerNametagWithGlow(player, p, NamedTextColor.NAMES.value(color));
-        }
     }
 
 }

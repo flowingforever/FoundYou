@@ -11,12 +11,10 @@ import pro.fazeclan.river.foundyou.event.AbilityEvent;
 import pro.fazeclan.river.foundyou.event.GameAddPlayerEvent;
 import pro.fazeclan.river.foundyou.event.GamePlayerDeathEvent;
 import pro.fazeclan.river.foundyou.event.GameRemovePlayerEvent;
-import pro.fazeclan.river.foundyou.util.RoleUtil;
+import pro.fazeclan.river.foundyou.util.GameFunctions;
 import pro.fazeclan.river.jarona.Jarona;
 import pro.fazeclan.river.jarona.condition.SwitchCondition;
 import pro.fazeclan.river.jarona.util.ConditionUtil;
-
-import java.io.IOException;
 
 public class ExplodeAbility extends Ability {
 
@@ -97,7 +95,7 @@ public class ExplodeAbility extends Ability {
                     return;
                 }
                 handleExplosion(player);
-                RoleUtil.eliminatePlayer(player);
+                GameFunctions.eliminatePlayer(player);
                 super.cancel();
             }
         }.runTaskTimer(FoundYou.getInstance(), 0L, 2L);

@@ -6,7 +6,6 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.title.Title;
 import org.alexdev.unlimitednametags.api.UNTPaperAPI;
 import org.alexdev.unlimitednametags.api.UntNametagManagerPaper;
-import org.alexdev.unlimitednametags.config.Settings;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -20,6 +19,7 @@ import pro.fazeclan.river.foundyou.FoundYou;
 import pro.fazeclan.river.foundyou.event.GracePeriodOverEvent;
 import pro.fazeclan.river.foundyou.role.Faction;
 import pro.fazeclan.river.foundyou.role.Role;
+import pro.fazeclan.river.foundyou.util.GameFunctions;
 import pro.fazeclan.river.foundyou.util.RoleUtil;
 import pro.fazeclan.river.foundyou.util.TimeUtil;
 import pro.fazeclan.river.jarona.Jarona;
@@ -84,14 +84,14 @@ public class FoundYouGame extends Game {
             for (int i = 0; i < role.getMaxPlayers() || i < hunters.size(); i++) {
                 try {
                     var hunter = hunters.get(i);
-                    RoleUtil.assignRole(hunter, role, hunterSpawn);
+                    GameFunctions.addPlayer(hunter, role, hunterSpawn);
                     hunters.remove(hunter);
                 } catch (Exception ignored) {}
             }
         }
         if (!hunters.isEmpty()) {
             for (Player hunter : hunters) {
-                RoleUtil.assignRole(
+                GameFunctions.addPlayer(
                         hunter,
                         roleManager.getRandomUnlimitedRole(Faction.HUNTERS),
                         hunterSpawn
@@ -106,14 +106,14 @@ public class FoundYouGame extends Game {
             for (int i = 0; i < role.getMaxPlayers(); i++) {
                 try {
                     var runner = queued.get(i);
-                    RoleUtil.assignRole(runner, role, runnerSpawn);
+                    GameFunctions.addPlayer(runner, role, runnerSpawn);
                     queued.remove(runner);
                 } catch (Exception ignored) {}
             }
         }
         if (!queued.isEmpty()) {
             for (Player runner : queued) {
-                RoleUtil.assignRole(runner, roleManager.getRandomUnlimitedRole(Faction.RUNNERS), runnerSpawn);
+                GameFunctions.addPlayer(runner, roleManager.getRandomUnlimitedRole(Faction.RUNNERS), runnerSpawn);
             }
         }
 

@@ -1,6 +1,6 @@
 package pro.fazeclan.river.foundyou.ability.definitions;
 
-import org.bukkit.*;
+import org.bukkit.Material;
 import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
