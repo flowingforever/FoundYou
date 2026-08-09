@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.event.EventHandler;
+import org.bukkit.inventory.ItemType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import pro.fazeclan.river.foundyou.ability.Ability;
@@ -17,7 +18,7 @@ import pro.fazeclan.river.jarona.util.SchedulingUtil;
 
 public class ShrinkAbility extends Ability {
 
-    public ShrinkAbility() { super("shrink"); }
+    public ShrinkAbility() { super("shrink", ItemType.ANVIL.createItemStack()); }
 
     @EventHandler
     private void handleAbility(AbilityEvent event) {

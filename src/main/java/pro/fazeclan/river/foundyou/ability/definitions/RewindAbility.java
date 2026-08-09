@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemType;
 import pro.fazeclan.river.foundyou.ability.Ability;
 import pro.fazeclan.river.foundyou.event.AbilityEvent;
 import pro.fazeclan.river.foundyou.event.GameAddPlayerEvent;
@@ -28,7 +29,7 @@ public class RewindAbility extends Ability {
     private final Map<UUID, Closeable> PARTICLE_TASKS = new ConcurrentHashMap<>();
 
     public RewindAbility() {
-        super("rewind");
+        super("rewind", ItemType.CLOCK.createItemStack());
     }
 
     @EventHandler

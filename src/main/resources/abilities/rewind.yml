@@ -1,3 +1,5 @@
+name: "<yellow>Rewind</yellow>"
+description: "<newline><red><b>ACTIVE ABILITY</b></red><newline><newline>When pressing [<key:key.swapOffhand>], you save a position to<newline>teleport back to in a short amount of<newline>time."
 cooldown: 60
 duration: 5
 uses: 2

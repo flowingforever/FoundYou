@@ -2,6 +2,7 @@ package pro.fazeclan.river.foundyou.ability.definitions;
 
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
+import org.bukkit.inventory.ItemType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import pro.fazeclan.river.foundyou.ability.Ability;
@@ -17,7 +18,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class RollAbility extends Ability {
 
     public RollAbility() {
-        super("roll");
+        super("roll", ItemType.VAULT.createItemStack());
     }
 
     @EventHandler

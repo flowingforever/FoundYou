@@ -4,6 +4,7 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.ItemType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import pro.fazeclan.river.foundyou.ability.Ability;
@@ -26,7 +27,7 @@ public class EcholocateAbility extends Ability {
     private final Map<UUID, Long> LAST_PING_AT = new ConcurrentHashMap<>();
 
     public EcholocateAbility() {
-        super("echolocate");
+        super("echolocate", ItemType.SCULK_SENSOR.createItemStack());
     }
 
     @EventHandler

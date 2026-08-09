@@ -1,2 +1,4 @@
+name: "<color:#573400>Quickfire</color>"
+description: "<newline><red><b>ACTIVE ABILITY</b></red><newline><newline>When pressing [<key:key.attack>], you may fire an arrow<newline>instantly that does less damage compared to a<newline>normal crossbow shot."
 cooldown-ticks: 30
 arrow-speed: 3.0

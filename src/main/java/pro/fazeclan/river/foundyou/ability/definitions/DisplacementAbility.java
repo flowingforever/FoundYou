@@ -1,6 +1,7 @@
 package pro.fazeclan.river.foundyou.ability.definitions;
 
 import org.bukkit.event.EventHandler;
+import org.bukkit.inventory.ItemType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import pro.fazeclan.river.foundyou.ability.Ability;
@@ -13,7 +14,7 @@ import pro.fazeclan.river.jarona.condition.TimedCondition;
 public class DisplacementAbility extends Ability {
 
     public DisplacementAbility() {
-        super("displacement");
+        super("displacement", ItemType.SPIDER_EYE.createItemStack());
     }
 
     @EventHandler

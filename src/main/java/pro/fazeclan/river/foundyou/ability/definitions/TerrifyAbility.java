@@ -2,6 +2,7 @@ package pro.fazeclan.river.foundyou.ability.definitions;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.inventory.ItemType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import pro.fazeclan.river.foundyou.ability.Ability;
@@ -20,7 +21,7 @@ import java.util.UUID;
 
 public class TerrifyAbility extends Ability {
 
-    public TerrifyAbility() { super("terrify"); }
+    public TerrifyAbility() { super("terrify", ItemType.SCULK_SHRIEKER.createItemStack()); }
 
     private final Map<UUID, Closeable> terrifyTasks = new HashMap<>();
 

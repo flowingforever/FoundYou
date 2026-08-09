@@ -6,6 +6,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ItemType;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 import pro.fazeclan.river.foundyou.ability.Ability;
@@ -18,7 +19,7 @@ import pro.fazeclan.river.jarona.condition.TimedCondition;
 public class ScrapshotAbility extends Ability {
 
     public ScrapshotAbility() {
-        super("scrapshot");
+        super("scrapshot", ItemType.CROSSBOW.createItemStack());
     }
 
     @EventHandler

@@ -1,3 +1,5 @@
+name: "<dark_gray>Muzzle</dark_gray>"
+description: "<newline><red><b>ACTIVE ABILITY</b></red><newline><newline>When pressing [<key:key.swapOffhand>], you suppress the abilities of<newline>those around you!<newline><newline>If Simple Voice Chat is installed, it also mutes<newline>them temporarily."
 cooldown: 45 # seconds
 duration: 10 # seconds
 range: 7.0 # blocks

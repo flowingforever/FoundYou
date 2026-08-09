@@ -1,3 +1,5 @@
+name: "<gold>Trap</gold>"
+description: "<newline><red><b>ACTIVE ABILITY</b></red><newline><newline>When pressing [<key:key.swapOffhand>], place down a trap.<newline><newline>When hiders get close enough to<newline>it, they will be inflicted<newline>with <color:#94A061>Glowing</color> and <color:#8BAFE0>Slowness</color>.<newline><newline>When seekers get close enough to it,<newline>they will be given <color:#33EBFF>Speed</color>."
 cooldown: 60
 lifetime: 130 # seconds
 radius: 3.25

@@ -1,3 +1,5 @@
+name: "<dark_aqua>Enraged Shriek</dark_aqua>"
+description: "<newline><red><b>ACTIVE ABILITY</b></red><newline><newline>When pressing [<key:key.swapOffhand>], highlight players<newline>around you, and shoot a beam<newline>dealing massive damage."
 cooldown: 35
 charge: 3 # seconds
 range: 15 # blocks

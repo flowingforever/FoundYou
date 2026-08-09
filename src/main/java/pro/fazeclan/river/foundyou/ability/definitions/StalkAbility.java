@@ -6,6 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import pro.fazeclan.river.foundyou.ability.Ability;
@@ -22,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class StalkAbility extends Ability {
 
-    public StalkAbility() { super("stalk"); }
+    public StalkAbility() { super("stalk", ItemType.GRAY_CANDLE.createItemStack()); }
 
     private final Map<UUID, Long> lastStepAt = new ConcurrentHashMap<>();
     private final Map<UUID, Closeable> gameTasks = new ConcurrentHashMap<>();

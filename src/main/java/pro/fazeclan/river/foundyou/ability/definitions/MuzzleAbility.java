@@ -1,6 +1,7 @@
 package pro.fazeclan.river.foundyou.ability.definitions;
 
 import org.bukkit.event.EventHandler;
+import org.bukkit.inventory.ItemType;
 import org.bukkit.scheduler.BukkitRunnable;
 import pro.fazeclan.river.foundyou.FoundYou;
 import pro.fazeclan.river.foundyou.ability.Ability;
@@ -14,7 +15,7 @@ import pro.fazeclan.river.jarona.util.ConditionUtil;
 
 public class MuzzleAbility extends Ability {
 
-    public MuzzleAbility() { super("muzzle"); }
+    public MuzzleAbility() { super("muzzle", ItemType.WHITE_WOOL.createItemStack()); }
 
     @EventHandler
     private void handleAbility(AbilityEvent event) {

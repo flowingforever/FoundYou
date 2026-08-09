@@ -1,3 +1,5 @@
+name: "<red>Self Destruct</red>"
+description: "<newline><b><red>ACTIVE</red> & <green>PASSIVE</green> ABILITY</b><newline><newline>Upon death or pressing [<key:key.swapOffhand>], you explode,<newline>dealing massive damage and knockback to those<newline>around you."
 radius: 5
 damage: 20
 delay: 5

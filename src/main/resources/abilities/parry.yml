@@ -1,3 +1,5 @@
+name: "<green>Parry</green>"
+description: "<newline><red><b>ACTIVE ABILITY</b></red><newline><newline>When pressing [<key:key.swapOffhand>], there's a little window where<newline>someone can attack you and you<newline>wouldn't take any damage.<newline><newline><green>When your parry counters someone, they</green><newline><green>are inflicted with <color:#1F1F23>Blindness</color>, <color:#8BAFE0>Slowness</color>,</green><newline><green>and <color:#484D48>Weakness</color>.</green><newline><newline><red>When your parry misses, it backfires and</red><newline><red>inflicts you with <color:#8BAFE0>Slowness</color>.</red>"
 cooldown: 35
 active-window: 3 # seconds
 uses: 2

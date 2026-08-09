@@ -1,7 +1,9 @@
 package pro.fazeclan.river.foundyou.ability.definitions;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.event.EventHandler;
+import org.bukkit.inventory.ItemType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import pro.fazeclan.river.foundyou.ability.Ability;
@@ -14,7 +16,14 @@ import pro.fazeclan.river.jarona.condition.TimedUseCondition;
 
 public class AdrenalineAbility extends Ability {
 
-    public AdrenalineAbility() { super("adrenaline"); }
+    public AdrenalineAbility() {
+        super(
+                "adrenaline",
+                ItemType.POTION.createItemStack(meta -> {
+                    meta.setColor(Color.fromRGB(0x33EBFF));
+                })
+        );
+    }
 
     @EventHandler
     private void handleAbility(AbilityEvent event) {

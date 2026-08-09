@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ItemType;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -28,7 +29,9 @@ public class BrewerAbility extends Ability {
     private final Map<UUID, Closeable> brewTasks = new HashMap<>();
 
     public BrewerAbility() {
-        super("brewer");
+        super("brewer", ItemType.POTION.createItemStack(meta -> {
+            meta.setColor(Color.fromRGB(0x8BAFE0));
+        }));
     }
 
     @EventHandler

@@ -3,6 +3,7 @@ package pro.fazeclan.river.foundyou.ability.definitions;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.inventory.ItemType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import pro.fazeclan.river.foundyou.FoundYou;
@@ -19,7 +20,7 @@ import pro.fazeclan.river.jarona.util.ConditionUtil;
 public class ExplodeAbility extends Ability {
 
     public ExplodeAbility() {
-        super("explode");
+        super("explode", ItemType.RED_CANDLE.createItemStack());
     }
 
     @EventHandler

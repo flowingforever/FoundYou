@@ -1,2 +1,4 @@
+name: "<dark_purple>Roll</dark_purple>"
+description: "<newline><red><b>ACTIVE ABILITY</b></red><newline><newline>When pressing [<key:key.swapOffhand>], you roll one out of<newline><color:#87A363>Poison</color>, <color:#484D48>Weakness</color>, <color:#292721>Darkness</color>, <color:#2552A5>Absorption</color>,<newline><color:#9146F0>Resistance</color>, or <color:#FFC700>Strength</color>."
 cooldown: 35
 uses: 5

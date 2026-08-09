@@ -8,17 +8,18 @@ import io.papermc.paper.command.brigadier.Commands;
 import org.bukkit.entity.Player;
 import pro.fazeclan.river.foundyou.FoundYou;
 import pro.fazeclan.river.foundyou.command.arguments.RoleArgument;
-import pro.fazeclan.river.foundyou.dialog.RoleCreationDialog;
 import pro.fazeclan.river.foundyou.role.Role;
+import pro.fazeclan.river.foundyou.screen.RoleCreationDialog;
+import pro.fazeclan.river.foundyou.screen.RolePreviewMenu;
 import pro.fazeclan.river.foundyou.util.TextUtil;
 
 public class RoleCommand {
 
     public static LiteralArgumentBuilder<CommandSourceStack> command() {
         return Commands.literal("role")
-                .requires(ctx -> ctx.getSender().hasPermission("found_you.admin.role"))
                 .then(
                         Commands.literal("create")
+                                .requires(ctx -> ctx.getSender().hasPermission("found_you.admin.role"))
                                 .executes(ctx -> {
                                     if (!(ctx.getSource().getSender() instanceof Player player)) {
                                         return Command.SINGLE_SUCCESS;
@@ -30,6 +31,7 @@ public class RoleCommand {
                 )
                 .then(
                         Commands.literal("reload")
+                                .requires(ctx -> ctx.getSender().hasPermission("found_you.admin.role"))
                                 .executes(ctx -> {
                                     var manager = FoundYou.getInstance().getRoleManager();
                                     manager.reloadRegistry();
@@ -43,6 +45,7 @@ public class RoleCommand {
                 .then(
                         Commands.literal("getitems")
                                 .then(Commands.argument("role", new RoleArgument())
+                                        .requires(ctx -> ctx.getSender().hasPermission("found_you.admin.role"))
                                         .executes(ctx -> {
                                             if (!(ctx.getSource().getSender() instanceof Player player)) {
                                                 return Command.SINGLE_SUCCESS;
@@ -57,6 +60,21 @@ public class RoleCommand {
                                             ctx.getSource().getSender().sendMessage(TextUtil.formatComponent(
                                                     "<green>Given all the items in "+ role.getName() +"!</green>"
                                             ));
+
+                                            return Command.SINGLE_SUCCESS;
+                                        })
+                                )
+                )
+                .then(
+                        Commands.literal("preview")
+                                .then(Commands.argument("role", new RoleArgument())
+                                        .executes(ctx -> {
+                                            if (!(ctx.getSource().getSender() instanceof Player player)) {
+                                                return Command.SINGLE_SUCCESS;
+                                            }
+
+                                            var role = ctx.getArgument("role", Role.class);
+                                            RolePreviewMenu.createAndShowPreview(player, role);
 
                                             return Command.SINGLE_SUCCESS;
                                         })

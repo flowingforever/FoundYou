@@ -1,3 +1,5 @@
+name: "<gold>Stalk</gold>"
+description: "<newline><green><b>PASSIVE ABILITY</b></green><newline><newline>See the footprints of hiders around you!"
 cooldown: 0.2 # seconds
 minimum-movement: 0.2 # blocks
 view-range: 24.0

@@ -1,3 +1,5 @@
+name: "<color:#8BAFE0>Brewer</color>"
+description: "<newline><green><b>PASSIVE ABILITY</b></green><newline><newline>You get a random potion on an interval<newline>throughout the whole game."
 interval: 45 # seconds
 drink-duration:
   one-winged-angel: 0.8

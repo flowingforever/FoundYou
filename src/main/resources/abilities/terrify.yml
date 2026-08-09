@@ -1,3 +1,5 @@
+name: "<color:#292721>Terrify</color>"
+description: "<newline><b><red>ACTIVE</red> & <green>PASSIVE</green> ABILITY</b><newline><newline>When pressing [<key:key.swapOffhand>], give all hiders<newline><color:#94A061>Glowing</color>, all players <color:#292721>Darkness</color>,<newline>and yourself some <color:#33EBFF>Speed</color>.<newline>All hiders close enough to<newline>you will get <color:#292721>Darkness</color>."
 cooldown: 75 # seconds
 aura-radius: 5.0
 aura-darkness: 2 # seconds

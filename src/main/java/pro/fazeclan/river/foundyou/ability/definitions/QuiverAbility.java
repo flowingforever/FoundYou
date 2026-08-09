@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ItemType;
 import pro.fazeclan.river.foundyou.ability.Ability;
 import pro.fazeclan.river.foundyou.event.GameAddPlayerEvent;
 import pro.fazeclan.river.foundyou.event.GameRemovePlayerEvent;
@@ -21,7 +22,7 @@ public class QuiverAbility extends Ability {
     private final Map<UUID, Closeable> quiverTask = new HashMap<>();
 
     public QuiverAbility() {
-        super("quiver");
+        super("quiver", ItemType.SPECTRAL_ARROW.createItemStack());
     }
 
     @EventHandler

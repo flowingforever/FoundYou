@@ -1,2 +1,4 @@
+name: "<color:#33EBFF>Adrenaline</color>"
+description: "<newline><red><b>ACTIVE ABILITY</b></red><newline><newline>When pressing [<key:key.swapOffhand>], you gain <color:#33EBFF>Speed 2</color> for <green>5s</green>!"
 cooldown: 30
 uses: 2

@@ -1,3 +1,5 @@
+name: "<color:#573400>Scrapshot</color>"
+description: "<newline><red><b>ACTIVE ABILITY</b></red><newline><newline>When pressing [<key:key.swapOffhand>], shoot a shot with<newline>some insane recoil that launches<newline>you backwards."
 cooldown: 20
 damage: 12
 recoil-strength: 1.29

@@ -4,6 +4,7 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import pro.fazeclan.river.foundyou.ability.Ability;
@@ -22,7 +23,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class TrapAbility extends Ability {
 
-    public TrapAbility() { super("trap"); }
+    public TrapAbility() { super("trap", ItemType.POINTED_DRIPSTONE.createItemStack()); }
 
     private final List<Trap> TRAPS          = new CopyOnWriteArrayList<>();
     private volatile boolean scannersStarted = false;

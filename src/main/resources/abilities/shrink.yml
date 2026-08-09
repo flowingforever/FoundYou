@@ -1,3 +1,5 @@
+name: "<green>Shrink</green>"
+description: "<newline><red><b>ACTIVE ABILITY</b></red><newline><newline>When pressing [<key:key.swapOffhand>], shrink down<newline>and gain some <color:#33EBFF>speed</color>!"
 cooldown: 45
 uses: 2
 duration: 5

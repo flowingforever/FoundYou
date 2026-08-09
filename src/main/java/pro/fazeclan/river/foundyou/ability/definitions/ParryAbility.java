@@ -6,6 +6,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.inventory.ItemType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import pro.fazeclan.river.foundyou.ability.Ability;
@@ -25,7 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ParryAbility extends Ability {
 
-    public ParryAbility() { super("parry"); }
+    public ParryAbility() { super("parry", ItemType.SHIELD.createItemStack()); }
 
     // State
     private final Map<UUID, Long> ACTIVE_UNTIL = new ConcurrentHashMap<>();  // primed window end

@@ -1,3 +1,5 @@
+name: "<green>Draining Dash</green>"
+description: "<newline><red><b>ACTIVE ABILITY</b></red><newline><newline>When pressing [<key:key.swapOffhand>], you launch forward and gain <color:#33EBFF>Speed 2</color><newline>for <green>2s</green> and <color:#292721>Darkness</color> for <green>5s</green>!"
 cooldown: 20
 uses: 3
 magnitude: 1.11

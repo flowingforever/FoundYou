@@ -6,6 +6,7 @@ import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.inventory.ItemType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.RayTraceResult;
@@ -28,7 +29,7 @@ public class LaserbeamAbility extends Ability {
             );
 
     public LaserbeamAbility() {
-        super("laser");
+        super("laser", ItemType.SOUL_LANTERN.createItemStack());
     }
 
     @EventHandler

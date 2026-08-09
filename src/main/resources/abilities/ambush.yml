@@ -1,3 +1,5 @@
+name: "<color:#FFC700>Ambush</color>"
+description: "<newline><red><b>ACTIVE ABILITY</b></red><newline><newline>When pressing [<key:key.swapOffhand>], you go <dark_gray>Invisible</dark_gray> and gain <color:#33EBFF>Speed I</color><newline>for a short duration. While <dark_gray>Invisible</dark_gray>, you may backstab players<newline>for extra damage, but you will lose a bit of<newline>damage for doing normal hits."
 cooldown: 90
 duration: 10
 punish-duration: 5

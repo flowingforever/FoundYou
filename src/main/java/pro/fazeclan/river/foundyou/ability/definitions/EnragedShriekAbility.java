@@ -5,6 +5,7 @@ import net.kyori.adventure.title.Title;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.inventory.ItemType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -27,7 +28,7 @@ import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 public class EnragedShriekAbility extends Ability {
 
     public EnragedShriekAbility() {
-        super("shriek");
+        super("shriek", ItemType.SCULK_SHRIEKER.createItemStack());
     }
 
     private final Map<UUID, Closeable> CHARGES = new HashMap<>();

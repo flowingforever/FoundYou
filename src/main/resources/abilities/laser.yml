@@ -1,3 +1,5 @@
+name: "<blue>Laserbeam</blue>"
+description: "<newline><red><b>ACTIVE ABILITY</b></red><newline><newline>When pressing [<key:key.swapOffhand>], you shoot a beam for a bit<newline>of damage!<newline><newline><green>If it hits, your cooldown is shortened.</green><newline><red>If it misses, your cooldown is longer.</red>"
 success-cooldown: 3
 failure-cooldown: 20
 damage: 6

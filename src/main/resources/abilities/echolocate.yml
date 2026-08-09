@@ -1,2 +1,4 @@
+name: "<color:#16A6A6>Echolocate</color>"
+description: "<newline><green><b>PASSIVE ABILITY</b></green><newline><newline>You are sent a ping from a hider when they move."
 cooldown: 2 # seconds
 radius: 25.0

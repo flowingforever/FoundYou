@@ -28,7 +28,6 @@ import pro.fazeclan.river.jarona.condition.TimedCondition;
 import pro.fazeclan.river.jarona.game.Game;
 import pro.fazeclan.river.jarona.util.GameUtil;
 import pro.fazeclan.river.jarona.util.NametagUtil;
-import pro.fazeclan.river.jarona.util.WorldUtil;
 import pro.fazeclan.river.jarona.util.WorldlessLocation;
 
 import java.io.File;

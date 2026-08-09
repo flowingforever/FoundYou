@@ -1,3 +1,5 @@
+name: "<gold>Noise</gold>"
+description: "<newline><red><b>ACTIVE ABILITY</b></red><newline><newline>When pressing [<key:key.swapOffhand>], you <color:#1F1F23>blind</color> hunters around you<newline>, as well as giving you <color:#33EBFF>Speed</color> and <color:#CD5CAB>Regeneration</color>."
 cooldown: 45 # seconds
 period: 10 # seconds, between each ring
 blindness-duration: 5

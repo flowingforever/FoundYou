@@ -8,6 +8,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ItemType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -32,7 +33,7 @@ public class AmbushAbility extends Ability {
     private final Map<UUID, Integer> hiddenArrowCounts = new HashMap<>();
 
     public AmbushAbility() {
-        super("ambush");
+        super("ambush", ItemType.GOLDEN_AXE.createItemStack());
     }
 
     @EventHandler

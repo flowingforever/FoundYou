@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 import pro.fazeclan.river.foundyou.FoundYou;
 import pro.fazeclan.river.foundyou.event.GameAddPlayerEvent;
 import pro.fazeclan.river.foundyou.role.Faction;
@@ -18,11 +19,13 @@ public class Ability implements Listener {
 
     @Getter
     private final String id;
+    @Getter
+    private final ItemStack display;
 
     private final File file;
     private final YamlConfiguration config;
 
-    public Ability(String id) {
+    public Ability(String id, ItemStack display) {
         var plugin = FoundYou.getInstance();
 
         plugin.saveResource("abilities/" + id + ".yml", false);
@@ -30,6 +33,7 @@ public class Ability implements Listener {
         this.config = YamlConfiguration.loadConfiguration(this.file);
 
         this.id = id;
+        this.display = display;
     }
 
     public <T> T getDefaultAbilityProperty(String key, T def) {

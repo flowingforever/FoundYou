@@ -1,3 +1,5 @@
+name: "<aqua>Displacement</aqua>"
+description: "<newline><red><b>ACTIVE ABILITY</b></red><newline><newline>When pressing [<key:key.swapOffhand>], you gain strong <color:#33EBFF>Speed</color> and<newline>strong <color:#484D48>Weakness</color>!"
 cooldown: 40
 speed:
   amplifier: 2

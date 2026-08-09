@@ -3,6 +3,7 @@ package pro.fazeclan.river.foundyou.ability.definitions;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.inventory.ItemType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -16,7 +17,7 @@ import pro.fazeclan.river.jarona.condition.TimedUseCondition;
 
 public class DashAbility extends Ability {
     public DashAbility() {
-        super("dash");
+        super("dash", ItemType.RABBIT_FOOT.createItemStack());
     }
 
     @EventHandler
@@ -34,7 +35,8 @@ public class DashAbility extends Ability {
                         getId() + "_ability",
                         new TimedUseCondition(
                                 TimedCondition.Type.GAME_TICK,
-                                c -> null
+                                c -> null,
+                                maxUses
                         )
                 );
 

@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ItemType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import pro.fazeclan.river.foundyou.ability.Ability;
@@ -23,7 +24,7 @@ import java.util.Map;
 public class ConcealAbility extends Ability {
 
     public ConcealAbility() {
-        super("conceal");
+        super("conceal", ItemType.BARRIER.createItemStack());
     }
 
     @EventHandler

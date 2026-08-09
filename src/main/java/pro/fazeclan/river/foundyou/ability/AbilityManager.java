@@ -1,5 +1,6 @@
 package pro.fazeclan.river.foundyou.ability;
 
+import lombok.Getter;
 import org.bukkit.event.HandlerList;
 import pro.fazeclan.river.foundyou.FoundYou;
 import pro.fazeclan.river.foundyou.ability.definitions.*;
@@ -9,6 +10,7 @@ import java.util.Map;
 
 public class AbilityManager {
 
+    @Getter
     private final Map<String, Ability> registry = new HashMap<>();
 
     public void registerAbilities() {

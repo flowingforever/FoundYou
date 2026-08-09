@@ -3,6 +3,7 @@ package pro.fazeclan.river.foundyou.ability.definitions;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.inventory.ItemType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import pro.fazeclan.river.foundyou.ability.Ability;
@@ -22,7 +23,7 @@ import java.util.UUID;
 
 public class NoisemakerAbility extends Ability {
 
-    public NoisemakerAbility() { super("noise"); }
+    public NoisemakerAbility() { super("noise", ItemType.GOAT_HORN.createItemStack()); }
 
     private final Map<UUID, Closeable> rings = new HashMap<>();
 

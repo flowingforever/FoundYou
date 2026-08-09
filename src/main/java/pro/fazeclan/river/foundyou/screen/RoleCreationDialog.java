@@ -1,4 +1,4 @@
-package pro.fazeclan.river.foundyou.dialog;
+package pro.fazeclan.river.foundyou.screen;
 
 import de.tr7zw.nbtapi.NBT;
 import io.papermc.paper.dialog.Dialog;
