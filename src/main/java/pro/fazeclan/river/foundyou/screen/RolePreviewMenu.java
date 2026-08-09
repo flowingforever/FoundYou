@@ -105,6 +105,9 @@ public class RolePreviewMenu {
                                         DataComponentTypes.BUNDLE_CONTENTS,
                                         BundleContents.bundleContents().addAll(displayList).build()
                                 )
+                                .setLore(List.of(
+                                        mm.deserialize("<dark_gray>(Hover over this and scroll!)</dark_gray>")
+                                ))
                 )
                 .addBundleSelectHandler((item, gui1, player1, integer) -> {
                     if (integer == -1) return;
