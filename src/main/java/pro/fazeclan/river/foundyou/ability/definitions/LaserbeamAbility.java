@@ -152,6 +152,7 @@ public class LaserbeamAbility extends Ability {
         return entity instanceof Player target
                 && target != shooter
                 && target.isValid()
+                && !target.getGameMode().equals(GameMode.SPECTATOR)
                 && !target.isDead();
     }
 
