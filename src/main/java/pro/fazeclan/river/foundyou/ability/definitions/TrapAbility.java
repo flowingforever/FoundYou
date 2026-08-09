@@ -47,6 +47,7 @@ public class TrapAbility extends Ability {
                     for (Player p : Bukkit.getOnlinePlayers()) {
                         if (p.getWorld() != w) continue;
                         if (p.getLocation().distanceSquared(trap.location) > radiusSquared) continue;
+                        if (p.isInvulnerable()) continue;
 
                         if (isRunner(p)) {
                             p.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 2 * 20, 0, false, false, true));

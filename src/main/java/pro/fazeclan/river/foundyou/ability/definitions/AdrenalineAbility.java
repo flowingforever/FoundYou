@@ -35,6 +35,8 @@ public class AdrenalineAbility extends Ability {
 
         var maxUses = getDefaultAbilityProperty("uses", 2);
 
+        var speedDuration = getDefaultAbilityProperty("duration", 10);
+
         var condition = conditionManager.getPlayerConditions(player)
                 .getOrCreate(
                         getId() + "_ability",
@@ -52,7 +54,7 @@ public class AdrenalineAbility extends Ability {
 
         player.addPotionEffect(new PotionEffect(
                 PotionEffectType.SPEED,
-                5 * 20,
+                speedDuration * 20,
                 1,
                 false,
                 false,

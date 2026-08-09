@@ -39,6 +39,8 @@ public class ExplodeAbility extends Ability {
         condition.setAvailable(false);
 
         handleExplosionBuildup(player);
+
+        player.sendMessage(ChatColor.RED + "EXPLODING!");
     }
 
     @EventHandler

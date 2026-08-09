@@ -31,6 +31,8 @@ public class ShrinkAbility extends Ability {
 
         var maxUses = getDefaultAbilityProperty("uses", 2);
 
+        var abilityDuration = getDefaultAbilityProperty("duration", 5);
+
         var condition = conditionManager.getPlayerConditions(player)
                 .getOrCreate(
                         getId() + "_ability",
@@ -48,7 +50,7 @@ public class ShrinkAbility extends Ability {
 
         player.addPotionEffect(new PotionEffect(
                 PotionEffectType.SPEED,
-                5 * 20,
+                abilityDuration * 20,
                 1,
                 false,
                 false,
@@ -57,8 +59,7 @@ public class ShrinkAbility extends Ability {
 
         AttributeInstance small = player.getAttribute(Attribute.SCALE);
 
-        var d = getDefaultAbilityProperty("duration", 5);
-        SchedulingUtil.runLater(d * 20L, () -> {
+        SchedulingUtil.runLater(abilityDuration * 20L, () -> {
             small.setBaseValue(1);
 
             if (player.getLocation().getBlock().getBoundingBox().contains(player.getBoundingBox())) {
@@ -81,7 +82,7 @@ public class ShrinkAbility extends Ability {
             }
         });
 
-        player.sendMessage(ChatColor.GREEN + "Shrink activated! " + ChatColor.GRAY + "(Speed II & Shrink, " + d + "s) "
+        player.sendMessage(ChatColor.GREEN + "Shrink activated! " + ChatColor.GRAY + "(Speed II & Shrink, " + abilityDuration + "s) "
                 + ChatColor.DARK_AQUA + "[" + (condition.getMaxUses() - condition.getUses()) + " left]");
 
     }

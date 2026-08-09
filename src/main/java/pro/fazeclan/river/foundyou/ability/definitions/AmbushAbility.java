@@ -127,7 +127,9 @@ public class AmbushAbility extends Ability {
                 0,
                 false,
                 false,
-                true));
+                true)
+        );
+        ACTIVE_UNTIL.remove(player.getUniqueId());
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)

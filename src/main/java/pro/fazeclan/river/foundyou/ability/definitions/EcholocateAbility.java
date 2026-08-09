@@ -60,6 +60,7 @@ public class EcholocateAbility extends Ability {
             for (Player victim : player.getWorld().getPlayers()) {
                 if (victim.getGameMode().isInvulnerable()) continue;
                 if (victim == player) continue;
+                if (!isRunner(victim)) continue;
                 if (hl.distanceSquared(victim.getLocation()) > r2) continue;
                 victim.addPotionEffect(new PotionEffect(
                         PotionEffectType.DARKNESS,
