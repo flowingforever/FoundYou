@@ -1,7 +1,6 @@
 package pro.fazeclan.river.foundyou.util;
 
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.alexdev.unlimitednametags.api.UNTPaperAPI;
 import org.alexdev.unlimitednametags.config.Settings;
 import org.bukkit.GameMode;
@@ -18,6 +17,7 @@ import pro.fazeclan.river.foundyou.role.Faction;
 import pro.fazeclan.river.foundyou.role.Role;
 import pro.fazeclan.river.jarona.Jarona;
 import pro.fazeclan.river.jarona.condition.TimedCondition;
+import pro.fazeclan.river.jarona.util.ConditionUtil;
 import pro.fazeclan.river.jarona.util.NametagUtil;
 
 import java.io.File;
@@ -31,8 +31,6 @@ public class GameFunctions {
         var config = YamlConfiguration.loadConfiguration(new File(world.getWorldFolder(), "map_config.yml"));
         var jarona = Jarona.getInstance();
         var plugin = FoundYou.getInstance();
-        var manager = jarona.getConditionManager();
-        var gameUUID = UUID.fromString(world.getKey().getKey());
         jarona.getServer().getPluginManager().callEvent(new GamePlayerDeathEvent(player, RoleUtil.getRoleOrThrow(player)));
         player.setGameMode(GameMode.SPECTATOR);
         world.playSound(
@@ -46,30 +44,8 @@ public class GameFunctions {
         // todo: summon corpse
 
         // add more time when player dies
-        var condition = manager.getGameConditions(gameUUID)
-                .getOrCreate(
-                        "game_" + gameUUID,
-                        new TimedCondition(
-                                TimedCondition.Type.GAME_TICK
-                        )
-                );
         var time = config.getInt("additional-time", 900);
-        condition.setDuration(condition.getDuration() + time);
-        condition.setHud(c -> {
-            var tc = (TimedCondition) c;
-            var duration = tc.getDuration();
-            return "<red><b>" + TimeUtil.ticksIntoReadableFormat((int) duration) + "</b></red>";
-        });
-
-        world.getPersistentDataContainer().set(
-                FoundYou.getKey("game_length"),
-                PersistentDataType.INTEGER,
-                world.getPersistentDataContainer().getOrDefault(
-                        FoundYou.getKey("game_length"),
-                        PersistentDataType.INTEGER,
-                        900
-                ) + time
-        );
+        addGameTime(world, time);
 
         var svcPlugin = plugin.getVoicechatPlugin();
         if (svcPlugin != null) {
@@ -99,8 +75,9 @@ public class GameFunctions {
             return original.withDisplayGroups(groups);
         });
         for (var p : player.getWorld().getPlayers()) {
-            NametagUtil.hidePlayerNametagWithGlow(player, p, NamedTextColor.NAMES.value(color));
+            NametagUtil.hidePlayerNametag(p, player);
         }
+        NametagUtil.hidePlayerNametagWithGlowToAll(player, NamedTextColor.NAMES.value(color));
         FoundYou.getInstance()
                 .getServer()
                 .getPluginManager()
@@ -112,6 +89,42 @@ public class GameFunctions {
         RoleUtil.removeRoles(player);
         manager.removeNametagOverride(player);
         NametagUtil.showPlayerNametagToAll(player);
+    }
+
+    public static void addGameTime(World world, long ticks) {
+        UUID gameUUID;
+        try {
+            gameUUID = UUID.fromString(world.getKey().getKey());
+        } catch (Exception e) {
+            return;
+        }
+        var condition = ConditionUtil.getWorldConditions(world)
+                .getOrCreate(
+                        "game_" + gameUUID,
+                        new TimedCondition(
+                                TimedCondition.Type.GAME_TICK
+                        )
+                );
+        condition.setDuration(condition.getDuration() + ticks);
+        condition.setHud(c -> {
+            var tc = (TimedCondition) c;
+            var duration = tc.getDuration();
+            return "<red><b>" + TimeUtil.ticksIntoReadableFormat((int) duration) + "</b></red>";
+        });
+        long max = world.getPersistentDataContainer().getOrDefault(FoundYou.getKey("max_game_length"), PersistentDataType.LONG, -1L);
+        long newTime = world.getPersistentDataContainer().getOrDefault(
+                FoundYou.getKey("game_length"),
+                PersistentDataType.INTEGER,
+                900
+        ) + ticks;
+        if (max != -1) {
+            newTime = Math.min(newTime, max);
+        }
+        world.getPersistentDataContainer().set(
+                FoundYou.getKey("game_length"),
+                PersistentDataType.INTEGER,
+                (int) newTime
+        );
     }
 
 }

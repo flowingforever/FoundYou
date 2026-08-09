@@ -28,6 +28,7 @@ import pro.fazeclan.river.jarona.condition.TimedCondition;
 import pro.fazeclan.river.jarona.game.Game;
 import pro.fazeclan.river.jarona.util.GameUtil;
 import pro.fazeclan.river.jarona.util.NametagUtil;
+import pro.fazeclan.river.jarona.util.WorldUtil;
 import pro.fazeclan.river.jarona.util.WorldlessLocation;
 
 import java.io.File;
@@ -126,8 +127,9 @@ public class FoundYouGame extends Game {
 
         }
 
-        var graceLength = config.getInt("grace-length");
-        var gameLength = config.getInt("initial-time");
+        int graceLength = config.getInt("grace-length");
+        int gameLength = config.getInt("initial-time");
+        long maxGameLength = config.getLong("max-game-length", -1);
         world.getPersistentDataContainer().set(
                 FoundYou.getKey("grace_length"),
                 PersistentDataType.INTEGER,
@@ -137,6 +139,11 @@ public class FoundYouGame extends Game {
                 FoundYou.getKey("game_length"),
                 PersistentDataType.INTEGER,
                 gameLength
+        );
+        world.getPersistentDataContainer().set(
+                FoundYou.getKey("max_game_length"),
+                PersistentDataType.LONG,
+                maxGameLength
         );
 
         var gameUUID = UUID.fromString(world.getKey().getKey());
