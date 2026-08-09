@@ -80,7 +80,7 @@ public class ScrapshotAbility extends Ability {
         fireParticleBeam(player);
         applyRecoil(player);
 
-        //player.setCooldown(Material.CROSSBOW, getDefaultAbilityProperty("cooldown", 20) * 20);
+        player.setCooldown(Material.CROSSBOW, getDefaultAbilityProperty("crossbow-cooldown", 5) * 20);
 
         player.sendMessage(ChatColor.GOLD + "Scrapshot fired! " + ChatColor.GRAY + "(" + cooldown + "s cooldown.)");
     }
