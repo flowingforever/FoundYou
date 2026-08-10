@@ -15,17 +15,15 @@ repositories {
     maven { url = uri("https://maven.pvphub.me/tofaa") }
     maven { url = uri("https://jitpack.io") }
     maven { url = uri("https://maven.maxhenkel.de/repository/public") }
-    maven { url = uri("https://repo.xenondevs.xyz/releases") }
 }
 
 dependencies {
     paperweight.paperDevBundle("26.2.build.+")
-    compileOnly(files("libs/Jarona-0.1.0-all.jar"))
+    compileOnly(files("../Jarona/build/libs/Jarona-0.1.0-all.jar"))
     compileOnly("de.tr7zw:item-nbt-api-plugin:2.15.7")
     compileOnly("io.github.alexdev03:unlimitednametags-api-paper:2.0.0")
     compileOnly("io.github.tofaa2:spigot:3.0.3-SNAPSHOT")
     compileOnly("de.maxhenkel.voicechat:voicechat-api:2.6.20")
-    implementation("xyz.xenondevs.invui:invui:2.3.0")
 }
 
 java {
@@ -33,10 +31,6 @@ java {
 }
 
 tasks {
-    shadowJar {
-        relocate("xyz.xenondevs.invui", "pro.fazeclan.river.foundyou.invui")
-    }
-
     build {
         dependsOn(shadowJar)
     }
@@ -47,7 +41,7 @@ tasks {
         // Your plugin's jar (or shadowJar if present) will be used automatically.
         minecraftVersion("26.2")
         jvmArgs("-Xms2G", "-Xmx2G", "-Dcom.mojang.eula.agree=true")
-        pluginJars(files("libs/Jarona-0.1.0-all.jar"))
+        pluginJars(files("../Jarona/build/libs/Jarona-0.1.0-all.jar"))
         downloadPlugins {
             modrinth("packetevents", "2.13.0+spigot")
             modrinth("nbtapi", "2.15.7")

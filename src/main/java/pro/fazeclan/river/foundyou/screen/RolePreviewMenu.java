@@ -14,11 +14,11 @@ import org.jetbrains.annotations.NotNull;
 import pro.fazeclan.river.foundyou.FoundYou;
 import pro.fazeclan.river.foundyou.role.Faction;
 import pro.fazeclan.river.foundyou.role.Role;
-import xyz.xenondevs.invui.gui.Gui;
-import xyz.xenondevs.invui.item.BoundItem;
-import xyz.xenondevs.invui.item.Item;
-import xyz.xenondevs.invui.item.ItemBuilder;
-import xyz.xenondevs.invui.window.Window;
+import pro.fazeclan.river.jarona.invui.gui.*;
+import pro.fazeclan.river.jarona.invui.item.BoundItem;
+import pro.fazeclan.river.jarona.invui.item.Item;
+import pro.fazeclan.river.jarona.invui.item.ItemBuilder;
+import pro.fazeclan.river.jarona.invui.window.Window;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
