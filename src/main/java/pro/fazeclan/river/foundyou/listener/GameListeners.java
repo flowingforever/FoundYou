@@ -9,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityExhaustionEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -63,7 +64,7 @@ public class GameListeners implements Listener {
     }
 
     @EventHandler
-    public void handleFoodLevel(FoodLevelChangeEvent event) {
+    public void handleFoodLevel(EntityExhaustionEvent event) {
         if (!(event.getEntity() instanceof Player player)) {
             return;
         }
