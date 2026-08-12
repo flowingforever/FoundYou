@@ -8,6 +8,7 @@ import de.maxhenkel.voicechat.api.events.MicrophonePacketEvent;
 import de.maxhenkel.voicechat.api.events.VoicechatServerStartedEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.Map;
 import java.util.UUID;
@@ -39,7 +40,7 @@ public class FYVoicechatPlugin implements VoicechatPlugin {
             if (connection == null) return;
             var player = Bukkit.getPlayer(connection.getPlayer().getUuid());
             if (player == null) return;
-            if (!player.getScoreboardTags().contains("foundyoumuzzled")) return;
+            if (!player.hasPotionEffect(PotionEffectType.UNLUCK)) return;
             event.cancel();
         });
     }

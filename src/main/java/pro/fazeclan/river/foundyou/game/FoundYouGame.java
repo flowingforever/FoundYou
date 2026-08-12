@@ -26,6 +26,7 @@ import pro.fazeclan.river.foundyou.util.TimeUtil;
 import pro.fazeclan.river.jarona.Jarona;
 import pro.fazeclan.river.jarona.condition.TimedCondition;
 import pro.fazeclan.river.jarona.game.Game;
+import pro.fazeclan.river.jarona.game.GameWithMap;
 import pro.fazeclan.river.jarona.util.GameUtil;
 import pro.fazeclan.river.jarona.util.NametagUtil;
 import pro.fazeclan.river.jarona.util.WorldlessLocation;
@@ -37,13 +38,11 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class FoundYouGame extends Game {
+public class FoundYouGame extends GameWithMap {
     public FoundYouGame() {
         super(
                 "<red>Found You!</red>",
                 FoundYou.getKey("game"),
-                true,
-                true,
                 2
         );
     }
