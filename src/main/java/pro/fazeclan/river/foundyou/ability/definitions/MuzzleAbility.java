@@ -2,6 +2,8 @@ package pro.fazeclan.river.foundyou.ability.definitions;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemType;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import pro.fazeclan.river.foundyou.FoundYou;
 import pro.fazeclan.river.foundyou.ability.Ability;
@@ -43,40 +45,8 @@ public class MuzzleAbility extends Ability {
             if (victim.equals(player)) continue;
             if (victim.getGameMode().isInvulnerable()) continue;
 
-            ConditionUtil.getPlayerConditions(victim)
-                            .getOrCreate(
-                                    "foundyoumuzzled",
-                                    new SwitchCondition(
-                                            true,
-                                            c -> "<dark_gray>Muzzled!</dark_gray>",
-                                            victim.getUniqueId()
-                                    )
-                            );
-            victim.addScoreboardTag("foundyoumuzzled");
+            victim.addPotionEffect(new PotionEffect(PotionEffectType.UNLUCK, duration, 0, true, false, true));
         }
-
-        new BukkitRunnable() {
-            long tick = 0;
-
-            @Override
-            public void run() {
-                tick++;
-
-                if (tick >= duration) {
-                    cancel();
-                }
-            }
-
-            @Override
-            public synchronized void cancel() throws IllegalStateException {
-                var players = player.getWorld().getPlayers();
-                for (var v : players) {
-                    v.removeScoreboardTag("foundyoumuzzled");
-                    ConditionUtil.getPlayerConditions(v).remove("foundyoumuzzled");
-                }
-
-            }
-        }.runTaskTimer(FoundYou.getInstance(), 0L, 1L);
 
     }
 
