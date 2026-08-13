@@ -21,7 +21,6 @@ import pro.fazeclan.river.foundyou.util.TextUtil;
 
 import java.util.List;
 
-@SuppressWarnings("UnstableApiUsage")
 public class RoleCreationDialog {
 
     public static void dialog(Player player) {
