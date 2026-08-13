@@ -6,6 +6,7 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.title.Title;
 import org.alexdev.unlimitednametags.api.UNTPaperAPI;
 import org.alexdev.unlimitednametags.api.UntNametagManagerPaper;
+import org.alexdev.unlimitednametags.config.Settings;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
@@ -53,7 +54,6 @@ public class FoundYouGame extends GameWithMap {
         var jarona = Jarona.getInstance();
 
         var conditionManager = jarona.getConditionManager();
-        var nametagManager = UNTPaperAPI.getInstance();
 
         var config = YamlConfiguration.loadConfiguration(new File(world.getWorldFolder(), "map_config.yml"));
 
@@ -83,28 +83,19 @@ public class FoundYouGame extends GameWithMap {
 
         // game prep
         for (Player player : players) {
-            var role = RoleUtil.getRoleOrThrow(player);
+            var role = RoleUtil.getRole(player);
 
             Title title = Title.title(Component.empty(), Component.empty());
             switch (role.getFaction()) {
-                case RUNNERS -> {
-                    title = Title.title(
-                            miniMessage.deserialize("<yellow>You're a <green>Runner!"),
-                            miniMessage.deserialize("<green>Avoid being killed by hunters to win!")
-                    );
-                    nametagManager.setForcedNametag(player, miniMessage.deserialize("<green>" + player.getName() + "</green>"));
-                    nametagManager.setNametagSeeThrough(player, false);
-                    NametagUtil.hidePlayerNametagWithGlowToAll(player, NamedTextColor.GREEN);
-                }
+                case RUNNERS -> title = Title.title(
+                        miniMessage.deserialize("<yellow>You're a <green>Runner!"),
+                        miniMessage.deserialize("<green>Avoid being killed by hunters to win!")
+                );
                 case HUNTERS -> {
                     title = Title.title(
                             miniMessage.deserialize("<yellow>You're a <red>Hunter!"),
                             miniMessage.deserialize("<red>Catch and kill all runners to win.")
                     );
-                    nametagManager.setForcedNametag(player, miniMessage.deserialize("<red>" + player.getName() + "</red>"));
-                    ((UntNametagManagerPaper) UNTPaperAPI.getInstance().nametagManager()).hideOtherNametags(player);
-                    nametagManager.setNametagSeeThrough(player, true);
-                    NametagUtil.hidePlayerNametagWithGlowToAll(player, NamedTextColor.RED);
 
                     var svcPlugin = plugin.getVoicechatPlugin();
                     if (svcPlugin != null) {
@@ -125,24 +116,10 @@ public class FoundYouGame extends GameWithMap {
 
         }
 
-        int graceLength = config.getInt("grace-length");
-        int gameLength = config.getInt("initial-time");
-        long maxGameLength = config.getLong("max-game-length", -1);
-        world.getPersistentDataContainer().set(
-                FoundYou.getKey("grace_length"),
-                PersistentDataType.INTEGER,
-                graceLength
-        );
-        world.getPersistentDataContainer().set(
-                FoundYou.getKey("game_length"),
-                PersistentDataType.INTEGER,
-                gameLength
-        );
-        world.getPersistentDataContainer().set(
-                FoundYou.getKey("max_game_length"),
-                PersistentDataType.LONG,
-                maxGameLength
-        );
+        var gameValues = getGameValues(world.getUID());
+        long graceLength = gameValues.setValue("grace_length", config.getLong("grace-length"));
+        long gameLength = gameValues.setValue("game_length", config.getLong("initial-time"));
+        gameValues.setValue("max_game_length", config.getLong("max-game-length", -1));
 
         var gameUUID = UUID.fromString(world.getKey().getKey());
 
@@ -181,25 +158,21 @@ public class FoundYouGame extends GameWithMap {
     @Override
     public void tick(World world, List<Player> players) {
 
-        var worldPDC = world.getPersistentDataContainer();
         var minimessage = MiniMessage.miniMessage();
 
-        var graceLength = worldPDC.get(FoundYou.getKey("grace_length"), PersistentDataType.INTEGER);
-        var gameLength = worldPDC.get(FoundYou.getKey("game_length"), PersistentDataType.INTEGER);
+        var gameValues = getGameValues(world.getUID());
+        long graceLength = gameValues.getValue("grace_length", 100L);
+        long gameLength = gameValues.getValue("game_length", 100L);
 
         var totalGameLength = graceLength + gameLength;
 
-        worldPDC.set(
-                FoundYou.getKey("tick"),
-                PersistentDataType.INTEGER,
-                getCurrentGameTick(world) + 1
-        );
+        long tick = gameValues.setValue("tick", getCurrentGameTick(world) + 1L);
 
         if (!areRunnersAlive(players) || !areHuntersAlive(players)) {
             GameUtil.endGame(world);
         }
 
-        if (getCurrentGameTick(world) == 100) {
+        if (tick == 100) {
             var config = YamlConfiguration.loadConfiguration(new File(world.getWorldFolder(), "map_config.yml"));
 
             for (Player player : players) {
@@ -212,7 +185,7 @@ public class FoundYouGame extends GameWithMap {
             }
         }
 
-        if (getCurrentGameTick(world) == graceLength) {
+        if (tick == graceLength) {
             var config = YamlConfiguration.loadConfiguration(new File(world.getWorldFolder(), "map_config.yml"));
 
             for (Player player : players) {
@@ -220,7 +193,7 @@ public class FoundYouGame extends GameWithMap {
                         "<yellow>Hunters have entered the map, good luck!</yellow>"
                 ));
 
-                if (RoleUtil.getFactionElseThrow(player) == Faction.HUNTERS) {
+                if (RoleUtil.getFaction(player) == Faction.HUNTERS) {
                     player.teleport(WorldlessLocation.deserialize("spawn", config).toLocation(world));
                     player.addPotionEffect(
                             new PotionEffect(
@@ -235,7 +208,7 @@ public class FoundYouGame extends GameWithMap {
             FoundYou.getInstance().getServer().getPluginManager().callEvent(new GracePeriodOverEvent(world, players));
         }
 
-        if (getCurrentGameTick(world) == totalGameLength - 200) {
+        if (tick == totalGameLength - 200) {
             for (Player player : players) {
                 player.addPotionEffect(new PotionEffect(
                         PotionEffectType.GLOWING,
@@ -251,7 +224,7 @@ public class FoundYouGame extends GameWithMap {
             }
         }
 
-        if (getCurrentGameTick(world) >= totalGameLength) {
+        if (tick >= totalGameLength) {
             GameUtil.endGame(world);
         }
 
@@ -266,15 +239,11 @@ public class FoundYouGame extends GameWithMap {
 
         boolean runnersWon = areRunnersAlive(players);
 
-        var nametagManager = UNTPaperAPI.getInstance();
         var conditionManager = jarona.getConditionManager();
         conditionManager.getGameConditions(gameUUID).remove("game_" + gameUUID);
 
         for (Player player : players) {
-            nametagManager.clearForcedNametag(player);
-            nametagManager.setNametagSeeThrough(player, true);
-            NametagUtil.showPlayerNametagToAll(player);
-            RoleUtil.removeRoles(player);
+            GameFunctions.removePlayer(player);
 
             var svcPlugin = plugin.getVoicechatPlugin();
             if (svcPlugin != null) {
@@ -299,15 +268,14 @@ public class FoundYouGame extends GameWithMap {
         }
     }
 
-    private int getCurrentGameTick(World world) {
-        return world.getPersistentDataContainer().getOrDefault(FoundYou.getKey("tick"), PersistentDataType.INTEGER, 0);
+    private long getCurrentGameTick(World world) {
+        return getGameValues(world.getUID()).getValue("tick", 0L);
     }
 
     private boolean isFactionAlive(List<Player> players, Faction faction) {
         return players.stream()
                 .filter(player -> !player.getGameMode().isInvulnerable())
-                .filter(player -> RoleUtil.getFaction(player).isPresent())
-                .anyMatch(player -> RoleUtil.getFactionElseThrow(player).equals(faction));
+                .anyMatch(player -> faction.equals(RoleUtil.getFaction(player)));
     }
 
     private boolean areRunnersAlive(List<Player> players) {

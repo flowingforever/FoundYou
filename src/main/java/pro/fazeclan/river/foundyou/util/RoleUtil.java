@@ -12,13 +12,17 @@ import pro.fazeclan.river.foundyou.role.Faction;
 import pro.fazeclan.river.foundyou.role.Role;
 import pro.fazeclan.river.jarona.util.GameUtil;
 
-import java.util.Optional;
+import java.util.Objects;
 
 public class RoleUtil {
 
     public static void assignRole(Player player, Role role) {
-        player.getScoreboardTags().add("foundyou_" + role.getId());
-        player.getScoreboardTags().add("foundyoufaction_" + role.getFaction().toString().toLowerCase());
+        var worldUUID = player.getWorld().getUID();
+        var game = GameUtil.getGame(player.getWorld());
+        if (game == null) {
+            return;
+        }
+        game.getGameValues(worldUUID).setValue(player.getUniqueId() + "_role", role);
         GameUtil.resetPlayer(player, GameMode.ADVENTURE);
         player.addPotionEffect(
                 new PotionEffect(
@@ -41,56 +45,43 @@ public class RoleUtil {
     }
 
     public static void removeRoles(Player player) {
-        var role = getRole(player);
-        if (role.isPresent()) {
-            player.getScoreboardTags().removeIf(tag -> tag.startsWith("foundyou_"));
-            removeFaction(player);
+        var worldUUID = player.getWorld().getUID();
+        var game = GameUtil.getGame(player.getWorld());
+        if (game == null) {
+            return;
+        }
+        var gameValues = game.getGameValues(worldUUID);
+        Role role = gameValues.getValue(player.getUniqueId() + "_role");
+        if (role != null) {
+            gameValues.removeValue(player.getUniqueId() + "_role");
             FoundYou.getInstance()
                     .getServer()
                     .getPluginManager()
-                    .callEvent(new GameRemovePlayerEvent(player, role.get()));
+                    .callEvent(new GameRemovePlayerEvent(player, role));
         }
     }
 
     public static boolean isRole(Player player, Role role) {
-        return isRole(player, role.getId());
+        return role.equals(getRole(player));
     }
 
-    public static boolean isRole(Player player, String id) {
-        return player.getScoreboardTags().contains("foundyou_" + id);
+    public static Role getRole(Player player) {
+        var worldUUID = player.getWorld().getUID();
+        var game = GameUtil.getGame(player.getWorld());
+        if (game == null) {
+            return null;
+        }
+        return game.getGameValues(worldUUID).getValue(player.getUniqueId() + "_role");
     }
 
-    public static Role getRoleOrThrow(Player player) {
-        return getRole(player).get();
-    }
-
-    public static Optional<Role> getRole(Player player) {
-        var manager = FoundYou.getInstance().getRoleManager();
-        return player.getScoreboardTags()
-                .stream()
-                .filter(tag -> tag.startsWith("foundyou_"))
-                .map(tag -> manager.getRole(tag.replace("foundyou_", "")))
-                .findFirst();
-    }
-
-    public static Optional<Faction> getFaction(Player player) {
-        return player.getScoreboardTags()
-                .stream()
-                .filter(tag -> tag.startsWith("foundyoufaction_"))
-                .map(tag -> Faction.valueOf(tag.replace("foundyoufaction_", "").toUpperCase()))
-                .findFirst();
-    }
-
-    public static Faction getFactionElseThrow(Player player) {
-        return getFaction(player).get();
-    }
-
-    public static void removeFaction(Player player) {
-        player.getScoreboardTags().removeIf(tag -> tag.startsWith("foundyoufaction_"));
+    public static Faction getFaction(Player player) {
+        var role = getRole(player);
+        if (role == null) return null;
+        return role.getFaction();
     }
 
     public static boolean isSameFaction(Player p1, Player p2) {
-        return getFactionElseThrow(p1).equals(getFactionElseThrow(p2));
+        return Objects.equals(getFaction(p1), getFaction(p2));
     }
 
 }

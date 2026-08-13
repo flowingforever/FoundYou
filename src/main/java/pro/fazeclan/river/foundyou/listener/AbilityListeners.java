@@ -17,9 +17,9 @@ public class AbilityListeners implements Listener {
         if (!player.getWorld().key().namespace().equals("foundyou")) return;
         if (player.getGameMode().equals(GameMode.SPECTATOR)) return;
         var role = RoleUtil.getRole(player);
-        if (role.isEmpty()) return;
+        if (role == null) return;
         if (player.hasPotionEffect(PotionEffectType.UNLUCK)) return;
-        for (String abilityId : role.get().getAbilities()) {
+        for (String abilityId : role.getAbilities()) {
             FoundYou.getInstance().getServer().getPluginManager().callEvent(new AbilityEvent(
                     player,
                     abilityId

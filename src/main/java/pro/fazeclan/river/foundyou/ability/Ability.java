@@ -42,7 +42,8 @@ public class Ability implements Listener {
 
     public boolean hasAbility(Player player) {
         var role = RoleUtil.getRole(player);
-        return role.map(value -> value.getAbilities().contains(getId())).orElse(false);
+        if (role == null) return false;
+        return role.getAbilities().contains(getId());
     }
 
     public String buildUses(int max, int used) {
@@ -114,11 +115,13 @@ public class Ability implements Listener {
 
     public boolean isRunner(Player player) {
         var role = RoleUtil.getRole(player);
-        return role.filter(value -> value.getFaction() == Faction.RUNNERS).isPresent();
+        if (role == null) return false;
+        return Faction.RUNNERS.equals(role.getFaction());
     }
 
     public boolean isHunter(Player player) {
         var role = RoleUtil.getRole(player);
-        return role.filter(value -> value.getFaction() == Faction.HUNTERS).isPresent();
+        if (role == null) return false;
+        return Faction.HUNTERS.equals(role.getFaction());
     }
 }

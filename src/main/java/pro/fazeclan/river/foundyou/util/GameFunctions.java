@@ -18,6 +18,7 @@ import pro.fazeclan.river.foundyou.role.Role;
 import pro.fazeclan.river.jarona.Jarona;
 import pro.fazeclan.river.jarona.condition.TimedCondition;
 import pro.fazeclan.river.jarona.util.ConditionUtil;
+import pro.fazeclan.river.jarona.util.GameUtil;
 import pro.fazeclan.river.jarona.util.NametagUtil;
 
 import java.io.File;
@@ -31,7 +32,7 @@ public class GameFunctions {
         var config = YamlConfiguration.loadConfiguration(new File(world.getWorldFolder(), "map_config.yml"));
         var jarona = Jarona.getInstance();
         var plugin = FoundYou.getInstance();
-        jarona.getServer().getPluginManager().callEvent(new GamePlayerDeathEvent(player, RoleUtil.getRoleOrThrow(player)));
+        jarona.getServer().getPluginManager().callEvent(new GamePlayerDeathEvent(player, RoleUtil.getRole(player)));
         player.setGameMode(GameMode.SPECTATOR);
         world.playSound(
                 player.getLocation(),
@@ -59,25 +60,28 @@ public class GameFunctions {
         RoleUtil.removeRoles(player);
         RoleUtil.assignRole(player, role, location);
 
-        String color;
+        String text;
+        NamedTextColor color;
         if (role.getFaction().equals(Faction.HUNTERS)) {
-            color = "red";
+            text = "<red><b>HUNTER</b></red>";
+            color = NamedTextColor.RED;
         } else {
-            color = "green";
+            text = "<green><b>RUNNER</b></green>";
+            color = NamedTextColor.GREEN;
         }
         nametagManager.modifyNametagProperty(player, original -> {
             var groups = new ArrayList<>(original.displayGroups());
-            groups.removeFirst();
             groups.add(Settings.DisplayGroup
                     .builder()
-                    .line("<" + color + ">" + player.getName() + "</" + color + ">")
+                    .line(text)
+                    .yOffset(0.25f)
                     .build());
             return original.withDisplayGroups(groups);
         });
         for (var p : player.getWorld().getPlayers()) {
             NametagUtil.hidePlayerNametag(p, player);
         }
-        NametagUtil.hidePlayerNametagWithGlowToAll(player, NamedTextColor.NAMES.value(color));
+        NametagUtil.hidePlayerNametagWithGlowToAll(player, color);
         FoundYou.getInstance()
                 .getServer()
                 .getPluginManager()
@@ -88,6 +92,7 @@ public class GameFunctions {
         var manager = UNTPaperAPI.getInstance();
         RoleUtil.removeRoles(player);
         manager.removeNametagOverride(player);
+        manager.setNametagSeeThrough(player, true);
         NametagUtil.showPlayerNametagToAll(player);
     }
 
@@ -98,6 +103,7 @@ public class GameFunctions {
         } catch (Exception e) {
             return;
         }
+        var game = GameUtil.getGame(world);
         var condition = ConditionUtil.getWorldConditions(world)
                 .getOrCreate(
                         "game_" + gameUUID,
@@ -111,20 +117,13 @@ public class GameFunctions {
             var duration = tc.getDuration();
             return "<red><b>" + TimeUtil.ticksIntoReadableFormat((int) duration) + "</b></red>";
         });
-        long max = world.getPersistentDataContainer().getOrDefault(FoundYou.getKey("max_game_length"), PersistentDataType.LONG, -1L);
-        long newTime = world.getPersistentDataContainer().getOrDefault(
-                FoundYou.getKey("game_length"),
-                PersistentDataType.INTEGER,
-                900
-        ) + ticks;
+        var gameValues = game.getGameValues(world.getUID());
+        long max = gameValues.getValue("max_game_length", -1L);
+        long newTime = gameValues.getValue("game_length", 900L) + ticks;
         if (max != -1) {
             newTime = Math.min(newTime, max);
         }
-        world.getPersistentDataContainer().set(
-                FoundYou.getKey("game_length"),
-                PersistentDataType.INTEGER,
-                (int) newTime
-        );
+        gameValues.setValue("game_length", newTime);
     }
 
 }

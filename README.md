@@ -22,7 +22,8 @@ My Friends - Feedback and whatnot for this project!! Every little bit counts and
 - [ ] Documentation (Mainly for setting up your own maps and roles, as they're all behind commands at the moment.)
 - [ ] Player Statistics
 - [ ] Achievements and/or Challenges
-- [ ] Map Voting
+- [X] Map Voting
+- [ ] Account for Parties in Queue
 - [ ] Game Modifiers
   - [ ] Infection
   - [ ] Impostor
