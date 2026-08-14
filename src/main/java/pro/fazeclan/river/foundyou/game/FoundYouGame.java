@@ -28,6 +28,7 @@ import pro.fazeclan.river.jarona.Jarona;
 import pro.fazeclan.river.jarona.condition.TimedCondition;
 import pro.fazeclan.river.jarona.game.Game;
 import pro.fazeclan.river.jarona.game.GameWithMap;
+import pro.fazeclan.river.jarona.stats.StatisticDefinition;
 import pro.fazeclan.river.jarona.util.GameUtil;
 import pro.fazeclan.river.jarona.util.NametagUtil;
 import pro.fazeclan.river.jarona.util.WorldlessLocation;
@@ -323,5 +324,20 @@ public class FoundYouGame extends GameWithMap {
             GameFunctions.addPlayer(player, unlimitedRoles.get(index), location);
             index++;
         }
+    }
+
+    @Override
+    public List<StatisticDefinition> getStatDefinitions() {
+        return List.of(
+                new StatisticDefinition(FoundYou.getKey("kills_as_hunter"), 0),
+                new StatisticDefinition(FoundYou.getKey("deaths_as_hunter"), 0),
+                new StatisticDefinition(FoundYou.getKey("wins_as_hunter"), 0),
+                new StatisticDefinition(FoundYou.getKey("losses_as_hunter"), 0),
+                new StatisticDefinition(FoundYou.getKey("kills_as_runner"), 0),
+                new StatisticDefinition(FoundYou.getKey("deaths_as_runner"), 0),
+                new StatisticDefinition(FoundYou.getKey("wins_as_runner"), 0),
+                new StatisticDefinition(FoundYou.getKey("losses_as_runner"), 0),
+                new StatisticDefinition(FoundYou.getKey("experience"), 0)
+        );
     }
 }
