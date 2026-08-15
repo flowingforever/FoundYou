@@ -2,27 +2,18 @@ package pro.fazeclan.river.foundyou.event;
 
 import lombok.Getter;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.player.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 import pro.fazeclan.river.foundyou.role.Faction;
 
-import java.util.List;
+public class GamePlayerLoseEvent extends PlayerEvent {
 
-public class GamePlayerLoseEvent extends Event {
-
-    @Getter
-    private final List<Player> players;
     @Getter
     private final Faction faction;
 
-    public GamePlayerLoseEvent(Faction faction, List<Player> players) {
-        this.players = players;
-        this.faction = faction;
-    }
-
-    public GamePlayerLoseEvent(Faction faction, Player... players) {
-        this.players = List.of(players);
+    public GamePlayerLoseEvent(@NotNull Player player, Faction faction) {
+        super(player);
         this.faction = faction;
     }
 

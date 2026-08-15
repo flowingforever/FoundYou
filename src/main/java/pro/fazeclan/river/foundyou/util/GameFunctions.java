@@ -113,6 +113,7 @@ public class GameFunctions {
         manager.setNametagSeeThrough(player, true);
         NametagUtil.showPlayerNametagToAll(player);
         player.getScoreboardTags().removeIf(tag -> tag.startsWith("foundyoufaction"));
+        ConditionUtil.getPlayerConditions(player).clear();
     }
 
     public static void addGameTime(World world, long ticks) {

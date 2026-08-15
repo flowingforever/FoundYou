@@ -37,7 +37,7 @@ public class StatisticListeners implements Listener {
 
     @EventHandler
     private void onKill(GamePlayerEliminationEvent event) {
-        if (event.getRole().getFaction().equals(Faction.HUNTERS)) {
+        if (event.getEliminatorRole().getFaction().equals(Faction.HUNTERS)) {
             Jarona.getInstance()
                     .getStatisticManager()
                     .incrementStatistic(
@@ -60,25 +60,20 @@ public class StatisticListeners implements Listener {
 
     @EventHandler
     private void onWin(GamePlayerWinEvent event) {
-        var statManager = Jarona.getInstance().getStatisticManager();
         if (event.getFaction().equals(Faction.HUNTERS)) {
-            for (var hunter : event.getPlayers()) {
-                statManager.incrementStatistic(
-                        hunter.getUniqueId(),
-                        FoundYou.getKey("game"),
-                        FoundYou.getKey("wins_as_hunter"),
-                        1
-                );
-            }
+            Jarona.getInstance().getStatisticManager().incrementStatistic(
+                    event.getPlayer().getUniqueId(),
+                    FoundYou.getKey("game"),
+                    FoundYou.getKey("wins_as_hunter"),
+                    1
+            );
         } else {
-            for (var runner : event.getPlayers()) {
-                statManager.incrementStatistic(
-                        runner.getUniqueId(),
-                        FoundYou.getKey("game"),
-                        FoundYou.getKey("wins_as_runner"),
-                        1
-                );
-            }
+            Jarona.getInstance().getStatisticManager().incrementStatistic(
+                    event.getPlayer().getUniqueId(),
+                    FoundYou.getKey("game"),
+                    FoundYou.getKey("wins_as_runner"),
+                    1
+            );
         }
     }
 

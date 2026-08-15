@@ -92,6 +92,13 @@ public class FoundYouGame extends GameWithMap {
             );
 
             if (role.getFaction() == Faction.HUNTERS) {
+                statManager.incrementStatistic(
+                        player.getUniqueId(),
+                        getKey(),
+                        FoundYou.getKey("games_played_as_hunter"),
+                        1
+                );
+
                 if (hunterCount == 1) {
                     player.getEquipment().getBoots().editMeta(meta -> meta.addAttributeModifier(Attribute.MAX_HEALTH, new AttributeModifier(
                             FoundYou.getKey("max_health"),
@@ -100,6 +107,13 @@ public class FoundYouGame extends GameWithMap {
                             EquipmentSlotGroup.FEET
                     )));
                 }
+            } else {
+                statManager.incrementStatistic(
+                        player.getUniqueId(),
+                        getKey(),
+                        FoundYou.getKey("games_played_as_runner"),
+                        1
+                );
             }
 
         }
@@ -231,8 +245,6 @@ public class FoundYouGame extends GameWithMap {
 
         var pluginManager = jarona.getServer().getPluginManager();
         for (Player player : players) {
-            GameFunctions.removePlayer(player);
-
             var svcPlugin = plugin.getVoicechatPlugin();
             if (svcPlugin != null) {
                 svcPlugin.removePlayer(player);
@@ -241,22 +253,33 @@ public class FoundYouGame extends GameWithMap {
             if (runnersWon) {
                 player.showTitle(
                         Title.title(
-                                miniMessage.deserialize("<green>Runners"),
+                                miniMessage.deserialize("<green><b>Runners</b></green>"),
                                 miniMessage.deserialize("win!")
                         )
                 );
-                pluginManager.callEvent(new GamePlayerWinEvent(Faction.RUNNERS, getAlivePlayers(players, Faction.RUNNERS)));
-                pluginManager.callEvent(new GamePlayerLoseEvent(Faction.HUNTERS, getAlivePlayers(players, Faction.HUNTERS)));
+
+                if (RoleUtil.getFaction(player) == Faction.RUNNERS) {
+                    pluginManager.callEvent(new GamePlayerWinEvent(player, Faction.RUNNERS));
+                } else {
+                    pluginManager.callEvent(new GamePlayerLoseEvent(player, Faction.HUNTERS));
+                }
             } else {
                 player.showTitle(
                         Title.title(
-                                miniMessage.deserialize("<red>Hunters"),
+                                miniMessage.deserialize("<red><b>Hunters</b></red>"),
                                 miniMessage.deserialize("win!")
                         )
                 );
-                pluginManager.callEvent(new GamePlayerLoseEvent(Faction.RUNNERS, getAlivePlayers(players, Faction.RUNNERS)));
-                pluginManager.callEvent(new GamePlayerWinEvent(Faction.HUNTERS, getAlivePlayers(players, Faction.HUNTERS)));
+
+                if (RoleUtil.getFaction(player) == Faction.HUNTERS) {
+                    pluginManager.callEvent(new GamePlayerWinEvent(player, Faction.HUNTERS));
+                } else {
+                    pluginManager.callEvent(new GamePlayerLoseEvent(player, Faction.RUNNERS));
+                }
             }
+
+            GameFunctions.removePlayer(player);
+
         }
     }
 
@@ -336,9 +359,11 @@ public class FoundYouGame extends GameWithMap {
                 new StatisticDefinition(FoundYou.getKey("kills_as_hunter"), "<red>Kills as Hunter</red>", 0),
                 new StatisticDefinition(FoundYou.getKey("deaths_as_hunter"), "<red>Deaths as Hunter</red>", 0),
                 new StatisticDefinition(FoundYou.getKey("wins_as_hunter"), "<red>Wins as Hunter</red>", 0),
+                new StatisticDefinition(FoundYou.getKey("games_played_as_hunter"), "<red>Games Played as Hunter</red>", 0),
                 new StatisticDefinition(FoundYou.getKey("kills_as_runner"), "<green>Kills as Runner</green>", 0),
                 new StatisticDefinition(FoundYou.getKey("deaths_as_runner"), "<green>Deaths as Runner</green>", 0),
                 new StatisticDefinition(FoundYou.getKey("wins_as_runner"), "<green>Wins as Runner</green>", 0),
+                new StatisticDefinition(FoundYou.getKey("games_played_as_runner"), "<green>Games Played as Runner</green>", 0),
                 new StatisticDefinition(FoundYou.getKey("experience"), "<aqua>Experience</aqua>", 0),
                 new StatisticDefinition(FoundYou.getKey("games_played"), "<aqua>Games Played</aqua>", 0)
         );
