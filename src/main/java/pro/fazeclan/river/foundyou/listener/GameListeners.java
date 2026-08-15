@@ -1,5 +1,6 @@
 package pro.fazeclan.river.foundyou.listener;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
@@ -15,6 +16,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import pro.fazeclan.river.foundyou.FoundYou;
+import pro.fazeclan.river.foundyou.event.GamePlayerEliminationEvent;
 import pro.fazeclan.river.foundyou.util.GameFunctions;
 import pro.fazeclan.river.foundyou.util.RoleUtil;
 import pro.fazeclan.river.jarona.Jarona;
@@ -162,9 +164,15 @@ public class GameListeners implements Listener {
         }
 
         GameFunctions.eliminatePlayer(player);
-
         player.setHealth(player.getAttribute(Attribute.MAX_HEALTH).getValue());
         event.setDamage(0.1);
+
+        var entity = event.getDamageSource().getCausingEntity();
+        if (entity instanceof Player attacker) {
+            var role = RoleUtil.getRole(player);
+            var attackerRole = RoleUtil.getRole(attacker);
+            Bukkit.getServer().getPluginManager().callEvent(new GamePlayerEliminationEvent(player, role, attacker, attackerRole));
+        }
     }
 
     @EventHandler

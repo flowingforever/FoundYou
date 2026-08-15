@@ -18,6 +18,8 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import pro.fazeclan.river.foundyou.FoundYou;
+import pro.fazeclan.river.foundyou.event.GamePlayerLoseEvent;
+import pro.fazeclan.river.foundyou.event.GamePlayerWinEvent;
 import pro.fazeclan.river.foundyou.event.GracePeriodOverEvent;
 import pro.fazeclan.river.foundyou.role.Faction;
 import pro.fazeclan.river.foundyou.role.Role;
@@ -51,6 +53,7 @@ public class FoundYouGame extends GameWithMap {
     public void init(World world, List<Player> players) {
         var jarona = Jarona.getInstance();
         var gameValues = getGameValues(world.getUID());
+        var statManager = jarona.getStatisticManager();
 
         var conditionManager = jarona.getConditionManager();
 
@@ -81,6 +84,12 @@ public class FoundYouGame extends GameWithMap {
         // game prep
         for (Player player : players) {
             var role = RoleUtil.getRole(player);
+            statManager.incrementStatistic(
+                    player.getUniqueId(),
+                    getKey(),
+                    FoundYou.getKey("games_played"),
+                    1
+            );
 
             if (role.getFaction() == Faction.HUNTERS) {
                 if (hunterCount == 1) {
@@ -220,6 +229,7 @@ public class FoundYouGame extends GameWithMap {
         var conditionManager = jarona.getConditionManager();
         conditionManager.getGameConditions(gameUUID).remove("game_" + gameUUID);
 
+        var pluginManager = jarona.getServer().getPluginManager();
         for (Player player : players) {
             GameFunctions.removePlayer(player);
 
@@ -235,6 +245,8 @@ public class FoundYouGame extends GameWithMap {
                                 miniMessage.deserialize("win!")
                         )
                 );
+                pluginManager.callEvent(new GamePlayerWinEvent(Faction.RUNNERS, getAlivePlayers(players, Faction.RUNNERS)));
+                pluginManager.callEvent(new GamePlayerLoseEvent(Faction.HUNTERS, getAlivePlayers(players, Faction.HUNTERS)));
             } else {
                 player.showTitle(
                         Title.title(
@@ -242,12 +254,27 @@ public class FoundYouGame extends GameWithMap {
                                 miniMessage.deserialize("win!")
                         )
                 );
+                pluginManager.callEvent(new GamePlayerLoseEvent(Faction.RUNNERS, getAlivePlayers(players, Faction.RUNNERS)));
+                pluginManager.callEvent(new GamePlayerWinEvent(Faction.HUNTERS, getAlivePlayers(players, Faction.HUNTERS)));
             }
         }
     }
 
     private long getCurrentGameTick(World world) {
         return getGameValues(world.getUID()).getValue("tick", 0L);
+    }
+
+    private List<Player> getPlayers(List<Player> players, Faction faction) {
+        return players.stream()
+                .filter(player -> faction.equals(RoleUtil.getFaction(player)))
+                .toList();
+    }
+
+    private List<Player> getAlivePlayers(List<Player> players, Faction faction) {
+        return players.stream()
+                .filter(player -> !player.getGameMode().isInvulnerable())
+                .filter(player -> faction.equals(RoleUtil.getFaction(player)))
+                .toList();
     }
 
     private boolean isFactionAlive(List<Player> players, Faction faction) {
@@ -309,11 +336,9 @@ public class FoundYouGame extends GameWithMap {
                 new StatisticDefinition(FoundYou.getKey("kills_as_hunter"), "<red>Kills as Hunter</red>", 0),
                 new StatisticDefinition(FoundYou.getKey("deaths_as_hunter"), "<red>Deaths as Hunter</red>", 0),
                 new StatisticDefinition(FoundYou.getKey("wins_as_hunter"), "<red>Wins as Hunter</red>", 0),
-                new StatisticDefinition(FoundYou.getKey("losses_as_hunter"), "<red>Losses as Hunter</red>", 0),
                 new StatisticDefinition(FoundYou.getKey("kills_as_runner"), "<green>Kills as Runner</green>", 0),
                 new StatisticDefinition(FoundYou.getKey("deaths_as_runner"), "<green>Deaths as Runner</green>", 0),
                 new StatisticDefinition(FoundYou.getKey("wins_as_runner"), "<green>Wins as Runner</green>", 0),
-                new StatisticDefinition(FoundYou.getKey("losses_as_runner"), "<green>Losses as Runner</green>", 0),
                 new StatisticDefinition(FoundYou.getKey("experience"), "<aqua>Experience</aqua>", 0),
                 new StatisticDefinition(FoundYou.getKey("games_played"), "<aqua>Games Played</aqua>", 0)
         );
