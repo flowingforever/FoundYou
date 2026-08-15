@@ -16,6 +16,7 @@ import pro.fazeclan.river.foundyou.compat.FYVoicechatPlugin;
 import pro.fazeclan.river.foundyou.game.FoundYouGame;
 import pro.fazeclan.river.foundyou.listener.AbilityListeners;
 import pro.fazeclan.river.foundyou.listener.GameListeners;
+import pro.fazeclan.river.foundyou.listener.NametagListener;
 import pro.fazeclan.river.foundyou.listener.StatisticListeners;
 import pro.fazeclan.river.foundyou.role.RoleManager;
 import pro.fazeclan.river.jarona.Jarona;
@@ -67,6 +68,7 @@ public final class FoundYou extends JavaPlugin {
         pluginManager.registerEvents(new GameListeners(), this);
         pluginManager.registerEvents(new AbilityListeners(), this);
         pluginManager.registerEvents(new StatisticListeners(), this);
+        pluginManager.registerEvents(new NametagListener(), this);
 
         var command = Commands.literal("foundyou")
                 .then(RoleCommand.command())

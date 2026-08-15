@@ -13,6 +13,7 @@ import pro.fazeclan.river.foundyou.role.Faction;
 import pro.fazeclan.river.foundyou.role.Role;
 import pro.fazeclan.river.foundyou.util.GameFunctions;
 import pro.fazeclan.river.foundyou.util.TextUtil;
+import pro.fazeclan.river.jarona.util.GameUtil;
 
 public class PlayerCommand {
 
@@ -29,6 +30,13 @@ public class PlayerCommand {
                                                                     var source = ctx.getSource();
                                                                     var tr = ctx.getArgument("game_player", PlayerSelectorArgumentResolver.class);
                                                                     var gamePlayer = tr.resolve(source).getFirst();
+                                                                    if (!GameUtil.hasGame(gamePlayer.getWorld())) {
+                                                                        source.getSender().sendMessage(TextUtil.formatComponent(
+                                                                                "<red>This player isn't in a game!</red>"
+                                                                        ));
+                                                                        return Command.SINGLE_SUCCESS;
+                                                                    }
+                                                                    var gameValues = GameUtil.getGame(gamePlayer.getWorld()).getGameValues(gamePlayer.getWorld().getUID());
 
                                                                     var tr2 = ctx.getArgument("players", PlayerSelectorArgumentResolver.class);
                                                                     var players = tr2.resolve(source);
@@ -36,7 +44,7 @@ public class PlayerCommand {
                                                                     var role = ctx.getArgument("role", Role.class);
 
                                                                     for (Player player : players) {
-                                                                        GameFunctions.addPlayer(player, role, gamePlayer.getLocation());
+                                                                        GameFunctions.addPlayer(player, role, gameValues, gamePlayer.getLocation());
 
                                                                         player.sendMessage(TextUtil.formatComponent(
                                                                                 "<green>You've been added into an ongoing game!</green>"
@@ -54,12 +62,19 @@ public class PlayerCommand {
                                                     var manager = FoundYou.getInstance().getRoleManager();
                                                     var tr = ctx.getArgument("game_player", PlayerSelectorArgumentResolver.class);
                                                     var gamePlayer = tr.resolve(source).getFirst();
+                                                    if (!GameUtil.hasGame(gamePlayer.getWorld())) {
+                                                        source.getSender().sendMessage(TextUtil.formatComponent(
+                                                                "<red>This player isn't in a game!</red>"
+                                                        ));
+                                                        return Command.SINGLE_SUCCESS;
+                                                    }
+                                                    var gameValues = GameUtil.getGame(gamePlayer.getWorld()).getGameValues(gamePlayer.getWorld().getUID());
 
                                                     var tr2 = ctx.getArgument("players", PlayerSelectorArgumentResolver.class);
                                                     var players = tr2.resolve(source);
 
                                                     for (Player player : players) {
-                                                        GameFunctions.addPlayer(player, manager.getRandomUnlimitedRole(Faction.RUNNERS), gamePlayer.getLocation());
+                                                        GameFunctions.addPlayer(player, manager.getRandomUnlimitedRole(Faction.RUNNERS), gameValues, gamePlayer.getLocation());
 
                                                         player.sendMessage(TextUtil.formatComponent(
                                                                 "<green>You've been added into an ongoing game!</green>"

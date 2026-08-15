@@ -27,6 +27,7 @@ import pro.fazeclan.river.foundyou.util.TimeUtil;
 import pro.fazeclan.river.jarona.Jarona;
 import pro.fazeclan.river.jarona.condition.TimedCondition;
 import pro.fazeclan.river.jarona.game.Game;
+import pro.fazeclan.river.jarona.game.GameValues;
 import pro.fazeclan.river.jarona.game.GameWithMap;
 import pro.fazeclan.river.jarona.stats.StatisticDefinition;
 import pro.fazeclan.river.jarona.util.GameUtil;
@@ -34,10 +35,7 @@ import pro.fazeclan.river.jarona.util.NametagUtil;
 import pro.fazeclan.river.jarona.util.WorldlessLocation;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class FoundYouGame extends GameWithMap {
@@ -51,14 +49,12 @@ public class FoundYouGame extends GameWithMap {
 
     @Override
     public void init(World world, List<Player> players) {
-        var plugin = FoundYou.getInstance();
         var jarona = Jarona.getInstance();
+        var gameValues = getGameValues(world.getUID());
 
         var conditionManager = jarona.getConditionManager();
 
         var config = YamlConfiguration.loadConfiguration(new File(world.getWorldFolder(), "map_config.yml"));
-
-        var miniMessage = MiniMessage.miniMessage();
 
         // okay proper starting neow
 
@@ -79,45 +75,26 @@ public class FoundYouGame extends GameWithMap {
             runners.remove(hunter);
         }
 
-        assignRoles(hunters, Faction.HUNTERS, hunterSpawn);
-        assignRoles(runners, Faction.RUNNERS, runnerSpawn);
+        assignRoles(hunters, Faction.HUNTERS, gameValues, hunterSpawn);
+        assignRoles(runners, Faction.RUNNERS, gameValues, runnerSpawn);
 
         // game prep
         for (Player player : players) {
             var role = RoleUtil.getRole(player);
 
-            Title title = Title.title(Component.empty(), Component.empty());
-            switch (role.getFaction()) {
-                case RUNNERS -> title = Title.title(
-                        miniMessage.deserialize("<yellow>You're a <green>Runner!"),
-                        miniMessage.deserialize("<green>Avoid being killed by hunters to win!")
-                );
-                case HUNTERS -> {
-                    title = Title.title(
-                            miniMessage.deserialize("<yellow>You're a <red>Hunter!"),
-                            miniMessage.deserialize("<red>Catch and kill all runners to win.")
-                    );
-
-                    var svcPlugin = plugin.getVoicechatPlugin();
-                    if (svcPlugin != null) {
-                        svcPlugin.addHunter(player);
-                    }
-
-                    if (hunterCount == 1) {
-                        player.getEquipment().getBoots().editMeta(meta -> meta.addAttributeModifier(Attribute.MAX_HEALTH, new AttributeModifier(
-                                FoundYou.getKey("max_health"),
-                                10.0,
-                                AttributeModifier.Operation.ADD_NUMBER,
-                                EquipmentSlotGroup.FEET
-                        )));
-                    }
+            if (role.getFaction() == Faction.HUNTERS) {
+                if (hunterCount == 1) {
+                    player.getEquipment().getBoots().editMeta(meta -> meta.addAttributeModifier(Attribute.MAX_HEALTH, new AttributeModifier(
+                            FoundYou.getKey("max_health"),
+                            10.0,
+                            AttributeModifier.Operation.ADD_NUMBER,
+                            EquipmentSlotGroup.FEET
+                    )));
                 }
             }
-            player.showTitle(title);
 
         }
 
-        var gameValues = getGameValues(world.getUID());
         long graceLength = gameValues.setValue("grace_length", config.getLong("grace-length"));
         long gameLength = gameValues.setValue("game_length", config.getLong("initial-time"));
         gameValues.setValue("max_game_length", config.getLong("max-game-length", -1));
@@ -287,7 +264,7 @@ public class FoundYouGame extends GameWithMap {
         return isFactionAlive(players, Faction.HUNTERS);
     }
 
-    private void assignRoles(List<Player> players, Faction faction, Location location) {
+    private void assignRoles(List<Player> players, Faction faction, GameValues values, Location location) {
         var manager = FoundYou.getInstance().getRoleManager();
 
         var limitedRoles = new ArrayList<Role>();
@@ -308,7 +285,7 @@ public class FoundYouGame extends GameWithMap {
         for (var player : players) {
             if (chance > 0f) {
                 if (ThreadLocalRandom.current().nextFloat() <= chance && !limitedRoles.isEmpty()) {
-                    GameFunctions.addPlayer(player, limitedRoles.getFirst(), location);
+                    GameFunctions.addPlayer(player, limitedRoles.getFirst(), values, location);
                     limitedRoles.removeFirst();
                     chance /= dividend;
                     continue;
@@ -321,7 +298,7 @@ public class FoundYouGame extends GameWithMap {
                 index = 0;
             }
 
-            GameFunctions.addPlayer(player, unlimitedRoles.get(index), location);
+            GameFunctions.addPlayer(player, unlimitedRoles.get(index), values, location);
             index++;
         }
     }
@@ -329,15 +306,16 @@ public class FoundYouGame extends GameWithMap {
     @Override
     public List<StatisticDefinition> getStatDefinitions() {
         return List.of(
-                new StatisticDefinition(FoundYou.getKey("kills_as_hunter"), 0),
-                new StatisticDefinition(FoundYou.getKey("deaths_as_hunter"), 0),
-                new StatisticDefinition(FoundYou.getKey("wins_as_hunter"), 0),
-                new StatisticDefinition(FoundYou.getKey("losses_as_hunter"), 0),
-                new StatisticDefinition(FoundYou.getKey("kills_as_runner"), 0),
-                new StatisticDefinition(FoundYou.getKey("deaths_as_runner"), 0),
-                new StatisticDefinition(FoundYou.getKey("wins_as_runner"), 0),
-                new StatisticDefinition(FoundYou.getKey("losses_as_runner"), 0),
-                new StatisticDefinition(FoundYou.getKey("experience"), 0)
+                new StatisticDefinition(FoundYou.getKey("kills_as_hunter"), "<red>Kills as Hunter</red>", 0),
+                new StatisticDefinition(FoundYou.getKey("deaths_as_hunter"), "<red>Deaths as Hunter</red>", 0),
+                new StatisticDefinition(FoundYou.getKey("wins_as_hunter"), "<red>Wins as Hunter</red>", 0),
+                new StatisticDefinition(FoundYou.getKey("losses_as_hunter"), "<red>Losses as Hunter</red>", 0),
+                new StatisticDefinition(FoundYou.getKey("kills_as_runner"), "<green>Kills as Runner</green>", 0),
+                new StatisticDefinition(FoundYou.getKey("deaths_as_runner"), "<green>Deaths as Runner</green>", 0),
+                new StatisticDefinition(FoundYou.getKey("wins_as_runner"), "<green>Wins as Runner</green>", 0),
+                new StatisticDefinition(FoundYou.getKey("losses_as_runner"), "<green>Losses as Runner</green>", 0),
+                new StatisticDefinition(FoundYou.getKey("experience"), "<aqua>Experience</aqua>", 0),
+                new StatisticDefinition(FoundYou.getKey("games_played"), "<aqua>Games Played</aqua>", 0)
         );
     }
 }
