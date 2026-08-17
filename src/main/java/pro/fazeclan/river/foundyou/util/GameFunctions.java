@@ -96,9 +96,6 @@ public class GameFunctions {
                     .build());
             return original.withDisplayGroups(groups);
         });
-        for (var p : player.getWorld().getPlayers()) {
-            NametagUtil.hidePlayerNametag(p, player);
-        }
         NametagUtil.hidePlayerNametagWithGlowToAll(player, color);
         FoundYou.getInstance()
                 .getServer()
