@@ -86,6 +86,7 @@ public class GameFunctions {
             player.getScoreboardTags().add("foundyoufaction_runners");
             values.setValue("tablist_name_" + player.getUniqueId(), "<green>❤ %jarona_nickname%</green>");
         }
+        player.setSaturation(0f);
         player.showTitle(title);
         nametagManager.modifyNametagProperty(player, original -> {
             var groups = new ArrayList<>(original.displayGroups());
