@@ -31,6 +31,7 @@ import pro.fazeclan.river.jarona.condition.TimedCondition;
 import pro.fazeclan.river.jarona.game.Game;
 import pro.fazeclan.river.jarona.game.GameValues;
 import pro.fazeclan.river.jarona.game.GameWithMap;
+import pro.fazeclan.river.jarona.stats.AchievementDefinition;
 import pro.fazeclan.river.jarona.stats.StatisticDefinition;
 import pro.fazeclan.river.jarona.util.GameUtil;
 import pro.fazeclan.river.jarona.util.NametagUtil;
@@ -366,6 +367,14 @@ public class FoundYouGame extends GameWithMap {
                 new StatisticDefinition(FoundYou.getKey("games_played_as_runner"), "<green>Games Played as Runner</green>", 0),
                 new StatisticDefinition(FoundYou.getKey("experience"), "<aqua>Experience</aqua>", 0),
                 new StatisticDefinition(FoundYou.getKey("games_played"), "<aqua>Games Played</aqua>", 0)
+        );
+    }
+
+    @Override
+    public List<AchievementDefinition> getAchievementDefinitions() {
+        return List.of(
+                new AchievementDefinition(FoundYou.getKey("hunter_win"), "<red>Slaughter</red>", 0, 1),
+                new AchievementDefinition(FoundYou.getKey("runner_win"), "<green>Survivor</green>", 0, 1)
         );
     }
 }
